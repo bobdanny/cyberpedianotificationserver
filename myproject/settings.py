@@ -26,6 +26,9 @@ DEBUG = False  # Set to False for production
 # Allow all hosts (for showcase purposes)
 ALLOWED_HOSTS = ['*']
 
+
+LOGIN_URL = '/hostelallocation/login/'
+
 # Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -34,11 +37,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'onlinecourseregistration',
+    'hostelallocation',
     'django.contrib.humanize',
 ]
 
-AUTH_USER_MODEL = 'onlinecourseregistration.CustomUser'
+AUTH_USER_MODEL = 'hostelallocation.CustomUser'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
