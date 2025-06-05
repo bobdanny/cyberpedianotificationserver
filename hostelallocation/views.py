@@ -191,7 +191,7 @@ def login(request):
         form = CustomAuthenticationForm(request, data=request.POST)  # pass request to form for authenticate
         if form.is_valid():
             auth_login(request, form.get_user())
-            next_url = request.GET.get('next') or 'landing_page'
+            next_url = request.GET.get('next') or 'home'
             return redirect(next_url)
     else:
         form = CustomAuthenticationForm()
@@ -216,7 +216,7 @@ def signup(request):
         if form.is_valid():
             user = form.save()
             auth_login(request, user)  # Automatically log in after signup
-            return redirect('landing_page')  # Redirect wherever you want
+            return redirect('home')  # Redirect wherever you want
     else:
         form = CustomUserCreationForm()
     return render(request, 'signup.html', {'form': form})
