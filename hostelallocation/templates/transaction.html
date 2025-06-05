@@ -1,0 +1,451 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Balance and Transactions</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.0.0/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.0.0/dist/tailwind.min.css" rel="stylesheet">
+   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@latest/dist/tailwind.min.css" rel="stylesheet">
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    
+
+
+      
+    
+    
+    
+    <style>
+   
+      /* General button styles */
+a.button {
+    display: inline-block;
+    padding: 10px 20px;
+    margin: 5px;
+    border: 2px solid transparent; /* Border color changes on hover */
+    border-radius: 5px;
+    text-align: center;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 16px;
+    color: #4a5568; /* Text color */
+    background-color: #edf2f7; /* Background color */
+    transition: all 0.3s ease; /* Smooth transition for hover effects */
+}
+
+/* Hover effect */
+a.button:hover {
+    color: #2d3748; /* Text color on hover */
+    background-color: #e2e8f0; /* Background color on hover */
+    border-color: #cbd5e0; /* Border color on hover */
+}
+
+/* Focus state for accessibility */
+a.button:focus {
+    outline: 2px solid #a0aec0; /* Focus outline color */
+    outline-offset: 2px;
+}
+
+/* Active state for when button is clicked */
+a.button:active {
+    background-color: #e2e8f0; /* Background color when active */
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2); /* Inner shadow when active */
+}
+
+        /* Optional custom styles */
+        .shadow-text {
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+        }
+      
+        /* Custom styles for sidenav */
+        .sidenav {
+            height: 100%;
+            width: 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: rgb(252, 252, 250);
+            overflow-x: hidden;
+            transition: 0.5s;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.5);
+        }
+        .sidenav.open {
+            width: 250px; /* Adjust as needed */
+        }
+        .sidenav .closebtn {
+            position: absolute;
+            top: 15px;
+            right: 25px;
+            font-size: 36px;
+            margin-left: 50px;
+            cursor: pointer;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: wheat;
+            background-color: white;
+            padding-top: 60px;
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+        }
+        .close-btn {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close-btn:hover,
+        .close-btn:focus {
+            color: rgb(226, 69, 69);
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+          /* Styles for the sidenav */
+          .sidenav {
+            height: 100%;
+            width: 0;
+            position: fixed;
+            z-index: 1;
+            top: 0;
+            left: 0;
+            background-color: rgba(253, 252, 249, 0.9);
+
+
+
+            overflow-x: hidden;
+            transition: 0.5s;
+            padding-top: 60px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .sidenav a {
+            padding: 8px 16px;
+            text-decoration: none;
+            font-size: 18px;
+            color: #000;
+            display: block;
+            transition: 0.3s;
+        }
+
+        .sidenav a:hover {
+            color: #f1f1f1;
+        }
+
+        .sidenav .closebtn {
+            position: absolute;
+            top: 0;
+            right: 25px;
+            font-size: 36px;
+            margin-left: 50px;
+        }
+    </style>
+   
+</head>
+
+
+
+
+
+
+
+
+
+
+
+
+<header class="bg-white rounded-lg  bg-opacity-70 backdrop-blur-md shadow-md sticky top-0 z-50">
+    <!-- Mobile Header (Small screens) -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between bg-white bg-opacity-70 backdrop-blur-md rounded-full shadow-md">
+      <div class="text-lg font-bold text-green-800">
+
+      {% load static %}
+         
+        <img src="{% static 'images/logo.png' %}" alt="NXC Icon" width="32" height="24" class="inline-block" />
+        Hi, <span class="font-extrabold text-xl text-green-600 italic">{{ user.username }}</span>!
+    </div>
+    
+
+       
+  <div class="block lg:hidden">
+           
+            <h2 class="text-gray-600"> </h3>
+        </div>
+
+        <!-- Desktop Header (Large screens) -->
+        <div class="hidden lg:flex items-center space-x-6">
+          
+          <div class="flex space-x-4">
+            <a href="{% url 'landing_page' %}" class="button">Home</a>
+            <a href="" class="button">Need Help?</a>
+            <a href="{% url 'FAQ' %}" class="button">FAQ</a>
+           
+          </div>
+      </div>
+     
+      
+    
+
+        <!-- Mobile Navbar Toggle -->
+        <div class="lg:hidden flex items-center">
+          <button id="navbar-toggle" class="text-gray-600 hover:text-gray-900 font-bold p-2">
+              <!-- Icon for mobile menu -->
+              <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+              </svg>
+          </button>
+      </div>
+   
+      
+
+    </div>
+    
+<nav id="myNav" class="sidenav">
+  <a href="javascript:void(0)" class="closebtn" id="closeNav">&times;</a>
+  <div class="px-4 py-6">
+      <h3 class="text-lg font-semibold mb-4 flex items-center">
+       {% load static %}
+          <img src="{% static 'images/logo.png' %}" alt="NXC Icon" width="32" height="24" class="inline-block" />
+          <span class="text-green-600">Nexis</span><span class="text-gray-400">phere</span><span class="text-black">FX</span>
+      </h3>
+    
+
+  
+
+
+
+
+
+      <div class="space-y-4">
+        <a href="{% url 'landing_page' %}" class="bg-white block p-4 text-green-800 rounded-xl border border-gray-200 hover:border-gray-300 flex items-center space-x-4 transition-transform transform hover:scale-105 font-semibold text-lg rounded-md section-item">
+            <i class="bi bi-house text-4xl mb-4 text-green-500"></i>
+
+            <span class="text-green-600">Home</span>
+        </a>
+    
+      
+        <a href="https://t.me/your_support_channel" class="bg-white block p-4 text-green-800 rounded-xl border border-gray-200 hover:border-gray-300 flex items-center space-x-4 transition-transform transform hover:scale-105 font-semibold text-lg rounded-md section-item">
+            <i class="bi bi-telephone text-4xl mb-4 text-green-500"></i>
+            <span class="text-green-600">Need Help?</span>
+        </a>
+    
+       
+
+        
+        <a href="{% url 'FAQ' %}" class="bg-white block p-4 text-green-800 rounded-xl border border-gray-200 hover:border-gray-300 flex items-center space-x-4 transition-transform transform hover:scale-105 font-semibold text-lg rounded-md section-item">
+            <i class="bi bi-question-circle text-4xl mb-4 text-green-500"></i>
+            <span class="text-green-600">FAQ</span>
+        </a>
+
+     
+      
+    
+        <!-- Footer with logout button -->
+    
+    </div>
+    
+    
+    
+    
+
+
+
+
+
+
+
+
+
+          
+      
+    </div>
+    
+    
+    
+    
+    
+    
+    
+          
+          
+
+     
+
+
+      </div>
+  </div>
+</nav>
+</header>
+
+<script>
+    document.getElementById('navbar-toggle').addEventListener('click', function() {
+        document.getElementById('myNav').style.width = '500px'; // Adjust width as needed
+    });
+  
+    document.getElementById('closeNav').addEventListener('click', function() {
+        document.getElementById('myNav').style.width = '0';
+    });
+  </script>
+
+
+
+
+
+
+<style>
+    /* Custom styles */
+    .modal-overlay {
+        backdrop-filter: blur(5px);
+    }
+</style>
+
+
+<body class="bg-gray-100">
+
+<main class="container mx-auto p-4">
+<h1 class="text-3xl font-bold mb-6">Transaction History</h1>
+<ul id="transaction-list" class="space-y-4">
+    <li class="transaction-item bg-white shadow-md rounded p-4 cursor-pointer transition-transform transform hover:scale-105" data-id="123456789">
+        <div class="flex items-center">
+            <img src="done.svg" alt="Transaction Icon" class="w-12 h-12 bg-gray-300 rounded-full mr-4">
+            <div class="flex-1">
+                <div class="flex justify-between mb-2">
+                    <span class="font-semibold">Deposit</span>
+                    <span class="text-lg font-medium">150,000 NGN</span>
+                </div>
+            </div>
+        </div>
+    </li>
+</ul>
+</main>
+
+<!-- Modal -->
+<div id="modal" class="modal-overlay fixed inset-0 hidden bg-gray-800 bg-opacity-50 flex items-center justify-center">
+<div class="modal-content bg-white p-6 rounded-lg shadow-lg w-11/12 md:w-1/3 relative">
+    <button id="close-modal" class="absolute top-2 right-2 text-gray-600 text-2xl focus:outline-none">×</button>
+    <h2 class="text-xl font-bold mb-4">NexisphereFX Receipt</h2>
+    <div id="modal-details">
+        <!-- Transaction details will be inserted here -->
+    </div>
+    <div class="flex justify-around mt-4">
+        <button id="download-pdf" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition">Download as PDF</button>
+        <button id="download-image" class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition">Download as Image</button>
+    </div>
+</div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const transactionItems = document.querySelectorAll('.transaction-item');
+    const modal = document.getElementById('modal');
+    const modalDetails = document.getElementById('modal-details');
+    const closeModal = document.getElementById('close-modal');
+    let currentTransaction = null;
+
+    transactionItems.forEach(item => {
+        item.addEventListener('click', () => {
+            const id = item.getAttribute('data-id');
+            currentTransaction = transactions.find(t => t.id === id);
+            showModal(currentTransaction);
+        });
+    });
+
+    closeModal.addEventListener('click', () => {
+        modal.classList.add('hidden');
+    });
+
+    const showModal = (transaction) => {
+        modalDetails.innerHTML = `
+            <p><strong>Transaction ID:</strong> ${transaction.id}</p>
+            <p><strong>Type:</strong> ${transaction.type}</p>
+            <p><strong>Amount:</strong> ${transaction.amount}</p>
+            <p><strong>Currency:</strong> ${transaction.currency}</p>
+            <p><strong>Bank Name:</strong> ${transaction.bankName}</p>
+            <p><strong>Bank Holder:</strong> ${transaction.bankHolder}</p>
+            <p><strong>Date:</strong> ${transaction.date}</p>
+            <p><strong>Status:</strong> ${transaction.status}</p>
+        `;
+        modal.classList.remove('hidden');
+    };
+
+    // Download PDF
+    document.getElementById('download-pdf').addEventListener('click', () => {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+        doc.text('NexisphereFX Receipt', 10, 10);
+        doc.text(modalDetails.innerText, 10, 20);
+        doc.save('receipt.pdf');
+    });
+
+    // Download Image
+    document.getElementById('download-image').addEventListener('click', () => {
+        html2canvas(modal, { scale: 2 }).then(canvas => {
+            const link = document.createElement('a');
+            link.href = canvas.toDataURL('image/png');
+            link.download = 'receipt.png';
+            link.click();
+        });
+    });
+
+    // Dummy transaction data
+    const transactions = [
+        {
+            id: '123456789',
+            type: 'Deposit',
+            amount: '150,000 NGN',
+            currency: 'NGN',
+            bankName: 'Bank of Africa',
+            bankHolder: 'Olasupo Danel Ayomide',
+            date: '2024-07-05',
+            status: 'Completed'
+        },
+    ];
+});
+</script>
+
+
+
+
+
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+</body>
+</html>

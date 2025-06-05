@@ -1,0 +1,297 @@
+
+
+marquee {
+    width: 100%;
+    padding: 2px;
+    background: linear-gradient(to right, #ffffff,  #b0fd9f,  #f0f0f0);
+    color: #333;
+    font-size: 1.2em;
+    border-bottom: 1px solid #000000;
+}
+.notification-icon {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+}
+
+
+
+
+
+
+  /* Inline CSS for demonstration purposes */
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+.balance {
+    margin: 5px;
+}
+.balance-amount {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+}
+.currency {
+    margin: 20px;
+}
+.currency .balance {
+    font-size: 1.2rem;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden; /* Prevent horizontal scrolling */
+}
+
+.menu-icon {
+    position: fixed;
+    top: 20px;
+    right: 20px; /* Position the menu icon on the right */
+    font-size: 30px;
+    cursor: pointer;
+}
+
+.menu {
+    position: fixed;
+    top: 0;
+    left: -50%; /* Initially hide the menu off-screen to the left */
+    width: 50%;
+    height: 100%;
+    background-color: rgba(236, 236, 236, 0.9); /* Transparent white background */
+    box-shadow: 2px 0 5px rgba(87, 236, 0, 0.5);
+    transition: left 0.3s ease;
+    z-index: 1000;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.menu ul {
+    list-style: none;
+    padding: 0;
+}
+
+.menu ul li {
+    margin: 20px 0;
+    font-size: 20px;
+    cursor: pointer;
+    transition: background 0.3s, color 0.3s;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.menu ul li:hover,
+.menu ul li.selected {
+    background-color: rgba(131, 161, 125, 0.1);
+    color: #007bff;
+}
+
+.menu ul li .icon {
+    margin-right: 10px;
+}
+
+.menu ul li a {
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    align-items: center;
+}
+
+.close-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-size: 30px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 900;
+    display: none;
+}
+
+header {
+    display: flex;
+    justify-content: center; /* Center the logo horizontally */
+    align-items: center;    /* Center the logo vertically */
+    padding: 10px;          /* Add some padding around the header */
+    background-color: #f8f9fa; /* Optional: background color for the header */
+}
+
+.logo {
+    height: 60px; /* Adjust the height of the logo as needed */
+    /* Optionally, add more styles to the logo */
+    max-width: 25;
+}
+
+
+/* Reset default browser styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+/* Basic styling for the entire page */
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(to right, #ffffff,  #b0fd9f,  #f0f0f0);
+}
+
+header
+{
+    background: linear-gradient(to right, #ffffff,  #b0fd9f,  #f0f0f0);
+    color: #000000;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header nav ul {
+    list-style-type: none;
+    display: flex;
+}
+
+header nav ul li {
+    margin-right: 20px;
+}
+
+header nav ul li a {
+    color: #030303;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+main {
+    max-width: 900px;
+    margin: 10px auto;
+    background-color: #ffffff;
+    padding: 10px;
+    border-radius: 15px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+
+.balance {
+    margin-bottom: 10px;
+    padding: 10px;
+    background-color: #f0f0f0; /* Set background color to off-white */
+    border-radius: 8px;
+    text-align: center;
+}
+
+.balance-amount {
+    font-size: 32px;
+    margin-top: 10px;
+}
+
+.transactions {
+    padding: 10px;
+    background-color: linear-gradient(to right, #f2faf0, #d5f8c0, #e6f5da);
+    border-radius: 8px;
+}
+
+.transactions ul {
+    list-style-type: none;
+}
+
+.transactions ul li {
+    margin-bottom: 5px;
+    padding: 5px;
+    border: 1px solid #c8cfc8;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+}
+
+.transaction-type {
+    padding: 8px 12px;
+    background-color: #b0fd9f;
+   
+    color: #1b1b1a;
+    border-radius: 4px;
+    text-transform: uppercase;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.transaction-details {
+    margin-left: 10px;
+}
+
+.transaction-amount {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.transaction-time {
+    color: #000000;
+    font-size: 14px;
+}
+
+footer {
+    text-align: center;
+    padding: 10px;
+    background-color: #c5ddb8;
+    color: #000000;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.buttons {
+    margin-top: 10px;
+    text-align: center; /* Center align the buttons */
+}
+
+.buttons a.deposit-btn {
+    display: inline-block;
+    text-decoration: none; /* Remove underline from link */
+    margin-right: 10px;
+    padding: 8px 12px;
+    border: 3px solid #5e635d;
+    background-color: rgba(255, 255, 255, 0.9); /* Transparent white background */
+    color: #2b4421;
+    font-size: 6px;
+    cursor: pointer;
+    border-radius: 20px; /* Rounded corners for buttons */
+    transition: background-color 0.3s ease; /* Smooth background color transition */
+}
+
+.buttons a.deposit-btn:hover {
+    background-color: #8ae378; /* Darker shade on hover */
+}
+
+.buttons a.deposit-btn img {
+    vertical-align: middle;
+    margin-right: 5px;
+}

@@ -1,0 +1,449 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Balance and Transactions</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.0.0/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.0.0/dist/tailwind.min.css" rel="stylesheet">
+   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@latest/dist/tailwind.min.css" rel="stylesheet">
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    
+
+
+      
+    
+    
+    
+    <style>
+   
+      /* General button styles */
+a.button {
+    display: inline-block;
+    padding: 10px 20px;
+    margin: 5px;
+    border: 2px solid transparent; /* Border color changes on hover */
+    border-radius: 5px;
+    text-align: center;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 16px;
+    color: #4a5568; /* Text color */
+    background-color: #edf2f7; /* Background color */
+    transition: all 0.3s ease; /* Smooth transition for hover effects */
+}
+
+/* Hover effect */
+a.button:hover {
+    color: #2d3748; /* Text color on hover */
+    background-color: #e2e8f0; /* Background color on hover */
+    border-color: #cbd5e0; /* Border color on hover */
+}
+
+/* Focus state for accessibility */
+a.button:focus {
+    outline: 2px solid #a0aec0; /* Focus outline color */
+    outline-offset: 2px;
+}
+
+/* Active state for when button is clicked */
+a.button:active {
+    background-color: #e2e8f0; /* Background color when active */
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2); /* Inner shadow when active */
+}
+
+        /* Optional custom styles */
+        .shadow-text {
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+        }
+      
+        /* Custom styles for sidenav */
+        .sidenav {
+            height: 100%;
+            width: 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: rgb(252, 252, 250);
+            overflow-x: hidden;
+            transition: 0.5s;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.5);
+        }
+        .sidenav.open {
+            width: 250px; /* Adjust as needed */
+        }
+        .sidenav .closebtn {
+            position: absolute;
+            top: 15px;
+            right: 25px;
+            font-size: 36px;
+            margin-left: 50px;
+            cursor: pointer;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: wheat;
+            background-color: white;
+            padding-top: 60px;
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+        }
+        .close-btn {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close-btn:hover,
+        .close-btn:focus {
+            color: rgb(226, 69, 69);
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+          /* Styles for the sidenav */
+          .sidenav {
+            height: 100%;
+            width: 0;
+            position: fixed;
+            z-index: 1;
+            top: 0;
+            left: 0;
+            background-color: rgba(253, 252, 249, 0.9);
+
+
+
+            overflow-x: hidden;
+            transition: 0.5s;
+            padding-top: 60px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .sidenav a {
+            padding: 8px 16px;
+            text-decoration: none;
+            font-size: 18px;
+            color: #000;
+            display: block;
+            transition: 0.3s;
+        }
+
+        .sidenav a:hover {
+            color: #f1f1f1;
+        }
+
+        .sidenav .closebtn {
+            position: absolute;
+            top: 0;
+            right: 25px;
+            font-size: 36px;
+            margin-left: 50px;
+        }
+    </style>
+   
+</head>
+
+
+
+
+
+
+
+
+
+
+
+
+<header class="bg-white rounded-lg  bg-opacity-70 backdrop-blur-md shadow-md sticky top-0 z-50">
+    <!-- Mobile Header (Small screens) -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between bg-white bg-opacity-70 backdrop-blur-md rounded-full shadow-md">
+      <div class="text-lg font-bold text-green-800">
+
+      {% load static %}
+         
+        <img src="{% static 'images/logo.png' %}" alt="NXC Icon" width="32" height="24" class="inline-block" />
+        Hi, <span class="font-extrabold text-xl text-green-600 italic">{{ user.username }}</span>!
+    </div>
+    
+
+       
+  <div class="block lg:hidden">
+           
+            <h2 class="text-gray-600"> </h3>
+        </div>
+
+        <!-- Desktop Header (Large screens) -->
+        <div class="hidden lg:flex items-center space-x-6">
+          
+          <div class="flex space-x-4">
+            <a href="{% url 'landing_page' %}" class="button">Home</a>
+            <a href="" class="button">Need Help?</a>
+            <a href="{% url 'FAQ' %}" class="button">FAQ</a>
+           
+          </div>
+      </div>
+     
+      
+    
+
+        <!-- Mobile Navbar Toggle -->
+        <div class="lg:hidden flex items-center">
+          <button id="navbar-toggle" class="text-gray-600 hover:text-gray-900 font-bold p-2">
+              <!-- Icon for mobile menu -->
+              <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+              </svg>
+          </button>
+      </div>
+   
+      
+
+    </div>
+    
+<nav id="myNav" class="sidenav">
+  <a href="javascript:void(0)" class="closebtn" id="closeNav">&times;</a>
+  <div class="px-4 py-6">
+      <h3 class="text-lg font-semibold mb-4 flex items-center">
+       {% load static %}
+          <img src="{% static 'images/logo.png' %}" alt="NXC Icon" width="32" height="24" class="inline-block" />
+          <span class="text-green-600">Nexis</span><span class="text-gray-400">phere</span><span class="text-black">FX</span>
+      </h3>
+    
+
+  
+
+
+
+
+
+      <div class="space-y-4">
+        <a href="{% url 'landing_page' %}" class="bg-white block p-4 text-green-800 rounded-xl border border-gray-200 hover:border-gray-300 flex items-center space-x-4 transition-transform transform hover:scale-105 font-semibold text-lg rounded-md section-item">
+            <i class="bi bi-house text-4xl mb-4 text-green-500"></i>
+
+            <span class="text-green-600">Home</span>
+        </a>
+    
+      
+        <a href="https://t.me/your_support_channel" class="bg-white block p-4 text-green-800 rounded-xl border border-gray-200 hover:border-gray-300 flex items-center space-x-4 transition-transform transform hover:scale-105 font-semibold text-lg rounded-md section-item">
+            <i class="bi bi-telephone text-4xl mb-4 text-green-500"></i>
+            <span class="text-green-600">Need Help?</span>
+        </a>
+    
+       
+
+        
+        <a href="{% url 'FAQ' %}" class="bg-white block p-4 text-green-800 rounded-xl border border-gray-200 hover:border-gray-300 flex items-center space-x-4 transition-transform transform hover:scale-105 font-semibold text-lg rounded-md section-item">
+            <i class="bi bi-question-circle text-4xl mb-4 text-green-500"></i>
+            <span class="text-green-600">FAQ</span>
+        </a>
+
+     
+      
+    
+        <!-- Footer with logout button -->
+    
+    </div>
+    
+    
+    
+    
+
+
+
+
+
+
+
+
+
+          
+      
+    </div>
+    
+    
+    
+    
+    
+    
+    
+          
+          
+
+     
+
+
+      </div>
+  </div>
+</nav>
+</header>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+<div class="bg-white mx-auto shadow-sm px-4 py-8 rounded-2xl">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div class="section shadow-md">
+        <h2 class="text-2xl font-semibold mb-4">Market (OTC)</h2>
+        <ul id="market-list" class="space-y-3">
+          <li class="flex justify-between items-center p-3 bg-gray-100 rounded-lg shadow-sm rounded-2xl">
+            <div class="text-gray-500">Pair</div>
+            <div class="text-right text-sm text-gray-500">
+              <div>Price ($)</div>
+            </div>
+            <div class="text-right text-sm text-gray-500">
+              <div>Vol</div>
+            </div>
+            <div class="text-gray-500">24h Change</div>
+          </li>
+          <li class="flex justify-between items-center p-3 bg-green-50 rounded-lg shadow-sm">
+            <div class="text-sm text-gray-900">NXC/USDT</div>
+            <div class="text-right text-sm text-green-900">
+              <div class="font-semibold">0.023</div>
+            </div>
+            <div class="text-right text-sm text-green-900">
+              <div class="font-semibold"><strong>NXC</strong> 300,975.023</div>
+            </div>
+            <a href="#" class="flex-shrink-0 flex items-center px-3 py-2 bg-green-500 hover:bg-green-400 text-white rounded-lg shadow-md transition-all duration-300 ease-in-out">
+              <div class="font-semibold">+0.15%</div>
+            </a>
+          </li>
+          <li class="flex justify-between items-center p-3 bg-red-50 rounded-lg shadow-sm">
+            <div class="text-sm text-gray-900">NGN/USDT</div>
+            <div class="text-right text-sm text-green-900">
+              <div class="font-semibold">1,620.05</div>
+            </div>
+            <div class="text-right text-sm text-red-900">
+              <div class="font-semibold">₦ 46,457,528,287,762.6</div>
+            </div>
+            <a href="#" class="flex-shrink-0 flex items-center px-3 py-2 bg-red-500 hover:bg-red-400 text-white rounded-lg shadow-md transition-all duration-300 ease-in-out">
+              <div class="font-semibold">-2.65%</div>
+            </a>
+          </li>
+          <!-- Add more items as needed -->
+         
+          <li class="flex justify-between items-center p-3 bg-green-50 rounded-lg shadow-sm">
+            <div class="text-sm text-gray-900">GHS/USDT</div>
+            <div class="text-right text-sm text-green-900">
+              <div class="font-semibold">15.69.</div>
+            </div>
+            <div class="text-right text-sm text-green-900">
+              <div class="font-semibold">₵ 107,600,000,000.</div>
+            </div>
+            <a href="#" class="flex-shrink-0 flex items-center px-3 py-2 bg-green-500 hover:bg-green-400 text-white rounded-lg shadow-md transition-all duration-300 ease-in-out">
+              <div class="font-semibold">+1.65%</div>
+            </a>
+          </li>
+          <li class="flex justify-between items-center p-3 bg-red-50 rounded-lg shadow-sm">
+            <div class="text-sm text-gray-900">XOF/USDT</div>
+            <div class="text-right text-sm text-green-900">
+              <div class="font-semibold">620.05</div>
+            </div>
+            <div class="text-right text-sm text-red-900">
+              <div class="font-semibold">Unavailable</div>
+            </div>
+            <a href="#" class="flex-shrink-0 flex items-center px-3 py-2 bg-red-500 hover:bg-red-400 text-white rounded-lg shadow-md transition-all duration-300 ease-in-out">
+              <div class="font-semibold">-0.00%</div>
+            </a>
+          </li>
+
+
+        </li>
+
+        <li class="flex justify-between items-center p-3 bg-green-50 rounded-lg shadow-sm">
+          <div class="text-sm text-gray-900">BTC/USDT</div>
+          <div class="text-right text-sm text-green-900">
+            <div class="font-semibold">63,193.69</div>
+          </div>
+          <div class="text-right text-sm text-red-900">
+            <div class="font-semibold"><strong>BTC</strong> 505,026.86</div>
+          </div>
+          <a href="#" class="flex-shrink-0 flex items-center px-3 py-2 bg-green-500 hover:bg-red-400 text-white rounded-lg shadow-md transition-all duration-300 ease-in-out">
+            <div class="font-semibold">+0.17%</div>
+          </a>
+        </li>
+
+      </li>
+ 
+
+
+
+      <li class="flex justify-between items-center p-3 bg-green-50 rounded-lg shadow-sm">
+        <div class="text-sm text-gray-900">ETH/USDT</div>
+        <div class="text-right text-sm text-green-900">
+          <div class="font-semibold">2,559.00</div>
+        </div>
+        <div class="text-right text-sm text-green-900">
+          <div class="font-semibold"><strong>ETH</strong> 8,223,130.07 </div>
+        </div>
+        <a href="#" class="flex-shrink-0 flex items-center px-3 py-2 bg-green-500 hover:bg-green-400 text-white rounded-lg shadow-md transition-all duration-300 ease-in-out">
+          <div class="font-semibold">+0.63%</div>
+        </a>
+      </li>
+
+
+
+        </ul>
+      </div>
+  
+     
+    </div>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+    document.getElementById('navbar-toggle').addEventListener('click', function() {
+        document.getElementById('myNav').style.width = '500px'; // Adjust width as needed
+    });
+  
+    document.getElementById('closeNav').addEventListener('click', function() {
+        document.getElementById('myNav').style.width = '0';
+    });
+  </script>
+
+
+
+
+</body>
+</html>

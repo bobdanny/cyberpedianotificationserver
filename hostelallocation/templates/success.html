@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Transaction Successful</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f5f5f5;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px;
+      box-sizing: border-box;
+      text-align: center;
+    }
+
+    .checkmark-container {
+      width: 120px;
+      height: 120px;
+      background-color: #ffffff;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .checkmark {
+      fill: none;
+      stroke: #09ff00;
+      stroke-width: 10;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-dasharray: 140;
+      stroke-dashoffset: 140;
+      animation: drawCheckmark 1.5s ease-out forwards;
+    }
+
+    @keyframes drawCheckmark {
+      0% {
+        stroke-dashoffset: 140;
+      }
+      100% {
+        stroke-dashoffset: 0;
+      }
+    }
+
+    h1 {
+      font-size: 1.5rem;
+      color: #2ecc71;
+      margin: 10px 0;
+      line-height: 1.4;
+    }
+
+    p {
+      font-size: 1rem;
+      color: #555;
+      margin: 10px 0;
+    }
+
+    a {
+      display: inline-block;
+      margin-top: 20px;
+      text-decoration: none;
+      background-color: #2ecc71;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 25px;
+      transition: background-color 0.3s ease;
+    }
+
+    a:hover {
+      background-color: #27ae60;
+    }
+
+    @media (min-width: 600px) {
+      .checkmark-container {
+        width: 150px;
+        height: 150px;
+      }
+
+      h1 {
+        font-size: 2rem;
+      }
+
+      p {
+        font-size: 1.2rem;
+      }
+
+      a {
+        padding: 12px 30px;
+        font-size: 1.1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="checkmark-container">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="80" height="80">
+      <path class="checkmark" d="M20,60 L50,90 L100,40"></path>
+    </svg>
+  </div>
+  <h1>🎉 Registration Successful!</h1>
+  <p>You have successfully registered for the course.</p>
+  <a href="{% url 'available_courses' %}">Go back to available courses</a>
+</body>
+</html>

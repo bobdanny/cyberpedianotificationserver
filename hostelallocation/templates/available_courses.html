@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Available Courses</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+<style>
+  /* Reset & base */
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: #f0f2f5;
+    margin: 0;
+    padding: 0;
+    color: #222;
+  }
+
+  /* Header styling */
+  header {
+    background: #026d19;
+    color: white;
+    padding: 1.5rem 1rem;
+    font-weight: 600;
+    font-size: 1.5rem;
+    text-align: center;
+    box-shadow: 0 2px 5px rgb(0 0 0 / 0.1);
+    letter-spacing: 0.03em;
+  }
+
+/* Tabs container */
+.tabs {
+  display: flex;
+  justify-content: center;
+  margin: 2rem auto 1.5rem;
+  max-width: 800px;
+  gap: 0.75rem;
+  flex-wrap: nowrap; /* Keep tabs in one row */
+  overflow-x: auto;  /* Allow horizontal scroll on small screens */
+  padding: 0 0.75rem; /* Added horizontal padding */
+  -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+
+  /* Hide scrollbar for WebKit browsers */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;  /* IE 10+ */
+}
+.tabs::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+/* Individual tab buttons */
+.tab {
+  padding: 0.5rem 1.25rem; /* Smaller padding */
+  font-size: 0.9rem;       /* Smaller font */
+  background: #fff;
+  border-radius: 24px;     /* Slightly smaller radius */
+  font-weight: 600;
+  cursor: pointer;
+  border: 2px solid #026d19;
+  color: #026d19;
+  white-space: nowrap;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  flex-shrink: 0; /* Prevent shrinking */
+}
+.tab.active,
+.tab:hover {
+  background-color: #026d19;
+  color: white;
+}
+
+  /* Main container */
+  .container {
+    max-width: 800px;
+    margin: 0 auto 3rem;
+    padding: 0 1rem;
+  }
+
+  /* Course cards */
+  .course-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #fff;
+    border-radius: 10px;
+    padding: 1rem 1.5rem;
+    margin-bottom: 1.25rem;
+    box-shadow: 0 4px 10px rgb(0 0 0 / 0.08);
+    flex-wrap: wrap;
+    transition: transform 0.15s ease-in-out;
+  }
+  .course-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 15px rgb(0 0 0 / 0.12);
+  }
+
+  /* Course info */
+  .course-info {
+    flex: 1 1 60%;
+    min-width: 250px;
+  }
+  h3 {
+    margin: 0 0 0.3rem;
+    font-weight: 600;
+    font-size: 1.3rem;
+    color: #333;
+  }
+  p {
+    margin: 0;
+    color: #555;
+    font-size: 0.95rem;
+  }
+
+  /* Buttons and form */
+  form, .btn-registered {
+    flex: 0 0 auto;
+    margin-left: 1rem;
+  }
+  .btn-register, .btn-registered {
+    padding: 0.55rem 1.5rem;
+    border: none;
+    border-radius: 28px;
+    font-size: 1rem;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+  }
+  .btn-register {
+    background-color: #28a745;
+    color: white;
+    box-shadow: 0 3px 8px rgb(40 167 69 / 0.5);
+  }
+  .btn-register:hover {
+    background-color: #218838;
+  }
+  .btn-registered {
+    background-color: #adb5bd;
+    color: #6c757d;
+    cursor: not-allowed;
+    box-shadow: none;
+  }
+
+  /* Empty state */
+  .empty-message {
+    text-align: center;
+    color: #666;
+    font-style: italic;
+    margin-top: 3rem;
+  }
+
+  /* Responsive */
+  @media (max-width: 600px) {
+    .course-card {
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 1rem 1rem;
+    }
+    form, .btn-registered {
+      margin-left: 0;
+      margin-top: 0.8rem;
+      width: 100%;
+    }
+    .btn-register, .btn-registered {
+      width: 100%;
+      text-align: center;
+    }
+  }
+</style>
+</head>
+<body>
+
+<header>Available Courses for {{ request.user.full_name }}</header>
+
+<!-- Tabs for filtering -->
+<div class="tabs" role="tablist">
+  <button class="tab active" data-tab="all" role="tab" aria-selected="true">All</button>
+  <button class="tab" data-tab="registered" role="tab" aria-selected="false">Registered</button>
+  <button class="tab" data-tab="unregistered" role="tab" aria-selected="false">Unregistered</button>
+</div>
+
+<div class="container">
+  {% comment %} All courses container {% endcomment %}
+  <div class="tab-content" id="all">
+    {% for course in courses %}
+      <div class="course-card" data-registered="{{ course.registered|yesno:'yes,no' }}">
+        <div class="course-info">
+          <h3>{{ course.title }} ({{ course.code }})</h3>
+          <p>Department: {{ course.get_department_display }}, Level: {{ course.level }}, Semester: {{ course.semester }}</p>
+        </div>
+        {% if course.registered %}
+          <button class="btn-registered" disabled>Registered</button>
+        {% else %}
+          <form action="{% url 'register_course' course.id %}" method="post" novalidate>
+            {% csrf_token %}
+            <button type="submit" class="btn-register">Register</button>
+          </form>
+        {% endif %}
+      </div>
+    {% empty %}
+      <p class="empty-message">No courses available.</p>
+    {% endfor %}
+  </div>
+
+  {% comment %} Registered courses container {% endcomment %}
+  <div class="tab-content" id="registered" style="display:none;">
+    {% for course in courses %}
+      {% if course.registered %}
+        <div class="course-card">
+          <div class="course-info">
+            <h3>{{ course.title }} ({{ course.code }})</h3>
+            <p>Department: {{ course.get_department_display }}, Level: {{ course.level }}, Semester: {{ course.semester }}</p>
+          </div>
+          <button class="btn-registered" disabled>Registered</button>
+        </div>
+      {% endif %}
+    {% empty %}
+      <p class="empty-message">No registered courses found.</p>
+    {% endfor %}
+  </div>
+
+  {% comment %} Unregistered courses container {% endcomment %}
+  <div class="tab-content" id="unregistered" style="display:none;">
+    {% for course in courses %}
+      {% if not course.registered %}
+        <div class="course-card">
+          <div class="course-info">
+            <h3>{{ course.title }} ({{ course.code }})</h3>
+            <p>Department: {{ course.get_department_display }}, Level: {{ course.level }}, Semester: {{ course.semester }}</p>
+          </div>
+          <form action="{% url 'register_course' course.id %}" method="post" novalidate>
+            {% csrf_token %}
+            <button type="submit" class="btn-register">Register</button>
+          </form>
+        </div>
+      {% endif %}
+    {% empty %}
+      <p class="empty-message">No unregistered courses found.</p>
+    {% endfor %}
+  </div>
+</div>
+
+<script>
+  const tabs = document.querySelectorAll('.tab');
+  const tabContents = document.querySelectorAll('.tab-content');
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      // Remove active class from all tabs
+      tabs.forEach(t => {
+        t.classList.remove('active');
+        t.setAttribute('aria-selected', 'false');
+      });
+
+      // Hide all tab contents
+      tabContents.forEach(tc => tc.style.display = 'none');
+
+      // Add active class to clicked tab
+      tab.classList.add('active');
+      tab.setAttribute('aria-selected', 'true');
+
+      // Show content for selected tab
+      const target = tab.getAttribute('data-tab');
+      document.getElementById(target).style.display = 'block';
+    });
+  });
+</script>
+
+</body>
+</html>

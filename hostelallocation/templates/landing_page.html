@@ -1,0 +1,306 @@
+{% load humanize %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Student Dashboard - Course Registration</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+
+<style>
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: #f7f9fc;
+    margin: 0;
+    padding: 0;
+  }
+  header {
+    background: #ffffff;
+    color: #000800;
+    padding: 1rem 2rem;
+    text-align: center;
+    box-shadow: 0 2px 0px rgba(0,0,0,0.1);
+
+
+ 
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 20px;
+  background-color: #f8f8f8;
+  }
+  header h1 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 600;
+  }
+
+  .header-logo {
+  width: 30px; /* adjust size as needed */
+  height: auto;
+  background-color: #ffffff;
+  padding: 7px;
+  border-radius: 17px;
+  transition: transform 0.3s ease-in-out; /* smooth animation */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* optional: subtle shadow */
+  background-color: #e3ffe5;
+}
+
+/* Animation on hover */
+.header-logo:hover {
+  transform: rotate(15deg) scale(1.1);
+}
+
+
+  .container {
+    max-width: 1000px;
+    margin: 2rem auto;
+    border-radius: 42px;
+    padding: 0 rem;
+  }
+  .card {
+    background: transparent;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    padding: 1.5rem 2rem;
+    margin-bottom: 2rem;
+  }
+  .card h2 {
+    margin-top: 0;
+    color: #412700;
+    font-size: 1.4rem;
+    margin-bottom: 1rem;
+  }
+  .stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+  }
+  .stat {
+    flex: 1 1 180px;
+    background: #ffffff;
+    border-radius: 8px;
+    padding: 1rem 1.5rem;
+    text-align: center;
+    box-shadow: inset 0 0 8px #c8e6c9;
+  }
+  .stat-icon {
+    font-size: 2rem;
+    margin-bottom: 0.3rem;
+    color: #2e7d32;
+  }
+  .stat-number {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #1b5e20;
+  }
+  .stat-label {
+    font-weight: 600;
+    color: #2e7d32;
+  }
+  .alert-list {
+    list-style: none;
+    padding-left: 1rem;
+    color: #b71c1c;
+  }
+  .alert-list li {
+    margin-bottom: 0.7rem;
+    border-left: 4px solid #d32f2f;
+    padding-left: 0.8rem;
+    font-weight: 600;
+  }
+  .btn {
+    display: inline-block;
+    padding: 0.7rem 1.4rem;
+    background-color: #2e7d32;
+    color: white;
+    font-weight: 600;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+    margin-top: 1.5rem;
+    margin-right: 1rem;
+  }
+  .btn:hover {
+    background-color: #1b5e20;
+  }
+
+  
+  .stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.stat {
+  flex: 1 1 50%;  /* Two per row */
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 1rem 1.5rem;
+  text-align: center;
+  box-shadow: inset 0 0 8px #c8e6c9;
+  box-sizing: border-box;
+  min-width: 120px; /* Optional: prevent too narrow */
+}
+
+/* On really small screens, shrink the flex basis to 45% or less */
+@media (max-width: 400px) {
+  .stat {
+    flex: 1 1 45%;
+    padding: 0.6rem 1rem;
+    font-size: 0.9rem; /* optional smaller font */
+  }
+}
+
+
+</style>
+
+</head>
+<body>
+  {% load static %}
+  <header>
+    <h1>Welcome, <span>{{ user.first_name }}</span></h1>
+    <a href="{% url 'user_profile' %}">
+    <img src="{% static 'images/userrprofile.png' %}" alt="Logo" class="header-logo">
+    </a>
+  </header>
+  
+
+<div class="container">
+
+  <!-- Registration Summary -->
+  <div class="card">
+    <h2>Your Registration Summary</h2>
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-icon">📚</div>
+        <div class="stat-number" id="courses-registered">{{ total_courses }}</div>
+        <div class="stat-label">Courses Registered</div>
+      </div>
+
+      <div class="stat">
+        <div class="stat-icon">✅</div>
+        <div class="stat-number" id="credits-earned">{{ total_registered_credits }}</div>
+        <div class="stat-label">Credits Earned</div>
+      </div>
+
+
+      <div class="stat">
+        <div class="stat-icon">🎓</div>
+        <div class="stat-number" id="credits-earned">{{ total_available_credits }}</div>
+        <div class="stat-label">Total Credit Units Available:</div>
+      </div>
+     
+      <div class="stat" style="flex: 1 1 180px;">
+        <div class="stat-icon">🔔</div>
+        <div class="stat-number" id="notifications-count">2</div>
+        <div class="stat-label">Notifications</div>
+      </div>
+    </div>
+
+
+    <style>
+      .progress-container {
+        background: #ddd;
+        border-radius: 20px;
+        overflow: hidden;
+        height: 20px;
+        width: 100%;
+        margin: 1rem 0;
+        box-shadow: inset 0 2px 5px rgba(0,0,0,0.1);
+      }
+    
+      .progress-bar {
+        background: linear-gradient(to right, #28a745, #218838);
+        height: 100%;
+        color: white;
+        text-align: center;
+        white-space: nowrap;
+        font-size: 0.8rem;
+        font-weight: 600;
+        line-height: 20px;
+        transition: width 0.5s ease-in-out;
+      }
+
+
+
+
+      
+  .progress-bar {
+    background-color: #070a07;
+    border-radius: 10px;
+    overflow: hidden;
+    height: 18px;
+    margin-top: 0.5rem;
+  }
+  .progress-fill {
+    background-color: #2e7d32;
+    height: 100%;
+    width: 0;
+    transition: width 0.7s ease;
+  }
+    </style>
+    
+    
+
+
+
+
+    {% widthratio total_registered_credits total_available_credits 100 as progress_percentage %}
+    <div class="progress-bar" style="width: {{ progress_percentage }}%">
+      {{ progress_percentage }}%
+    </div>
+    
+ 
+
+  </div>
+
+
+  
+  <!-- Important Alerts -->
+  <div class="card">
+    <h2>Important Alerts</h2>
+    <ul class="alert-list" id="alerts-list">
+      <li>You have not registered for 2 mandatory courses.</li>
+      <li>Registration deadline is in 3 days.</li>
+      <li>Some registered courses have scheduling conflicts.</li>
+    </ul>
+  </div>
+
+  <!-- Action Buttons -->
+  <div class="card" style="text-align:center;">
+    <a href="/onlinecourseregistration/student/available-courses" class="btn">View Available Courses</a>
+    <a href="/onlinecourseregistration/registration-history" class="btn"> Registration History</a>
+  </div>
+
+</div>
+
+<script>
+  // Example script to animate the progress bar and countdown days
+  const totalCredits = 18;
+  const earnedCredits = 12;
+  const progressPercent = (earnedCredits / totalCredits) * 100;
+  const progressFill = document.getElementById('credits-progress');
+  const creditsText = document.getElementById('credits-text');
+  progressFill.style.width = progressPercent + '%';
+  creditsText.textContent = `${earnedCredits} / ${totalCredits} credits (${progressPercent.toFixed(0)}%)`;
+
+  // Deadline countdown example
+  const deadlineDate = new Date('2025-06-15');
+  const today = new Date();
+  const diffTime = deadlineDate - today;
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  const deadlineCountdown = document.getElementById('deadline-countdown');
+  if(diffDays > 0) {
+    deadlineCountdown.textContent = `${diffDays} day${diffDays > 1 ? 's' : ''} remaining`;
+  } else if(diffDays === 0) {
+    deadlineCountdown.textContent = 'Deadline is today!';
+  } else {
+    deadlineCountdown.textContent = 'Registration deadline passed';
+  }
+</script>
+
+</body>
+</html>

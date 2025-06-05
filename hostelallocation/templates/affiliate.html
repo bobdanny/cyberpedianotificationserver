@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexisphere Referrals</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        
+
+marquee {
+    width: 100%;
+    padding: 2px;
+    background: linear-gradient(to right, #ffffff,  #b0fd9f,  #f0f0f0);
+    color: #333;
+    font-size: 1.2em;
+    border-bottom: 1px solid #000000;
+}
+.notification-icon {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+}
+
+
+
+
+
+
+  /* Inline CSS for demonstration purposes */
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+.balance {
+    margin: 5px;
+}
+.balance-amount {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+}
+.currency {
+    margin: 20px;
+}
+.currency .balance {
+    font-size: 1.2rem;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden; /* Prevent horizontal scrolling */
+}
+
+.menu-icon {
+    position: fixed;
+    top: 20px;
+    right: 20px; /* Position the menu icon on the right */
+    font-size: 30px;
+    cursor: pointer;
+}
+
+.menu {
+    position: fixed;
+    top: 0;
+    left: -50%; /* Initially hide the menu off-screen to the left */
+    width: 50%;
+    height: 100%;
+    background-color: rgba(236, 236, 236, 0.9); /* Transparent white background */
+    box-shadow: 2px 0 5px rgba(87, 236, 0, 0.5);
+    transition: left 0.3s ease;
+    z-index: 1000;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.menu ul {
+    list-style: none;
+    padding: 0;
+}
+
+.menu ul li {
+    margin: 20px 0;
+    font-size: 20px;
+    cursor: pointer;
+    transition: background 0.3s, color 0.3s;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.menu ul li:hover,
+.menu ul li.selected {
+    background-color: rgba(131, 161, 125, 0.1);
+    color: #007bff;
+}
+
+.menu ul li .icon {
+    margin-right: 10px;
+}
+
+.menu ul li a {
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    align-items: center;
+}
+
+.close-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-size: 30px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 900;
+    display: none;
+}
+
+header {
+    display: flex;
+    justify-content: center; /* Center the logo horizontally */
+    align-items: center;    /* Center the logo vertically */
+    padding: 10px;          /* Add some padding around the header */
+    background-color: transparent; /* Optional: background color for the header */
+}
+
+.logo {
+    height: 60px; /* Adjust the height of the logo as needed */
+    /* Optionally, add more styles to the logo */
+    max-width: 25;
+}
+
+
+/* Reset default browser styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+/* Basic styling for the entire page */
+body {
+    font-family: Arial, sans-serif;
+    background-color: rgba(246, 255, 248, 0.8); /* Off-white with transparency */
+}
+
+header
+{
+    background: linear-gradient(to right, #ffffff,  #ebf1e9,  #f0f0f0);
+    color: #000000;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header nav ul {
+    list-style-type: none;
+    display: flex;
+}
+
+header nav ul li {
+    margin-right: 20px;
+}
+
+header nav ul li a {
+    color: #030303;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+main {
+    max-width: 900px;
+    margin: 10px auto;
+    background-color: #ffffff;
+    padding: 10px;
+    border-radius: 15px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+
+.balance {
+    margin-bottom: 10px;
+    padding: 10px;
+    background-color: #f0f0f0; /* Set background color to off-white */
+    border-radius: 8px;
+    text-align: center;
+}
+
+.balance-amount {
+    font-size: 32px;
+    margin-top: 10px;
+}
+
+.transactions {
+    padding: 10px;
+    background-color: linear-gradient(to right, #f2faf0, #d5f8c0, #e6f5da);
+    border-radius: 8px;
+}
+
+.transactions ul {
+    list-style-type: none;
+}
+
+.transactions ul li {
+    margin-bottom: 5px;
+    padding: 5px;
+    border: 1px solid #c8cfc8;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+}
+
+.transaction-type {
+    padding: 8px 12px;
+    background-color: #b0fd9f;
+   
+    color: #1b1b1a;
+    border-radius: 4px;
+    text-transform: uppercase;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.transaction-details {
+    margin-left: 10px;
+}
+
+.transaction-amount {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.transaction-time {
+    color: #000000;
+    font-size: 14px;
+}
+
+footer {
+    text-align: center;
+    padding: 10px;
+    background-color: #c5ddb8;
+    color: #000000;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.buttons {
+    margin-top: 10px;
+    text-align: center; /* Center align the buttons */
+}
+
+.buttons a.deposit-btn {
+    display: inline-block;
+    text-decoration: none; /* Remove underline from link */
+    margin-right: 10px;
+    padding: 8px 12px;
+    border: 3px solid #5e635d;
+    background-color: rgba(255, 255, 255, 0.9); /* Transparent white background */
+    color: #2b4421;
+    font-size: 6px;
+    cursor: pointer;
+    border-radius: 20px; /* Rounded corners for buttons */
+    transition: background-color 0.3s ease; /* Smooth background color transition */
+}
+
+.buttons a.deposit-btn:hover {
+    background-color: #8ae378; /* Darker shade on hover */
+}
+
+.buttons a.deposit-btn img {
+    vertical-align: middle;
+    margin-right: 5px;
+}
+        body {
+            font-family: Arial, sans-serif;
+            background-color: rgba(246, 255, 248, 0.8); /* Off-white with transparency */
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            background: transparent;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .header {
+            background-color: #ceff9f;
+            color: #000000;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .referral-section {
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .referral-section h2 {
+            margin: 0 0 10px;
+            font-size: 20px;
+            text-align: center;
+        }
+
+        .referral-code {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .referral-code input {
+            width: 70%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .referral-code button {
+            padding: 10px 20px;
+            background: #95fd69;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+            font-size: 16px;
+        }
+
+        .referral-code button:hover {
+            background: #7cfc4c;
+        }
+
+        .referral-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .stat-box {
+            flex: 1;
+            background: #f2faf0;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            margin: 0 10px;
+        }
+
+        .stat-box h3 {
+            margin: 0 0 10px;
+            font-size: 18px;
+        }
+
+        .stat-box p {
+            margin: 0;
+            font-size: 16px;
+        }
+
+        .referral-list {
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .referral-list h2 {
+            margin: 0 0 10px;
+            font-size: 20px;
+            text-align: center;
+        }
+
+        .referral-list ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .referral-list li {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .referral-list li:last-child {
+            border-bottom: none;
+        }
+
+        .referral-list .details {
+            display: flex;
+            align-items: center;
+        }
+
+        .referral-list .icon {
+            margin-right: 10px;
+        }
+
+        .referral-list .icon img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+        }
+
+        .referral-list .info {
+            font-size: 16px;
+        }
+
+        .referral-list .info p {
+            margin: 0;
+        }
+
+        .referral-list .timestamp {
+            font-size: 14px;
+            color: #888;
+        }
+
+        .remove-btn {
+            background: #ff4d4d;
+            border: none;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .remove-btn:hover {
+            background: #ff1a1a;
+        }
+    </style>
+    <div class="menu-icon" id="menuIcon">
+        &#9776; <!-- Hamburger icon -->
+    </div>
+    <div class="menu" id="menu">
+        <button class="close-btn" id="closeBtn">&times;</button>
+        <ul>
+            <li><a href="{% url 'home' %}"><i class="icon">🏠</i> Home</a></li>
+      
+        </ul>
+    </div>
+    <div class="overlay" id="overlay"></div>
+    
+    
+    <script>
+        
+
+        document.getElementById('menuIcon').addEventListener('click', function() {
+            document.getElementById('menu').style.left = '0';
+            document.getElementById('overlay').style.display = 'block';
+        });
+        
+        document.getElementById('closeBtn').addEventListener('click', function() {
+            document.getElementById('menu').style.left = '-50%';
+            document.getElementById('overlay').style.display = 'none';
+        });
+        
+        document.getElementById('overlay').addEventListener('click', function() {
+            document.getElementById('menu').style.left = '-50%';
+            document.getElementById('overlay').style.display = 'none';
+        });
+        
+        document.querySelectorAll('.menu ul li').forEach(function(item) {
+            item.addEventListener('click', function() {
+                document.querySelectorAll('.menu ul li').forEach(function(li) {
+                    li.classList.remove('selected');
+                });
+                item.classList.add('selected');
+            });
+        });
+          
+        
+        document.addEventListener("DOMContentLoaded", function() {
+            const easyTouch = document.getElementById("easyTouch");
+            let isDragging = false;
+        
+            easyTouch.addEventListener("mousedown", function(e) {
+                e.preventDefault();
+                let shiftX = e.clientX - easyTouch.getBoundingClientRect().left;
+                let shiftY = e.clientY - easyTouch.getBoundingClientRect().top;
+        
+                function moveAt(pageX, pageY) {
+                    easyTouch.style.left = pageX - shiftX + "px";
+                    easyTouch.style.top = pageY - shiftY + "px";
+                }
+        
+                function onMouseMove(event) {
+                    isDragging = true;
+                    moveAt(event.pageX, event.pageY);
+                }
+        
+                document.addEventListener("mousemove", onMouseMove);
+        
+                easyTouch.addEventListener("mouseup", function() {
+                    document.removeEventListener("mousemove", onMouseMove);
+                    setTimeout(() => { isDragging = false; }, 0); // Delay to differentiate click and drag
+                });
+        
+                easyTouch.addEventListener("dragstart", function() {
+                    return false;
+                });
+            });
+        
+            easyTouch.addEventListener("click", function() {
+                if (!isDragging) {
+                    window.location.href = "nexisphereai/nexisphereai.html";
+                }
+            });
+        });
+            </script>
+        
+
+    
+<h1 style="font-size: 2em;">
+        
+    <span style="color: rgb(147, 255, 133);">Ne</span><span style="color: rgb(56, 173, 1);">xisphere</span><span style="color: rgb(92, 92, 92);">FX</span>
+   
+</h1>
+
+</head>
+<body>
+
+    <div class="container">
+        <header class="header">
+            <h1>Referral Program</h1>
+        </header>
+
+        <div class="referral-section">
+            <h2>Your Referral Code</h2>
+            <div class="referral-code">
+                <input type="text" id="referralCode" value="NEXIS12345" readonly>
+                <button id="copyCode">Copy</button>
+            </div>
+        </div>
+
+        <div class="referral-stats">
+            <div class="stat-box">
+                <h3>Total Referrals</h3>
+                <p id="totalReferrals">15</p>
+            </div>
+            <div class="stat-box">
+                <h3>Total Earnings</h3>
+                <p id="totalEarnings">$300</p>
+            </div>
+            <div class="stat-box">
+                <h3>Pending Rewards</h3>
+                <p id="pendingRewards">$50</p>
+            </div>
+        </div>
+
+        <div class="referral-list">
+            <h2>Your Referrals</h2>
+            <ul id="referralList">
+                <li>
+                    <div class="details">
+                        <div class="icon">
+                            <img src="https://via.placeholder.com/40" alt="Profile Picture">
+                        </div>
+                        <div class="info">
+                            <p>John Doe</p>
+                            <p class="timestamp">Joined: 2 days ago</p>
+                        </div>
+                    </div>
+                    <button class="remove-btn" onclick="removeReferral(this)">Remove</button>
+                </li>
+                <li>
+                    <div class="details">
+                        <div class="icon">
+                            <img src="https://via.placeholder.com/40" alt="Profile Picture">
+                        </div>
+                        <div class="info">
+                            <p>Jane Smith</p>
+                            <p class="timestamp">Joined: 2 week ago</p>
+                        </div>
+                    </div>
+                    <button class="remove-btn" onclick="removeReferral(this)">Remove</button>
+                </li>
+                <!-- More referrals can be added here -->
+            </ul>
+        </div>
+    </div>
+    <h2>Referrals</h2>
+    <ul>
+        {% for referral in referrals %}
+            <li>{{ referral.referred.username }} (Referred on {{ referral.referred_on }})</li>
+        {% empty %}
+            <li>No referrals yet.</li>
+        {% endfor %}
+    </ul>
+
+    <p>Your referral code: {{ referral_code }}</p>
+
+    <!-- Request Payout Form -->
+    
+
+   
+    <script>
+        document.getElementById('copyCode').addEventListener('click', () => {
+            const referralCode = document.getElementById('referralCode');
+            referralCode.select();
+            document.execCommand('copy');
+            alert('Referral code copied to clipboard!');
+        });
+
+        function removeReferral(button) {
+            const referralList = document.getElementById('referralList');
+            referralList.removeChild(button.closest('li'));
+        }
+    </script>
+</body>
+</html>

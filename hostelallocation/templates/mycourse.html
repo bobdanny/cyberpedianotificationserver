@@ -1,0 +1,11 @@
+<!-- available_courses.html -->
+<h2 class="text-2xl font-bold mb-4">Available Courses for {{ request.user.full_name }}</h2>
+<ul class="space-y-2">
+    {% for course in courses %}
+        <li class="p-3 border rounded-lg shadow hover:bg-gray-100">
+            <strong>{{ course.code }}</strong>: {{ course.title }} ({{ course.credit_units }} CU)
+        </li>
+    {% empty %}
+        <li class="text-red-600">No courses available for your department, level, and semester at the moment.</li>
+    {% endfor %}
+</ul>

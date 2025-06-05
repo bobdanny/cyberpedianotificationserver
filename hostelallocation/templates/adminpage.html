@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Apartment Management</title>
+<style>
+  /* Reset & base */
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    margin: 0;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background: #f9fafb;
+    color: #333;
+    line-height: 1.5;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  header {
+    background: #4a90e2;
+    padding: 1rem 2rem;
+    color: white;
+    text-align: center;
+    box-shadow: 0 2px 6px rgba(74, 144, 226, 0.4);
+  }
+  header h1 {
+    margin: 0;
+    font-weight: 700;
+    font-size: 1.8rem;
+  }
+  main {
+    flex: 1;
+    max-width: 1100px;
+    margin: 1.5rem auto 3rem;
+    padding: 0 1rem;
+  }
+
+  /* Section Titles */
+  h2 {
+    margin-top: 2rem;
+    font-weight: 600;
+    font-size: 1.4rem;
+    color: #2c3e50;
+    border-bottom: 2px solid #4a90e2;
+    padding-bottom: 0.25rem;
+  }
+
+  /* Apartment Applications List */
+  ul.applications-list {
+    list-style: none;
+    padding: 0;
+    margin: 1rem 0 2rem;
+  }
+  ul.applications-list li {
+    background: white;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgb(74 144 226 / 0.15);
+    transition: box-shadow 0.2s;
+  }
+  ul.applications-list li:hover {
+    box-shadow: 0 4px 20px rgb(74 144 226 / 0.3);
+  }
+  ul.applications-list strong {
+    color: #4a90e2;
+  }
+  ul.applications-list em {
+    font-style: normal;
+    color: #666;
+  }
+  ul.applications-list p {
+    margin: 0.5rem 0 0;
+    white-space: pre-wrap;
+    color: #555;
+  }
+
+  /* Form Styling */
+  form {
+    background: white;
+    padding: 1.25rem 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(74, 144, 226, 0.15);
+    margin-top: 1rem;
+  }
+  form label {
+    display: block;
+    margin-top: 1rem;
+    font-weight: 600;
+    color: #333;
+  }
+  form input[type="file"] {
+    margin-top: 0.3rem;
+  }
+  form button {
+    margin-top: 1.5rem;
+    background-color: #4a90e2;
+    color: white;
+    font-weight: 700;
+    border: none;
+    padding: 0.65rem 1.5rem;
+    font-size: 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.25s;
+  }
+  form button:hover {
+    background-color: #3b7dc4;
+  }
+
+  /* Apartment Cards Container */
+  .apartment-list {
+    margin-top: 1.5rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fill,minmax(280px,1fr));
+    gap: 1.5rem;
+  }
+
+  /* Individual Apartment Card */
+  .apartment-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgb(74 144 226 / 0.1);
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+  }
+  .apartment-card img {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 1rem;
+  }
+  .apartment-card h3 {
+    margin: 0 0 0.4rem;
+    font-weight: 700;
+    color: #2c3e50;
+  }
+  .apartment-card p {
+    margin: 0.15rem 0;
+    color: #555;
+  }
+  .apartment-card form {
+    margin-top: auto;
+  }
+  .apartment-card .delete-button {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    width: 100%;
+    transition: background-color 0.25s;
+  }
+  .apartment-card .delete-button:hover {
+    background-color: #c0392b;
+  }
+
+  /* Responsive tweaks */
+  @media (max-width: 768px) {
+    header h1 {
+      font-size: 1.4rem;
+    }
+    h2 {
+      font-size: 1.2rem;
+    }
+    .apartment-card img {
+      height: 140px;
+    }
+  }
+  @media (max-width: 400px) {
+    main {
+      margin: 1rem 0.5rem 2rem;
+      padding: 0 0.5rem;
+    }
+    form button {
+      width: 100%;
+    }
+    .apartment-card .delete-button {
+      font-size: 0.9rem;
+      padding: 0.45rem 0;
+    }
+  }
+</style>
+</head>
+<body>
+  <header>
+    <h1>Apartment Management</h1>
+  </header>
+  <main>
+
+
+
+
+
+
+
+    <style>
+   
+  
+      /* Modal background overlay */
+      .modal-overlay {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: white;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          z-index: 1000;
+      }
+  
+      /* Modal container */
+      .container {
+          background: white;
+          padding: 2rem;
+          border-radius: 8px;
+          box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+          text-align: center;
+          max-width: 400px;
+          width: 90%;
+      }
+  
+      #mainContent {
+          display: none;
+          padding: 2rem;
+      }
+  
+      input[type="password"] {
+          width: 80%;
+          padding: 0.5rem;
+          margin: 1rem 0;
+          border: 1px solid #ccc;
+          border-radius: 4px;
+      }
+  
+      button {
+          padding: 0.5rem 1rem;
+          border: none;
+          background: #007bff;
+          color: white;
+          border-radius: 4px;
+          cursor: pointer;
+      }
+  
+      button:hover {
+          background: #0056b3;
+      }
+  
+      .error {
+          color: red;
+          font-size: 0.9rem;
+      }
+  </style>
+  
+  <!-- Modal -->
+  <div class="modal-overlay" id="modal">
+      <div class="container">
+          <div id="authForm">
+              <h2>Enter Secret Key</h2>
+              <input type="password" id="secretKeyInput" placeholder="Secret Key">
+              <br>
+              <button onclick="checkKey()">Submit</button>
+              <div id="errorMsg" class="error"></div>
+          </div>
+      </div>
+  </div>
+  
+  <!-- Main Page Content -->
+
+  <script>
+    let SECRET_KEY = "";
+
+    // Fetch the secret key from the backend
+    fetch(' /hostelallocation/api/secret-key/')
+        .then(response => response.json())
+        .then(data => {
+            SECRET_KEY = data.secret_key;
+        })
+        .catch(error => {
+            console.error('Error fetching secret key:', error);
+        });
+
+    function checkKey() {
+        const inputKey = document.getElementById("secretKeyInput").value;
+        const errorMsg = document.getElementById("errorMsg");
+
+        if (inputKey === SECRET_KEY) {
+            document.getElementById("modal").style.display = "none";
+            document.getElementById("mainContent").style.display = "block";
+        } else {
+            errorMsg.textContent = "Invalid key. Please try again.";
+        }
+    }
+</script>
+
+  
+
+
+
+
+
+
+    <style>
+      .reply-form {
+  margin-top: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.reply-form label {
+  font-weight: 600;
+  color: #4a90e2;
+}
+.reply-form textarea {
+  resize: vertical;
+  min-height: 50px;
+  padding: 0.5rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-family: inherit;
+  font-size: 0.95rem;
+}
+.reply-form button {
+  align-self: flex-start;
+  background-color: #4a90e2;
+  color: white;
+  border: none;
+  padding: 0.45rem 1.2rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 700;
+  transition: background-color 0.25s;
+}
+.reply-form button:hover {
+  background-color: #3b7dc4;
+}
+
+    </style>
+
+<section>
+  <h2>Apartment Applications</h2>
+  {% if applications_with_sent_messages %}
+    <ul class="applications-list">
+      {% for item in applications_with_sent_messages %}
+        {% with app=item.application %}
+        <li>
+          <strong>{{ app.user.username }}</strong> ({{ app.user.first_name }}) applied for <em>{{ app.apartment.name }}</em>
+          on {{ app.applied_at|date:"F j, Y, g:i a" }}.
+          {% if app.message %}
+            <p>Message: {{ app.message|linebreaksbr }}</p>
+          {% endif %}
+
+          <!-- Sent Messages by current user -->
+          {% if item.sent_messages %}
+            <div class="sent-messages">
+              <strong>Sent Replies:</strong>
+              <ul>
+                {% for msg in item.sent_messages %}
+                  <li>
+                    <small>{{ msg.sent_at|date:"F j, Y, g:i a" }}</small>: {{ msg.content|linebreaksbr }}
+                  </li>
+                {% endfor %}
+              </ul>
+            </div>
+          {% endif %}
+
+          <!-- Reply Form -->
+          <form method="post" action="{% url 'reply_to_application' app.id %}" class="reply-form">
+            {% csrf_token %}
+            <label for="reply-{{ app.id }}">Reply to {{ app.user.first_name }}:</label>
+            <textarea name="reply_message" id="reply-{{ app.id }}" rows="2" placeholder="Type your reply here..." required></textarea>
+            <button type="submit">Send Reply</button>
+          </form>
+        </li>
+        {% endwith %}
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No apartment applications found.</p>
+  {% endif %}
+</section>
+
+
+
+    <section>
+      <h2>Upload a New Apartment</h2>
+      <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <label for="image1">Image 1:</label>
+        <input type="file" name="image1" id="image1" />
+        <label for="image2">Image 2:</label>
+        <input type="file" name="image2" id="image2" />
+        <button type="submit">Upload Apartment</button>
+      </form>
+    </section>
+
+    <section>
+      <h2>Existing Apartments</h2>
+      <div class="apartment-list">
+        {% for apartment in apartments %}
+          <div class="apartment-card">
+            {% if apartment.image1 %}
+              <img src="{{ apartment.image1 }}" alt="Apartment Image 1" />
+            {% endif %}
+            <h3>{{ apartment.name }}</h3>
+            <p><strong>Location:</strong> {{ apartment.location }}</p>
+            <p><strong>Price:</strong> ${{ apartment.price }}</p>
+            <form method="post" action="">
+              {% csrf_token %}
+              <input type="hidden" name="delete_apartment_id" value="{{ apartment.id }}" />
+              <button type="submit" class="delete-button">Delete</button>
+            </form>
+          </div>
+        {% endfor %}
+      </div>
+    </section>
+
+  </main>
+</body>
+</html>

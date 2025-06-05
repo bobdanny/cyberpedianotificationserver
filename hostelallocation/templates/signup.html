@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sign Up</title>
+  {% load static %}
+  <link rel="icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon" />
+
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #f9fafb; /* Light gray background */
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 500px;
+      width: 100%;
+      padding: 20px;
+    }
+
+    .form-container {
+      background-color: rgba(255, 255, 255, 0.9);
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      backdrop-filter: blur(5px);
+    }
+
+    .form-container h1 {
+      font-size: 24px;
+      font-weight: bold;
+      color: #2563eb; /* Changed from greenish #065f46 to blue */
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .form-container img {
+      vertical-align: middle;
+      margin-right: 5px;
+    }
+
+    .form-container p {
+      font-size: 14px;
+      color: #333;
+      background-color: #e0f2fe; /* Changed from #f1f9f1 (light green) to light blue */
+      border-left: 4px solid #3b82f6; /* Changed from green #22c55e to blue */
+      padding: 10px;
+      border-radius: 6px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+      margin-bottom: 20px;
+      text-align: center;
+      line-height: 1.5;
+      font-weight: 300;
+    }
+
+    label {
+      display: block;
+      font-size: 14px;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    select {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 14px;
+      box-sizing: border-box;
+      transition: border-color 0.3s;
+    }
+
+    input:focus,
+    select:focus {
+      outline: none;
+      border-color: #3b82f6; /* Blue */
+      box-shadow: 0 0 3px #3b82f6;
+    }
+
+    .error {
+      color: #dc2626;
+      font-size: 12px;
+      margin-top: 4px;
+    }
+
+    .btn-active {
+      background-color: #3b82f6; /* Changed from green #22c55e to blue */
+      color: white;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s, transform 0.2s;
+      width: 100%;
+    }
+
+    .btn-active:hover,
+    .btn-active:focus {
+      background-color: #2563eb; /* Darker blue hover */
+    }
+
+    .btn-active:disabled {
+      background-color: #d1d5db;
+      color: #6b7280;
+      cursor: not-allowed;
+    }
+
+    .text-center {
+      text-align: center;
+    }
+
+    .text-link {
+      color: #3b82f6; /* Changed from green #22c55e to blue */
+      text-decoration: none;
+    }
+
+    .text-link:hover {
+      text-decoration: underline;
+    }
+
+    .mb-4 {
+      margin-bottom: 16px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <section class="form-container">
+      <h1>
+        <img src="{% static 'images/logo1.png' %}" alt="NXC Icon" width="32" height="24" />
+        Fuoye Lodge
+      </h1>
+
+      <h1>Sign Up</h1>
+      <p>
+        Sign up now!! Rent. Relax. Focus.
+      </p>
+
+      <form method="post" action="{% url 'signup' %}" id="signupForm">
+        {% csrf_token %}
+
+        <div class="mb-4">
+          {{ form.full_name.label_tag }}
+          <input type="text" name="{{ form.full_name.name }}" id="{{ form.full_name.id_for_label }}" placeholder="Full Name" value="{{ form.full_name.value|default_if_none:'' }}" />
+          {% if form.full_name.errors %}
+            <div class="error">{{ form.full_name.errors }}</div>
+          {% endif %}
+        </div>
+
+        <div class="mb-4">
+          {{ form.email.label_tag }}
+          <input type="email" name="{{ form.email.name }}" id="{{ form.email.id_for_label }}" placeholder="Email Address" value="{{ form.email.value|default_if_none:'' }}" />
+          {% if form.email.errors %}
+            <div class="error">{{ form.email.errors }}</div>
+          {% endif %}
+        </div>
+
+        <div class="mb-4">
+          {{ form.password1.label_tag }}
+          <input type="password" name="{{ form.password1.name }}" id="{{ form.password1.id_for_label }}" placeholder="Password" />
+          {% if form.password1.errors %}
+            <div class="error">{{ form.password1.errors }}</div>
+          {% endif %}
+        </div>
+
+        <div class="mb-4">
+          {{ form.password2.label_tag }}
+          <input type="password" name="{{ form.password2.name }}" id="{{ form.password2.id_for_label }}" placeholder="Confirm Password" />
+          {% if form.password2.errors %}
+            <div class="error">{{ form.password2.errors }}</div>
+          {% endif %}
+        </div>
+
+        <div class="mb-4">
+          {{ form.department.label_tag }}
+          <select name="{{ form.department.name }}" id="{{ form.department.id_for_label }}">
+            {% for val, text in form.department.field.choices %}
+              <option value="{{ val }}" {% if form.department.value == val %}selected{% endif %}>{{ text }}</option>
+            {% endfor %}
+          </select>
+          {% if form.department.errors %}
+            <div class="error">{{ form.department.errors }}</div>
+          {% endif %}
+        </div>
+
+        <div class="mb-4">
+          {{ form.level.label_tag }}
+          <select name="{{ form.level.name }}" id="{{ form.level.id_for_label }}">
+            {% for val, text in form.level.field.choices %}
+              <option value="{{ val }}" {% if form.level.value == val %}selected{% endif %}>{{ text }}</option>
+            {% endfor %}
+          </select>
+          {% if form.level.errors %}
+            <div class="error">{{ form.level.errors }}</div>
+          {% endif %}
+        </div>
+
+        <div class="mb-4">
+          {{ form.semester.label_tag }}
+          <select name="{{ form.semester.name }}" id="{{ form.semester.id_for_label }}">
+            {% for val, text in form.semester.field.choices %}
+              <option value="{{ val }}" {% if form.semester.value == val %}selected{% endif %}>{{ text }}</option>
+            {% endfor %}
+          </select>
+          {% if form.semester.errors %}
+            <div class="error">{{ form.semester.errors }}</div>
+          {% endif %}
+        </div>
+
+        <button type="submit" id="submitButton" class="btn-active">
+          Sign Up
+        </button>
+      </form>
+
+      <p class="text-center mt-4">
+        Already have an account? <a href="{% url 'login' %}" class="text-link">Login here</a>
+      </p>
+    </section>
+  </div>
+
+  <script>
+    document.getElementById('signupForm').addEventListener('submit', function(event) {
+      var button = document.getElementById('submitButton');
+      button.disabled = true;
+      button.textContent = 'Signing up...';
+    });
+  </script>
+</body>
+</html>

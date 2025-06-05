@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Admin Dashboard - All Registrations History</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: #f7f9fc;
+      color: #333;
+    }
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    /* Navbar (Mobile) */
+    .navbar {
+      display: flex;
+      background-color: #2e7d32;
+      color: white;
+      padding: 1rem 1.5rem;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .navbar .menu-btn {
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+    .navbar .title {
+      font-weight: 700;
+      font-size: 1.25rem;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: -250px;
+      width: 240px;
+      height: 100%;
+      background-color: #2e7d32;
+      color: white;
+      transition: 0.3s ease;
+      padding-top: 1.5rem;
+      z-index: 1001;
+    }
+    .sidebar.open {
+      left: 0;
+    }
+    .sidebar h2 {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .sidebar nav a {
+      display: block;
+      padding: 1rem 1.5rem;
+      font-weight: 600;
+      transition: background 0.3s;
+    }
+    .sidebar nav a:hover,
+    .sidebar nav a.active {
+      background-color: #1b5e20;
+    }
+
+    /* Main Content */
+    .main-content {
+      margin-left: 240px;
+      padding: 2rem;
+      transition: margin-left 0.3s ease;
+    }
+    .main-content.full-width {
+      margin-left: 0;
+    }
+    header {
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      color: #2e7d32;
+    }
+
+    /* Registrations Table */
+    .registrations {
+      background: white;
+      border-radius: 12px;
+      padding: 1rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      overflow-x: auto;
+    }
+    .registrations h3 {
+      margin-top: 0;
+      margin-bottom: 1rem;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 600px;
+    }
+    thead {
+      background-color: #c8e6c9;
+    }
+    th, td {
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid #ddd;
+      text-align: left;
+      font-size: 0.95rem;
+    }
+    .status-approved {
+      background: #2e7d32;
+      color: white;
+      padding: 0.2rem 0.6rem;
+      border-radius: 10px;
+      font-size: 0.85rem;
+    }
+    .status-pending {
+      background: #f9a825;
+      color: white;
+      padding: 0.2rem 0.6rem;
+      border-radius: 10px;
+      font-size: 0.85rem;
+    }
+    tr:hover {
+      background: #f1f8f1;
+    }
+
+    /* View All Button */
+    .view-all-btn {
+      margin-top: 1rem;
+      display: inline-block;
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 6px;
+      border: none;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 9999;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-content {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+      text-align: center;
+      width: 90%;
+      max-width: 350px;
+    }
+    .modal-content input {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+    .modal-content button {
+      margin-top: 10px;
+      padding: 10px 20px;
+      background-color: #2e7d32;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .error-message {
+      color: red;
+      font-size: 0.9rem;
+      margin-top: 5px;
+    }
+
+    @media (max-width: 768px) {
+      .main-content {
+        margin-left: 0;
+        padding: 1rem;
+      }
+      table {
+        font-size: 0.85rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Modal -->
+<div id="privateKeyModal" class="modal">
+  <div class="modal-content">
+    <h2>Enter Private Key</h2>
+    <input type="password" id="privateKeyInput" placeholder="Private Key" />
+    <div class="error-message" id="errorMsg"></div>
+    <button id="submitKeyBtn">Submit</button>
+  </div>
+</div>
+
+<!-- Navbar -->
+<div class="navbar">
+  <div class="menu-btn" id="menu-btn"></div>
+  <div class="title">Admin Panel</div>
+</div>
+
+<!-- Sidebar -->
+<div class="sidebar" id="sidebar">
+
+</div>
+
+<!-- Main Content -->
+<main class="main-content" id="mainContent" style="display: none;">
+  <header>All Registrations</header>
+
+  <section class="registrations">
+    <h3>Recent Registrations</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Student Name</th>
+          <th>Course</th>
+          <th>Date</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody id="registrationTableBody">
+        {% for registration in all_registrations %}
+        <tr class="registration-row" {% if forloop.counter > 10 %}style="display: none;"{% endif %}>
+          <td>{{ registration.student.full_name }}</td>
+          <td>{{ registration.course.title }} ({{ registration.course.code }})</td>
+          <td>{{ registration.registered_at|date:"Y-m-d H:i" }}</td>
+          <td><span class="status-approved">Approved</span></td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="4">No course registrations found.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <button class="view-all-btn" id="viewAllBtn">View All</button>
+  </section>
+</main>
+
+<script>
+  // Sidebar Toggle
+  const menuBtn = document.getElementById('menu-btn');
+  const sidebar = document.getElementById('sidebar');
+  const mainContent = document.getElementById('mainContent');
+
+  menuBtn.onclick = () => {
+    sidebar.classList.toggle('open');
+  };
+
+  // Modal logic
+  let CORRECT_KEY = "";
+
+  fetch('/onlinecourseregistration/get-private-key/')
+    .then(res => res.json())
+    .then(data => {
+      CORRECT_KEY = data.private_key;
+      document.getElementById('privateKeyModal').style.display = 'flex';
+    });
+
+  const input = document.getElementById('privateKeyInput');
+  const errorMsg = document.getElementById('errorMsg');
+  const submitBtn = document.getElementById('submitKeyBtn');
+
+  function checkKey() {
+    if (input.value.trim() === CORRECT_KEY) {
+      document.getElementById('privateKeyModal').style.display = 'none';
+      mainContent.style.display = 'block';
+    } else {
+      errorMsg.textContent = "Incorrect private key.";
+      input.value = '';
+      input.focus();
+    }
+  }
+
+  submitBtn.onclick = checkKey;
+  input.addEventListener('keypress', e => {
+    if (e.key === 'Enter') checkKey();
+  });
+
+  // View All Toggle
+  const viewAllBtn = document.getElementById('viewAllBtn');
+  let showingAll = false;
+  viewAllBtn.addEventListener('click', () => {
+    const rows = document.querySelectorAll('.registration-row');
+    showingAll = !showingAll;
+    rows.forEach((row, index) => {
+      row.style.display = showingAll || index < 10 ? '' : 'none';
+    });
+    viewAllBtn.textContent = showingAll ? 'Show Less' : 'View All';
+  });
+</script>
+
+</body>
+</html>

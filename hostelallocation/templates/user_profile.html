@@ -1,0 +1,411 @@
+<!-- templates/user_profile.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <title>User Profile</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link 
+      rel="stylesheet" 
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            margin: 20px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .profile-card {
+            max-width: 600px;
+            margin: auto;
+            background-color: #ffffff;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .profile-header {
+            background: linear-gradient(135deg, #010a8f, #033670);
+            color: white;
+            text-align: center;
+            padding: 30px 20px;
+          
+        }
+
+        .profile-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 4px solid white;
+            object-fit: cover;
+            margin-top: -30px;
+            background-color: #ffffff;
+        }
+
+        .profile-info {
+            padding: 20px;
+        }
+
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .info-item:last-child {
+            border-bottom: none;
+        }
+
+        .info-item span {
+            font-weight: 500;
+        }
+
+        .logout-btn {
+            margin: 20px;
+            display: block;
+        }
+
+        @media (max-width: 576px) {
+            .info-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .info-item span {
+                margin-top: 5px;
+            }
+
+            .profile-header {
+                padding: 20px 10px;
+            }
+        }
+
+
+
+
+
+
+
+
+
+
+        
+
+        .back-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 0px;
+      text-decoration: none;
+      color: #002b50;
+      font-weight: 900;
+      margin-bottom: 5px;
+      cursor: pointer;
+    }
+    .back-button svg {
+      width: 40px;
+      height: 40px;
+      fill: #4facfe;
+    }
+    .back-button:hover {
+      text-decoration: underline;
+    }
+
+
+    </style>
+</head>
+<body>
+
+
+    <div>
+        <a href="javascript:history.back()" class="back-button">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          
+        </a>
+      </div>
+
+
+
+    <div class="profile-card">
+        <div class="profile-header">
+            <h2>Welcome,  {{ user.first_name }}</h2>
+        </div>
+        <div class="text-center">
+            <img src="{% static 'images/avatar.png' %}" alt="User Avatar" class="profile-avatar">
+        </div>
+        <div class="profile-info">
+            <div class="info-item">
+                <strong>Email:</strong>
+                <span>{{ user.email }}</span>
+            </div>
+            <div class="info-item">
+                <strong>Full Name:</strong>
+                <span>{{ user.full_name }}</span>
+            </div>
+            <div class="info-item">
+                <strong>Department:</strong>
+                <span>
+                    {% if user.department %}
+                        {{ user.get_department_display }}
+                    {% else %}
+                        Not assigned
+                    {% endif %}
+                </span>
+            </div>
+            <div class="info-item">
+                <strong>Level:</strong>
+                <span>
+                    {% if user.level %}
+                        {{ user.level }}
+                    {% else %}
+                        Not assigned
+                    {% endif %}
+                </span>
+            </div>
+            <div class="info-item">
+                <strong>Semester:</strong>
+                <span>
+                    {% if user.semester %}
+                        {{ user.semester }}
+                    {% else %}
+                        Not assigned
+                    {% endif %}
+                </span>
+            </div>
+          
+           
+            <div class="info-item">
+                <strong>Date Joined:</strong>
+                <span>{{ user.date_joined|date:"F j, Y, g:i a" }}</span>
+            </div>
+        </div>
+        <div class="text-center">
+            <form method="POST" action="{% url 'logout' %}">
+            <a href="{% url 'logout' %}" class="btn btn-danger logout-btn">Logout</a>
+        </form>
+        </div>
+    </div>
+
+
+
+    <script>
+        let touchStartY = [];
+        let isTwoFinger = false;
+    
+        document.addEventListener("touchstart", (e) => {
+            if (e.touches.length === 2) {
+                isTwoFinger = true;
+                // Record the Y position of both fingers
+                touchStartY = [e.touches[0].clientY, e.touches[1].clientY];
+            } else {
+                isTwoFinger = false;
+            }
+        });
+    
+        document.addEventListener("touchmove", (e) => {
+            if (isTwoFinger && e.touches.length === 2) {
+                const newY1 = e.touches[0].clientY;
+                const newY2 = e.touches[1].clientY;
+                const deltaY1 = newY1 - touchStartY[0];
+                const deltaY2 = newY2 - touchStartY[1];
+    
+                // Check if both fingers swiped UP more than 50px
+                if (deltaY1 < -50 && deltaY2 < -50) {
+                    window.location.href = "/hostelallocation/adminpage/"; // Replace with your URL
+                }
+            }
+        });
+    
+        document.addEventListener("touchend", () => {
+            // Reset state
+            isTwoFinger = false;
+            touchStartY = [];
+        });
+    </script>
+    
+
+
+
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+  <style>
+    nav.bottom-nav {
+   position: fixed;
+   bottom: 0;
+   left: 50%;
+   transform: translateX(-50%);
+   width: 100%;
+   max-width: 480px;
+   background: white;
+   box-shadow: 0 -1px 8px rgb(0 0 0 / 0.1);
+   display: flex;
+   justify-content: space-around;
+   padding: 10px 0;
+   z-index: 100;
+ }
+ .nav-item {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   color: #666;
+   font-size: 0.75rem;
+   cursor: pointer;
+   user-select: none;
+ }
+ .nav-item.active {
+   color: #3498db;
+ }
+ .nav-icon {
+   font-size: 1.4rem;
+   margin-bottom: 2px;
+ }
+
+ /* Scrollbar styling for WebKit */
+ .filters-row::-webkit-scrollbar,
+ .featured-carousel::-webkit-scrollbar,
+ .quick-categories::-webkit-scrollbar {
+   height: 6px;
+ }
+ .filters-row::-webkit-scrollbar-thumb,
+ .featured-carousel::-webkit-scrollbar-thumb,
+ .quick-categories::-webkit-scrollbar-thumb {
+   background-color: #ccc;
+   border-radius: 3px;
+ }
+
+ </style>
+ 
+<nav class="bottom-nav" aria-label="Main Navigation">
+
+
+   <div id="home"  class="nav-item" tabindex="0">
+     <div class="nav-icon">
+       <!-- Home SVG -->
+       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+         <path d="M3 9.5L12 3L21 9.5V21H14V14H10V21H3V9.5Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+       </svg>
+     </div>
+     <div class="nav-label">Home</div>
+   </div>
+ 
+ 
+   <div id="application" class="nav-item" tabindex="0">
+     <div class="nav-icon">
+       <!-- Search SVG -->
+       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+         <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/>
+         <line x1="16.6569" y1="16.6569" x2="21" y2="21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+       </svg>
+     </div>
+     <div class="nav-label">Search</div>
+   </div>
+ 
+ 
+ 
+ 
+ 
+   <div id="inbox" class="nav-item" tabindex="0">
+     <div class="nav-icon">
+       <!-- Wishlist (Save/Bookmark) SVG -->
+       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+           <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v10z" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+         </svg>
+     </div>
+     <div class="nav-label">Inbox</div>
+   </div>
+ 
+ 
+ 
+   <div class="nav-item " tabindex="0">
+     <div id="applications" class="nav-icon">
+       <!-- Applications (Document) SVG -->
+       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+         <rect x="4" y="3" width="16" height="18" rx="2" ry="2" stroke="currentColor" stroke-width="2"/>
+         <line x1="8" y1="7" x2="16" y2="7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+         <line x1="8" y1="11" x2="16" y2="11" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+         <line x1="8" y1="15" x2="12" y2="15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+       </svg>
+     </div>
+     <div class="nav-label">Applications</div>
+   </div>
+ 
+ 
+   <div class="nav-item  active" tabindex="0">
+  
+     <div  class="nav-icon">
+      
+       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+         <circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="2"/>
+         <path d="M4 20C4 16 8 14 12 14C16 14 20 16 20 20" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+       </svg>
+    
+     </div>
+     
+     <div class="nav-label">Profile</div>
+   </div>
+ </nav>
+ </main>
+
+
+ <script>
+   document.getElementById("home").addEventListener("click", function() {
+     window.location.href = "/hostelallocation/home";  
+   });
+ </script>
+ 
+
+
+ <script>
+   document.getElementById("inbox").addEventListener("click", function() {
+     window.location.href = "/hostelallocation/inbox";  
+   });
+ </script>
+
+
+
+ <script>
+   document.getElementById("applications").addEventListener("click", function() {
+     window.location.href = "/hostelallocation/applications";  
+   });
+ </script>
+ 
+ <script>
+   document.getElementById("application").addEventListener("click", function() {
+     window.location.href = "/hostelallocation/application";  
+   });
+ </script>
+ 
+ 
+ <script>
+   document.getElementById("user").addEventListener("click", function() {
+     window.location.href = "/hostelallocation/profile";  
+   });
+ </script>
+
+
+</body>
+</html>

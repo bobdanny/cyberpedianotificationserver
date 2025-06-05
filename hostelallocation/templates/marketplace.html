@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marketplace</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@latest/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.0.0/dist/tailwind.min.css" rel="stylesheet">
+    
+   <style>
+        .modal-overlay {
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+    </style>
+      <style>
+   
+        /* General button styles */
+  a.button {
+      display: inline-block;
+      padding: 10px 20px;
+      margin: 5px;
+      border: 2px solid transparent; /* Border color changes on hover */
+      border-radius: 5px;
+      text-align: center;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 16px;
+      color: #4a5568; /* Text color */
+      background-color: #edf2f7; /* Background color */
+      transition: all 0.3s ease; /* Smooth transition for hover effects */
+  }
+  
+  /* Hover effect */
+  a.button:hover {
+      color: #2d3748; /* Text color on hover */
+      background-color: #e2e8f0; /* Background color on hover */
+      border-color: #cbd5e0; /* Border color on hover */
+  }
+  
+  /* Focus state for accessibility */
+  a.button:focus {
+      outline: 2px solid #a0aec0; /* Focus outline color */
+      outline-offset: 2px;
+  }
+  
+  /* Active state for when button is clicked */
+  a.button:active {
+      background-color: #e2e8f0; /* Background color when active */
+      box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2); /* Inner shadow when active */
+  }
+  
+          /* Optional custom styles */
+          .shadow-text {
+              text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+          }
+        
+          /* Custom styles for sidenav */
+          .sidenav {
+              height: 100%;
+              width: 0;
+              position: fixed;
+              top: 0;
+              left: 0;
+              background-color: rgb(252, 252, 250);
+              overflow-x: hidden;
+              transition: 0.5s;
+              box-shadow: 2px 0 5px rgba(0,0,0,0.5);
+          }
+          .sidenav.open {
+              width: 250px; /* Adjust as needed */
+          }
+          .sidenav .closebtn {
+              position: absolute;
+              top: 15px;
+              right: 25px;
+              font-size: 36px;
+              margin-left: 50px;
+              cursor: pointer;
+          }
+          .modal {
+              display: none;
+              position: fixed;
+              z-index: 1;
+              left: 0;
+              top: 0;
+              width: 100%;
+              height: 100%;
+              overflow: auto;
+              background-color: wheat;
+              background-color: white;
+              padding-top: 60px;
+          }
+          .modal-content {
+              background-color: #fefefe;
+              margin: 5% auto;
+              padding: 20px;
+              border: 1px solid #888;
+              width: 80%;
+          }
+          .close-btn {
+              color: #aaa;
+              float: right;
+              font-size: 28px;
+              font-weight: bold;
+          }
+          .close-btn:hover,
+          .close-btn:focus {
+              color: rgb(226, 69, 69);
+              text-decoration: none;
+              cursor: pointer;
+          }
+  
+            /* Styles for the sidenav */
+            .sidenav {
+              height: 100%;
+              width: 0;
+              position: fixed;
+              z-index: 1;
+              top: 0;
+              left: 0;
+              background-color: rgba(253, 252, 249, 0.9);
+  
+  
+  
+              overflow-x: hidden;
+              transition: 0.5s;
+              padding-top: 60px;
+              box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+          }
+  
+          .sidenav a {
+              padding: 8px 16px;
+              text-decoration: none;
+              font-size: 18px;
+              color: #000;
+              display: block;
+              transition: 0.3s;
+          }
+  
+          .sidenav a:hover {
+              color: #f1f1f1;
+          }
+  
+          .sidenav .closebtn {
+              position: absolute;
+              top: 0;
+              right: 25px;
+              font-size: 36px;
+              margin-left: 50px;
+          }
+      </style>
+
+
+</head>
+
+
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <style>
+     
+
+        
+
+        marquee {
+               width: 100%;
+               padding: 2px;
+               background: linear-gradient(to right, #ffffff,  #bababa,  #f7f6f6);
+               color: #333;
+               font-size: 1.2em;
+               border-bottom: 1px solid #000000;
+           }
+           .notification-icon {
+               position: relative;
+               display: inline-block;
+               cursor: pointer;
+           }
+           
+           
+           
+           
+           
+           .menu {
+               position: fixed;
+               top: 0;
+               left: -50%; /* Initially hide the menu off-screen to the left */
+               width: 50%;
+               height: 100%;
+               background-color: rgba(236, 236, 236, 0.9); /* Transparent white background */
+               box-shadow: 2px 0 5px rgba(87, 236, 0, 0.5);
+               transition: left 0.3s ease;
+               z-index: 1000;
+               padding: 20px;
+               box-sizing: border-box;
+           }
+           
+           .menu ul {
+               list-style: none;
+               padding: 0;
+           }
+           
+           .menu ul li {
+               margin: 20px 0;
+               font-size: 20px;
+               cursor: pointer;
+               transition: background 0.3s, color 0.3s;
+               padding: 10px;
+               border-radius: 5px;
+           }
+           
+           .menu ul li:hover,
+           .menu ul li.selected {
+               background-color: rgba(131, 161, 125, 0.1);
+               color: #007bff;
+           }
+           
+           .menu ul li .icon {
+               margin-right: 10px;
+           }
+           
+           .menu ul li a {
+               text-decoration: none;
+               color: inherit;
+               display: flex;
+               align-items: center;
+           }
+           
+           .close-btn {
+               position: absolute;
+               top: 20px;
+               right: 20px;
+               font-size: 30px;
+               background: transparent;
+               border: none;
+               cursor: pointer;
+           }
+           
+           .overlay {
+               position: fixed;
+               top: 0;
+               left: 0;
+               width: 100%;
+               height: 100%;
+               background: rgba(0, 0, 0, 0.5);
+               z-index: 900;
+               display: none;
+           }
+           
+           header {
+               display: flex;
+               justify-content: center; /* Center the logo horizontally */
+               align-items: center;    /* Center the logo vertically */
+               padding: 10px;          /* Add some padding around the header */
+               background-color: #f8f9fa; /* Optional: background color for the header */
+           }
+       
+           
+           
+           /* Reset default browser styles */
+           * {
+               margin: 0;
+               padding: 0;
+               box-sizing: border-box;
+           }
+           
+   
+       
+        
+           
+           header
+           {
+               background-color: rgba(214, 214, 214, 0.8); /* Off-white with transparency */
+               color: #000000;
+               padding: 20px;
+               display: flex;
+               justify-content: space-between;
+               align-items: center;
+           }
+   
+           
+           header nav ul {
+               list-style-type: none;
+               display: flex;
+           }
+           
+           header nav ul li {
+               margin-right: 20px;
+           }
+           
+           header nav ul li a {
+               color: #030303;
+               text-decoration: none;
+               font-weight: bold;
+           }
+           
+           main {
+               max-width: 900px;
+               margin: 10px auto;
+               background-color: #ffffff;
+               padding: 10px;
+               border-radius: 15px;
+               box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+           }
+           
+           
+           .balance {
+               margin-bottom: 10px;
+               padding: 10px;
+               background-color: #f0f0f0; /* Set background color to off-white */
+               border-radius: 8px;
+               text-align: center;
+           }
+           
+           .balance-amount {
+               font-size: 32px;
+               margin-top: 10px;
+           }
+        
+           footer {
+               text-align: center;
+               padding: 10px;
+               background-color: #c5ddb8;
+               color: #000000;
+               position: fixed;
+               bottom: 0;
+               width: 100%;
+           }
+           
+           
+           
+           
+           
+           .buttons {
+               margin-top: 10px;
+               text-align: center; /* Center align the buttons */
+           }
+           
+           .buttons a.deposit-btn {
+               display: inline-block;
+               text-decoration: none; /* Remove underline from link */
+               margin-right: 10px;
+               padding: 8px 12px;
+               border: 3px solid #5e635d;
+               background-color: rgba(255, 255, 255, 0.9); /* Transparent white background */
+               color: #2b4421;
+               font-size: 6px;
+               cursor: pointer;
+               border-radius: 20px; /* Rounded corners for buttons */
+               transition: background-color 0.3s ease; /* Smooth background color transition */
+           }
+           
+           .buttons a.deposit-btn:hover {
+               background-color: #8ae378; /* Darker shade on hover */
+           }
+           
+           .buttons a.deposit-btn img {
+               vertical-align: middle;
+               margin-right: 5px;
+           }
+                   .container {
+                       max-width: 800px;
+                       margin: 50px auto;
+                       background: transparent;
+                       border-radius: 15px;
+                       padding: 20px;
+                       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                   }
+           
+                   .header {
+                       background-color: #f0f5f7;
+                       color: #000000;
+                       padding: 20px;
+                       border-radius: 15px;
+                       margin-bottom: 20px;
+                       text-align: center;
+                   }
+           
+                   .header h1 {
+                       margin: 0;
+                       font-size: 24px;
+                   }
+           
+              
+               </style>
+
+
+
+
+
+   
+
+
+
+
+
+
+
+
+ <body class="bg-gray-100 font-sans">
+
+
+ 
+
+   
+
+
+<div id="popup" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+    <div class="bg-white rounded-lg shadow-lg p-8 text-center">
+        <h2 class="text-xl font-semibold mb-4">Please, We are still working on this section</h2>
+        <a href="{% url 'landing_page' %}" class="inline-block px-6 py-2 text-white bg-blue-500 rounded hover:bg-blue-600 transition">
+            Go Back Home
+        </a>
+    </div>
+</div>
+
+<script>
+    // Display the modal on page load
+    window.onload = function() {
+        document.getElementById("popup").style.display = "flex";
+    };
+</script>
+
+
+
+
+    
+
+
+   
+
+    <h2 class="text-2xl font-bold mb-4">Trending</h2>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        <div class="product bg-white shadow-md rounded-lg p-4 cursor-pointer" data-title="Apple iphone 15 pro" data-description="Available in Ghana" data-description2="3433" data-price="₵433.38" data-price="₵433.38">
+            {% load static %}
+        
+            <img src="{% static 'images/smartphone.png' %}" alt="Smartphone" class="w-full h-32 object-cover mb-4"/>
+            
+            <h3 class="text-lg font-semibold mb-2">Apple iphone 15 pro</h3>
+            <p class="text-gray-500 mb-4">$1329.69</p>
+            <button class="bg-blue-500 text-white px-4 py-2 rounded">View Details</button>
+        </div>
+       
+     
+   
+        <div class="product bg-white shadow-md rounded-lg p-4 cursor-pointer" data-title="Apple iphone 15 pro" data-description="256 storage" data-price="₵433.38">
+            {% load static %}
+        
+            <img src="{% static 'images/fashionjacket.png' %}" alt="Smartphone" class="w-full h-32 object-cover mb-4"/>
+            <h3 class="text-lg font-semibold mb-2">Fashion Jacket</h3>
+            <p class="text-gray-500 mb-4">$19.69</p>
+            <button class="bg-blue-500 text-white px-4 py-2 rounded">View Details</button>
+        </div>
+
+        <div class="product bg-white shadow-md rounded-lg p-4 cursor-pointer" data-title="Apple iphone 15 pro" data-description="256 storage" data-price="₵433.38">
+            {% load static %}
+        
+            <img src="{% static 'images/nikeairshoe.png' %}" alt="Smartphone" class="w-full h-32 object-cover mb-4"/>
+            <h3 class="text-lg font-semibold mb-2">Nike Air Shoe</h3>
+            <p class="text-gray-500 mb-4">$12.69</p>
+            <button class="bg-blue-500 text-white px-4 py-2 rounded">View Details</button>
+        </div>
+
+        <div class="product bg-white shadow-md rounded-lg p-4 cursor-pointer" data-title="Apple iphone 15 pro" data-description="256 storage" data-price="₵433.38">
+            {% load static %}
+        
+            <img src="{% static 'images/niveacream.png' %}" alt="Smartphone" class="w-full h-32 object-cover mb-4"/>
+            <h3 class="text-lg font-semibold mb-2">Nivea Cream</h3>
+            <p class="text-gray-500 mb-4">$19.69</p>
+            <button class="bg-blue-500 text-white px-4 py-2 rounded">View Details</button>
+        </div>
+        <!-- Repeat similar block for other products -->
+    </div>
+
+    <h2 class="text-2xl font-bold mb-4">All Categories</h2>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        <div class="product bg-white shadow-md rounded-lg p-4 cursor-pointer" data-title="Apple iphone 15 pro" data-description="Brand new 256gb storage" data-price="₵433.38" data-price="₵43.38" >
+            {% load static %}
+        
+            <img src="{% static 'images/fasn.png' %}" alt="Smartphone" class="w-full h-32 object-cover mb-4"/>
+             <h3 class="text-lg font-semibold mb-2">Small standard fan</h3>
+            <p class="text-gray-500 mb-4">$6.9</p>
+            <button class="bg-blue-500 text-white px-4 py-2 rounded">View Details</button>
+        </div>
+      
+        <div class="product bg-white shadow-md rounded-lg p-4 cursor-pointer" data-title="Apple iphone 15 pro" data-description="256gb storage" data-price="$433.38">
+            {% load static %}
+        
+            <img src="{% static 'images/niveaperfume.png' %}" alt="Smartphone" class="w-full h-32 object-cover mb-4"/>
+             <h3 class="text-lg font-semibold mb-2">Nivea Perfume</h3>
+            <p class="text-gray-500 mb-4">$1329.69</p>
+            <button class="bg-blue-500 text-white px-4 py-2 rounded">View Details</button>
+        </div>
+    
+     
+        <div class="product bg-white shadow-md rounded-lg p-4 cursor-pointer" data-title="Apple iphone 15 pro" data-description="256gb storage" data-price="$433.38">
+            {% load static %}
+        
+            <img src="{% static 'images/crocs.png' %}" alt="Smartphone" class="w-full h-32 object-cover mb-4"/>
+             <h3 class="text-lg font-semibold mb-2">Crocs</h3>
+            <p class="text-gray-500 mb-4">$3.69</p>
+            <button class="bg-blue-500 text-white px-4 py-2 rounded">View Details</button>
+        </div>
+    
+        <div class="product bg-white shadow-md rounded-lg p-4 cursor-pointer" data-title="Apple iphone 15 pro" data-description="256gb storage" data-price="$433.38">
+            {% load static %}
+        
+            <img src="{% static 'images/fashion.jpeg' %}" alt="Smartphone" class="w-full h-32 object-cover mb-4"/>
+             <h3 class="text-lg font-semibold mb-2">fashion Jacket</h3>
+            <p class="text-gray-500 mb-4">$4.69</p>
+            <button class="bg-blue-500 text-white px-4 py-2 rounded">View Details</button>
+        </div>
+
+
+        </div>
+        <!-- Repeat similar block for other products -->
+    </div>
+    
+</div>
+
+    <!-- Modal -->
+    <div id="modal" class="modal-overlay fixed inset-0 hidden flex items-center justify-center">
+        <div class="modal-content bg-white p-6 rounded-lg shadow-lg relative max-w-md mx-auto">
+            <button id="closeModal" class="absolute top-2 right-2 text-gray-600 text-2xl">✖</button>
+            <h2 id="modalTitle" class="text-xl font-bold mb-4">Product Title</h2>
+            <img src="" id="modalImage" alt="Product Image" class="w-full h-64 object-cover mb-4">
+            <p id="modalDescription" class="text-gray-700 mb-4">Product description goes here.</p>
+            <p id="modalPrice" class="text-lg font-semibold text-gray-900">Product price goes here.</p>
+            <div class="flex justify-between mt-4">
+                <button id="buyNow" class="bg-green-500 text-white px-4 py-2 rounded">Buy Now</button>
+                <button id="addToCart" class="bg-yellow-500 text-white px-4 py-2 rounded">Add to Cart</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const products = document.querySelectorAll('.product');
+            const modal = document.getElementById('modal');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalDescription = document.getElementById('modalDescription');
+            const modalPrice = document.getElementById('modalPrice');
+            const modalImage = document.getElementById('modalImage');
+            const closeModalButton = document.getElementById('closeModal');
+
+            products.forEach(product => {
+                product.addEventListener('click', () => {
+                    const title = product.getAttribute('data-title');
+                    const description = product.getAttribute('data-description');
+                    const price = product.getAttribute('data-price');
+                    const imageSrc = product.querySelector('img').src;
+
+                    modalTitle.textContent = title;
+                    modalDescription.textContent = description;
+                    modalPrice.textContent = price;
+                    modalImage.src = imageSrc;
+
+                    modal.classList.remove('hidden');
+                });
+            });
+
+            closeModalButton.addEventListener('click', () => {
+                modal.classList.add('hidden');
+            });
+
+            window.addEventListener('click', (e) => {
+                if (e.target == modal) {
+                    modal.classList.add('hidden');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

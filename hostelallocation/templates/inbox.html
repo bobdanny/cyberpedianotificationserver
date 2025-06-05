@@ -1,0 +1,304 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Inbox</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f8f9fb;
+      color: #333;
+      padding: 1rem;
+    }
+
+    main {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    h2 {
+      font-size: 2rem;
+      margin-bottom: 1.5rem;
+      text-align: center;
+      color: #2c3e50;
+    }
+
+    .message-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+
+    .message-list li {
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      padding: 1.2rem;
+      transition: transform 0.2s ease;
+    }
+
+    .message-list li:hover {
+      transform: translateY(-4px);
+    }
+
+    .message-header {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin-bottom: 0.8rem;
+      font-size: 0.95rem;
+      color: #555;
+    }
+
+    .message-header div {
+      display: flex;
+      gap: 0.3rem;
+    }
+
+    .message-header strong {
+      color: #2c3e50;
+    }
+
+    .message-content {
+      font-size: 1rem;
+      line-height: 1.5;
+      color: #333;
+    }
+
+    @media (min-width: 600px) {
+      .message-header {
+        flex-direction: row;
+        justify-content: space-between;
+        flex-wrap: wrap;
+      }
+
+      .message-header div {
+        flex: 1 1 auto;
+      }
+    }
+
+    
+  /* Bottom Navigation */
+  nav.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 480px;
+    background: white;
+    box-shadow: 0 -1px 8px rgb(0 0 0 / 0.1);
+    display: flex;
+    justify-content: space-around;
+    padding: 10px 0;
+    z-index: 100;
+  }
+  .nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #666;
+    font-size: 0.75rem;
+    cursor: pointer;
+    user-select: none;
+  }
+  .nav-item.active {
+    color: #3498db;
+  }
+  .nav-icon {
+    font-size: 1.4rem;
+    margin-bottom: 2px;
+  }
+
+  /* Scrollbar styling for WebKit */
+  .filters-row::-webkit-scrollbar,
+  .featured-carousel::-webkit-scrollbar,
+  .quick-categories::-webkit-scrollbar {
+    height: 6px;
+  }
+  .filters-row::-webkit-scrollbar-thumb,
+  .featured-carousel::-webkit-scrollbar-thumb,
+  .quick-categories::-webkit-scrollbar-thumb {
+    background-color: #ccc;
+    border-radius: 3px;
+  }
+
+
+  </style>
+</head>
+<body>
+
+  <main>
+    <h2>Inbox</h2>
+
+    {% if messages %}
+    <ul class="message-list">
+      {% for msg in messages %}
+      <li>
+        <div class="message-header">
+          <div><strong>From:</strong> Admin</div>
+          <div><strong>Apartment:</strong> {{ msg.apartment_application.apartment.name }}</div>
+          <div><strong>Received:</strong> {{ msg.sent_at|date:"F j, Y, g:i a" }}</div>
+        </div>
+        <div class="message-content">{{ msg.content|linebreaksbr }}</div>
+      </li>
+      {% endfor %}
+    </ul>
+    {% else %}
+    <p>No messages found.</p>
+    {% endif %}
+
+
+
+
+
+
+
+
+
+
+
+    &nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
+    &nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
+    &nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
+    &nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
+    &nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
+    &nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
+    &nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
+    &nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
+    &nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+
+
+<nav class="bottom-nav" aria-label="Main Navigation">
+    <div id="home" class="nav-item " tabindex="0">
+      <div class="nav-icon">
+        <!-- Home SVG -->
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+          <path d="M3 9.5L12 3L21 9.5V21H14V14H10V21H3V9.5Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="nav-label">Home</div>
+    </div>
+  
+  
+  
+    <div id="application" class="nav-item " tabindex="0">
+      <div class="nav-icon">
+        <!-- Search SVG -->
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+          <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/>
+          <line x1="16.6569" y1="16.6569" x2="21" y2="21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="nav-label">Search</div>
+    </div>
+  
+  
+    <div class="nav-item active" tabindex="0">
+      <div class="nav-icon">
+        <!-- Inbox SVG -->
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v10z" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="nav-label">Inbox</div>
+    </div>
+    
+  
+  
+  
+    <div id="applications" class="nav-item" tabindex="0">
+      <div class="nav-icon">
+        <!-- Applications (Document) SVG -->
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+          <rect x="4" y="3" width="16" height="18" rx="2" ry="2" stroke="currentColor" stroke-width="2"/>
+          <line x1="8" y1="7" x2="16" y2="7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <line x1="8" y1="11" x2="16" y2="11" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <line x1="8" y1="15" x2="12" y2="15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="nav-label">Applications</div>
+    </div>
+  
+  
+    <div id="user" class="nav-item" tabindex="0">
+   
+      <div  class="nav-icon">
+       
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+          <circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="2"/>
+          <path d="M4 20C4 16 8 14 12 14C16 14 20 16 20 20" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+        </svg>
+     
+      </div>
+      
+      <div class="nav-label">Profile</div>
+    </div>
+  </nav>
+  
+  
+  
+  
+  
+  <script>
+    document.getElementById("home").addEventListener("click", function() {
+      window.location.href = "/hostelallocation/home";  
+    });
+  </script>
+  
+  
+  <script>
+    document.getElementById("application").addEventListener("click", function() {
+      window.location.href = "/hostelallocation/application";  
+    });
+  </script>
+
+  <script>
+    document.getElementById("applications").addEventListener("click", function() {
+      window.location.href = "/hostelallocation/applications";  
+    });
+  </script>
+  
+  <script>
+    document.getElementById("user").addEventListener("click", function() {
+      window.location.href = "/hostelallocation/profile";  
+    });
+  </script>
+  
+  </main>
+
+</body>
+</html>
+
+  

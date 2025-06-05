@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQ</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@latest/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        /* Additional custom styles */
+        .special-bg {
+            background: linear-gradient(to right, #f2faf0, #e8ebe7, #f0f0f0);
+        }
+
+        .modal-content {
+            background: linear-gradient(to right, #f2f2f2, #f5f5f5, #fcfdfa);
+        }
+
+        .close-button {
+            background: #ff0000;
+            color: #fff;
+        }
+
+        .close-button:hover {
+            background: #d40000;
+        }
+    </style>
+</head>
+
+
+
+
+
+
+
+
+
+
+
+    
+<style>
+   
+    /* General button styles */
+a.button {
+  display: inline-block;
+  padding: 10px 20px;
+  margin: 5px;
+  border: 2px solid transparent; /* Border color changes on hover */
+  border-radius: 5px;
+  text-align: center;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 16px;
+  color: #4a5568; /* Text color */
+  background-color: #edf2f7; /* Background color */
+  transition: all 0.3s ease; /* Smooth transition for hover effects */
+}
+
+/* Hover effect */
+a.button:hover {
+  color: #2d3748; /* Text color on hover */
+  background-color: #e2e8f0; /* Background color on hover */
+  border-color: #cbd5e0; /* Border color on hover */
+}
+
+/* Focus state for accessibility */
+a.button:focus {
+  outline: 2px solid #a0aec0; /* Focus outline color */
+  outline-offset: 2px;
+}
+
+/* Active state for when button is clicked */
+a.button:active {
+  background-color: #e2e8f0; /* Background color when active */
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2); /* Inner shadow when active */
+}
+
+      /* Optional custom styles */
+      .shadow-text {
+          text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+      }
+    
+      /* Custom styles for sidenav */
+      .sidenav {
+          height: 100%;
+          width: 0;
+          position: fixed;
+          top: 0;
+          left: 0;
+          background-color: rgb(252, 252, 250);
+          overflow-x: hidden;
+          transition: 0.5s;
+          box-shadow: 2px 0 5px rgba(0,0,0,0.5);
+      }
+      .sidenav.open {
+          width: 250px; /* Adjust as needed */
+      }
+      .sidenav .closebtn {
+          position: absolute;
+          top: 15px;
+          right: 25px;
+          font-size: 36px;
+          margin-left: 50px;
+          cursor: pointer;
+      }
+      .modal {
+          display: none;
+          position: fixed;
+          z-index: 1;
+          left: 0;
+          top: 0;
+          width: 100%;
+          height: 100%;
+          overflow: auto;
+          background-color: wheat;
+          background-color: white;
+          padding-top: 60px;
+      }
+      .modal-content {
+          background-color: #fefefe;
+          margin: 5% auto;
+          padding: 20px;
+          border: 1px solid #888;
+          width: 80%;
+      }
+      .close-btn {
+          color: #aaa;
+          float: right;
+          font-size: 28px;
+          font-weight: bold;
+      }
+      .close-btn:hover,
+      .close-btn:focus {
+          color: rgb(226, 69, 69);
+          text-decoration: none;
+          cursor: pointer;
+      }
+
+        /* Styles for the sidenav */
+        .sidenav {
+          height: 100%;
+          width: 0;
+          position: fixed;
+          z-index: 1;
+          top: 0;
+          left: 0;
+          background-color: rgba(253, 252, 249, 0.9);
+
+
+
+          overflow-x: hidden;
+          transition: 0.5s;
+          padding-top: 60px;
+          box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+
+      .sidenav a {
+          padding: 8px 16px;
+          text-decoration: none;
+          font-size: 18px;
+          color: #000;
+          display: block;
+          transition: 0.3s;
+      }
+
+      .sidenav a:hover {
+          color: #f1f1f1;
+      }
+
+      .sidenav .closebtn {
+          position: absolute;
+          top: 0;
+          right: 25px;
+          font-size: 36px;
+          margin-left: 50px;
+      }
+  </style>
+    
+
+<header class="bg-white rounded-lg  bg-opacity-70 backdrop-blur-md shadow-md sticky top-0 z-50">
+    <!-- Mobile Header (Small screens) -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between bg-white bg-opacity-70 backdrop-blur-md rounded-full shadow-md">
+      <div class="text-lg font-bold text-green-800">
+
+      {% load static %}
+         
+        <img src="{% static 'images/logo.png' %}" alt="NXC Icon" width="32" height="24" class="inline-block" />
+        Hi, <span class="font-extrabold text-xl text-green-600 italic">{{ user.username }}</span>!
+    </div>
+    
+
+       
+  <div class="block lg:hidden">
+           
+            <h2 class="text-gray-600"> </h3>
+        </div>
+
+        <!-- Desktop Header (Large screens) -->
+        <div class="hidden lg:flex items-center space-x-6">
+          
+          <div class="flex space-x-4">
+            <a href="{% url 'landing_page' %}" class="button">Home</a>
+            <a href="" class="button">Need Help?</a>
+            <a href="{% url 'FAQ' %}" class="button">FAQ</a>
+           
+          </div>
+      </div>
+     
+      
+    
+
+        <!-- Mobile Navbar Toggle -->
+        <div class="lg:hidden flex items-center">
+          <button id="navbar-toggle" class="text-gray-600 hover:text-gray-900 font-bold p-2">
+              <!-- Icon for mobile menu -->
+              <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+              </svg>
+          </button>
+      </div>
+   
+      
+
+    </div>
+    
+<nav id="myNav" class="sidenav">
+  <a href="javascript:void(0)" class="closebtn" id="closeNav">&times;</a>
+  <div class="px-4 py-6">
+      <h3 class="text-lg font-semibold mb-4 flex items-center">
+       {% load static %}
+          <img src="{% static 'images/logo.png' %}" alt="NXC Icon" width="32" height="24" class="inline-block" />
+          <span class="text-green-600">Nexis</span><span class="text-gray-400">phere</span><span class="text-black">FX</span>
+      </h3>
+    
+
+  
+
+
+
+
+
+      <div class="space-y-4">
+        <a href="{% url 'landing_page' %}" class="bg-white block p-4 text-green-800 rounded-xl border border-gray-200 hover:border-gray-300 flex items-center space-x-4 transition-transform transform hover:scale-105 font-semibold text-lg rounded-md section-item">
+            <i class="bi bi-house text-4xl mb-4 text-green-500"></i>
+
+            <span class="text-green-600">Home</span>
+        </a>
+    
+      
+        <a href="https://t.me/your_support_channel" class="bg-white block p-4 text-green-800 rounded-xl border border-gray-200 hover:border-gray-300 flex items-center space-x-4 transition-transform transform hover:scale-105 font-semibold text-lg rounded-md section-item">
+            <i class="bi bi-telephone text-4xl mb-4 text-green-500"></i>
+            <span class="text-green-600">Need Help?</span>
+        </a>
+    
+       
+
+        
+        <a href="{% url 'FAQ' %}" class="bg-white block p-4 text-green-800 rounded-xl border border-gray-200 hover:border-gray-300 flex items-center space-x-4 transition-transform transform hover:scale-105 font-semibold text-lg rounded-md section-item">
+            <i class="bi bi-question-circle text-4xl mb-4 text-green-500"></i>
+            <span class="text-green-600">FAQ</span>
+        </a>
+
+     
+      
+    
+        <!-- Footer with logout button -->
+    
+    </div>
+    
+    
+    
+    
+
+
+
+
+
+
+
+
+
+          
+      
+    </div>
+    
+    
+    
+    
+    
+    
+    
+          
+          
+
+     
+
+
+      </div>
+  </div>
+</nav>
+</header>
+
+
+<body class="font-sans bg-[#f6fff8] overflow-x-hidden">
+  
+ 
+
+    <div class="fixed top-0 left-0 w-1/2 h-full bg-gray-100 shadow-lg transition-transform transform -translate-x-full z-50" id="menu">
+        <button class="absolute top-4 right-4 text-3xl bg-transparent border-none cursor-pointer" id="closeBtn">&times;</button>
+        <ul class="mt-12 pl-6">
+            <li class="mb-4 text-xl cursor-pointer transition-colors duration-300 hover:bg-green-100 hover:text-blue-500">
+                <a href="{% url 'home' %}" class="flex items-center">
+                    <span class="mr-2">🏠</span> Home
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div class="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 z-40 hidden" id="overlay"></div>
+
+    <div class="max-w-2xl mx-auto mt-10 p-6 bg-white rounded-lg shadow-lg">
+        <header class="bg-green-200 text-black p-4 rounded-lg mb-6 text-center">
+            <h1 class="text-2xl font-bold">Frequently Asked Questions</h1>
+        </header>
+        <div class="space-y-4">
+            <div class="bg-white p-4 rounded-lg shadow-md border-b-4 border-green-300 cursor-pointer transition-transform duration-300 hover:scale-105 faq-item" data-title="Can Nexisphere Wallet receive money from a bank?" data-message="Yes, Nexisphere Wallet supports receiving money from banks through its integrated financial services.">
+                <div class="text-lg font-semibold text-teal-800">Can Nexisphere Wallet receive money from a bank?</div>
+            </div>
+            <div class="bg-white p-4 rounded-lg shadow-md border-b-4 border-green-300 cursor-pointer transition-transform duration-300 hover:scale-105 faq-item" data-title="Is Nexisphere Wallet a cryptocurrency wallet?" data-message="Nexisphere Wallet operates similarly to a digital currency wallet, using Gmail-based transactions instead of traditional wallet addresses for ease of transaction.">
+                <div class="text-lg font-semibold text-teal-800">Is Nexisphere Wallet a cryptocurrency wallet?</div>
+            </div>
+            <div class="bg-white p-4 rounded-lg shadow-md border-b-4 border-green-300 cursor-pointer transition-transform duration-300 hover:scale-105 faq-item" data-title="Why is Nexisphere Wallet linked to a Gmail account?" data-message="Nexisphere Wallet leverages Gmail-based technology for seamless and secure transaction processing. Your Gmail account enhances security and simplifies access to your financial activities.">
+                <div class="text-lg font-semibold text-teal-800">Why is Nexisphere Wallet linked to a Gmail account?</div>
+            </div>
+            <div class="bg-white p-4 rounded-lg shadow-md border-b-4 border-green-300 cursor-pointer transition-transform duration-300 hover:scale-105 faq-item" data-title="Can we buy airtime with NXC?" data-message="The function to buy airtime with NXC is not yet available. However, you can make payments to any bank.">
+                <div class="text-lg font-semibold text-teal-800">Can we buy airtime with NXC?</div>
+            </div>
+            <div class="bg-white p-4 rounded-lg shadow-md border-b-4 border-green-300 cursor-pointer transition-transform duration-300 hover:scale-105 faq-item" data-title="Can NXC be traded for USDT?" data-message="Yes, you can trade or sell NXC for USDT (TRC-20) on Nexisphere Wallet.">
+                <div class="text-lg font-semibold text-teal-800">Can NXC be traded for USDT?</div>
+            </div>
+            <div class="bg-white p-4 rounded-lg shadow-md border-b-4 border-green-300 cursor-pointer transition-transform duration-300 hover:scale-105 faq-item" data-title="Is Nexisphere Wallet legit?" data-message="Nexisphere Wallet is primarily known for its speed in transaction processing, ensuring a seamless and secure user experience.">
+                <div class="text-lg font-semibold text-teal-800">Is Nexisphere Wallet legit?</div>
+            </div>
+            <div class="bg-white p-4 rounded-lg shadow-md border-b-4 border-green-300 cursor-pointer transition-transform duration-300 hover:scale-105 faq-item" data-title="Is there a Nexisphere Card?" data-message="Currently, there is no Nexisphere Card available. Nexisphere Wallet operates primarily through its digital platform and Gmail-based transactions.">
+                <div class="text-lg font-semibold text-teal-800">Is there a Nexisphere Card?</div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center">
+        <div class="modal-content bg-gradient-to-r from-green-100 via-green-200 to-green-300 p-6 rounded-lg shadow-lg relative w-4/5 max-w-lg">
+            <div class="modal-header text-center mb-4">
+                <h2 class="text-xl font-semibold mb-2" id="modalTitle">FAQ Title</h2>
+                <button class="close-button absolute top-2 right-2 text-white text-lg rounded-full p-1" id="closeModal">✖</button>
+            </div>
+            <p id="modalMessage">FAQ message goes here.</p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const faqItems = document.querySelectorAll('.faq-item');
+            const modal = document.getElementById('modal');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalMessage = document.getElementById('modalMessage');
+            const closeModalButton = document.getElementById('closeModal');
+
+            faqItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    const title = item.getAttribute('data-title');
+                    const message = item.getAttribute('data-message');
+
+                    modalTitle.textContent = title;
+                    modalMessage.textContent = message;
+
+                    modal.classList.remove('hidden');
+                });
+            });
+
+            closeModalButton.addEventListener('click', () => {
+                modal.classList.add('hidden');
+            });
+
+            window.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.classList.add('hidden');
+                }
+            });
+        });
+
+        document.getElementById('menuIcon').addEventListener('click', function() {
+            document.getElementById('menu').classList.remove('-translate-x-full');
+            document.getElementById('overlay').classList.remove('hidden');
+        });
+        
+        document.getElementById('closeBtn').addEventListener('click', function() {
+            document.getElementById('menu').classList.add('-translate-x-full');
+            document.getElementById('overlay').classList.add('hidden');
+        });
+        
+        document.getElementById('overlay').addEventListener('click', function() {
+            document.getElementById('menu').classList.add('-translate-x-full');
+            document.getElementById('overlay').classList.add('hidden');
+        });
+        
+        document.querySelectorAll('.menu ul li').forEach(function(item) {
+            item.addEventListener('click', function() {
+                document.querySelectorAll('.menu ul li').forEach(function(li) {
+                    li.classList.remove('bg-green-100', 'text-blue-500');
+                });
+                item.classList.add('bg-green-100', 'text-blue-500');
+            });
+        });
+    </script>
+    
+<script>
+    document.getElementById('navbar-toggle').addEventListener('click', function() {
+        document.getElementById('myNav').style.width = '500px'; // Adjust width as needed
+    });
+  
+    document.getElementById('closeNav').addEventListener('click', function() {
+        document.getElementById('myNav').style.width = '0';
+    });
+  </script>
+</body>
+</html>

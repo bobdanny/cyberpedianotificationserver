@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notifications</title>
+  
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@latest/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.0.0/dist/tailwind.min.css" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: rgba(246, 255, 248, 0.8); /* Off-white with transparency */
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            background: transparent;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .header  {
+        color: #000000;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+         
+        
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .clear-btn {
+            background: #ff4d4d;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .clear-btn:hover {
+            background: #ff1a1a;
+        }
+
+        .notifications-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .notification {
+            display: flex;
+            align-items: center;
+            border-bottom: 3px solid #38be1d;
+            padding: 15px 0;
+            cursor: pointer;
+            position: relative;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 10px;
+        }
+
+        .notification-icon img {
+            width: 40px;
+            height: 40px;
+            margin-right: 15px;
+        }
+
+        .notification-details {
+            flex-grow: 1;
+        }
+
+        .notification-summary {
+            flex-grow: 1;
+        }
+
+        .notification-date {
+            display: block;
+            font-weight: bold;
+        }
+
+        .notification-type {
+            display: block;
+            margin: 5px 0;
+        }
+
+        .notification-amount {
+            display: block;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .receipt-details-summary {
+            filter: blur(5px);
+            transition: filter 0.3s;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(110, 26, 26, 0.9);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: linear-gradient(to right, #ebf8ff, #e5ebe7, #ffffff);
+
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+            position: relative;
+            width: 80%;
+            max-width: 600px;
+        }
+        .modal-background {
+            background: linear-gradient(to right, #ebf8ff, #e5ebe7, #ffffff);
+
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+            position: relative;
+            width: 80%;
+            max-width: 600px;
+        }
+
+        .modal-header h2 {
+            margin: 0 0 10px 0;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #ddd;
+            text-align: center;
+        }
+
+        .modal-content p {
+            margin: 5px 0;
+        }
+
+        .modal-footer {
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .modal-footer button {
+            padding: 10px 20px;
+            color: rgb(58, 55, 55);
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+        }
+
+        .modal-footer button:hover {
+            background: linear-gradient(to right, #f2faf0, #d5f8c0, #e6f5da);
+            background-color: #45a049;
+        }
+
+        .close-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #ff0000;
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        .close-button:hover {
+            background: #d40000;
+        }
+    </style>
+
+
+            
+    <style>
+     
+
+        
+
+        marquee {
+               width: 100%;
+               padding: 2px;
+               background: linear-gradient(to right, #ffffff,  #bababa,  #f7f6f6);
+               color: #333;
+               font-size: 1.2em;
+               border-bottom: 1px solid #000000;
+           }
+           .notification-icon {
+               position: relative;
+               display: inline-block;
+               cursor: pointer;
+           }
+           
+           
+           
+           
+           
+           .menu {
+               position: fixed;
+               top: 0;
+               left: -50%; /* Initially hide the menu off-screen to the left */
+               width: 50%;
+               height: 100%;
+               background-color: rgba(236, 236, 236, 0.9); /* Transparent white background */
+               box-shadow: 2px 0 5px rgba(87, 236, 0, 0.5);
+               transition: left 0.3s ease;
+               z-index: 1000;
+               padding: 20px;
+               box-sizing: border-box;
+           }
+           
+           .menu ul {
+               list-style: none;
+               padding: 0;
+           }
+           
+           .menu ul li {
+               margin: 20px 0;
+               font-size: 20px;
+               cursor: pointer;
+               transition: background 0.3s, color 0.3s;
+               padding: 10px;
+               border-radius: 5px;
+           }
+           
+           .menu ul li:hover,
+           .menu ul li.selected {
+               background-color: rgba(131, 161, 125, 0.1);
+               color: #007bff;
+           }
+           
+           .menu ul li .icon {
+               margin-right: 10px;
+           }
+           
+           .menu ul li a {
+               text-decoration: none;
+               color: inherit;
+               display: flex;
+               align-items: center;
+           }
+           
+           .close-btn {
+               position: absolute;
+               top: 20px;
+               right: 20px;
+               font-size: 30px;
+               background: transparent;
+               border: none;
+               cursor: pointer;
+           }
+           
+           .overlay {
+               position: fixed;
+               top: 0;
+               left: 0;
+               width: 100%;
+               height: 100%;
+               background: rgba(0, 0, 0, 0.5);
+               z-index: 900;
+               display: none;
+           }
+           
+           header {
+               display: flex;
+               justify-content: center; /* Center the logo horizontally */
+               align-items: center;    /* Center the logo vertically */
+               padding: 10px;          /* Add some padding around the header */
+               background-color: #f8f9fa; /* Optional: background color for the header */
+           }
+       
+           
+           
+           /* Reset default browser styles */
+           * {
+               margin: 0;
+               padding: 0;
+               box-sizing: border-box;
+           }
+           
+   
+       
+        
+           
+           header
+           {
+               background-color: rgba(214, 214, 214, 0.8); /* Off-white with transparency */
+               color: #000000;
+               padding: 20px;
+               display: flex;
+               justify-content: space-between;
+               align-items: center;
+           }
+   
+           
+           header nav ul {
+               list-style-type: none;
+               display: flex;
+           }
+           
+           header nav ul li {
+               margin-right: 20px;
+           }
+           
+           header nav ul li a {
+               color: #030303;
+               text-decoration: none;
+               font-weight: bold;
+           }
+           
+           main {
+               max-width: 900px;
+               margin: 10px auto;
+               background-color: #ffffff;
+               padding: 10px;
+               border-radius: 15px;
+               box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+           }
+           
+           
+           .balance {
+               margin-bottom: 10px;
+               padding: 10px;
+               background-color: #f0f0f0; /* Set background color to off-white */
+               border-radius: 8px;
+               text-align: center;
+           }
+           
+           .balance-amount {
+               font-size: 32px;
+               margin-top: 10px;
+           }
+        
+           footer {
+               text-align: center;
+               padding: 10px;
+               background-color: #c5ddb8;
+               color: #000000;
+               position: fixed;
+               bottom: 0;
+               width: 100%;
+           }
+           
+           
+           
+           
+           
+           .buttons {
+               margin-top: 10px;
+               text-align: center; /* Center align the buttons */
+           }
+           
+           .buttons a.deposit-btn {
+               display: inline-block;
+               text-decoration: none; /* Remove underline from link */
+               margin-right: 10px;
+               padding: 8px 12px;
+               border: 3px solid #5e635d;
+               background-color: rgba(255, 255, 255, 0.9); /* Transparent white background */
+               color: #2b4421;
+               font-size: 6px;
+               cursor: pointer;
+               border-radius: 20px; /* Rounded corners for buttons */
+               transition: background-color 0.3s ease; /* Smooth background color transition */
+           }
+           
+           .buttons a.deposit-btn:hover {
+               background-color: #8ae378; /* Darker shade on hover */
+           }
+           
+           .buttons a.deposit-btn img {
+               vertical-align: middle;
+               margin-right: 5px;
+           }
+                   .container {
+                       max-width: 800px;
+                       margin: 50px auto;
+                       background: transparent;
+                       border-radius: 15px;
+                       padding: 20px;
+                       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                   }
+           
+                   .header {
+                       background-color: #f0f5f7;
+                       color: #000000;
+                       padding: 20px;
+                       border-radius: 15px;
+                       margin-bottom: 20px;
+                       text-align: center;
+                   }
+           
+                   .header h1 {
+                       margin: 0;
+                       font-size: 24px;
+                   }
+           
+              
+               </style>
+
+
+</head>
+
+
+
+
+
+<header class="bg-gradient-to-r from-blue-100 via-green-100 to-white shadow-md sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 py-6 flex items-center justify-between">
+        <!-- Mobile Header (Small screens) -->
+        <div class="block lg:hidden">
+            <h1 class="text-xl font-bold text-green-800"> {% load static %}
+              <img src="{% static 'images/logo.png' %}" alt="NXC Icon" width="32" height="24" class="inline-block" />Hi {{ user.username }}! 
+              </h1>
+            <p class="text-gray-600">Securely manage and customize your notifications here..    </p>
+        </div>
+
+        <!-- Desktop Header (Large screens) -->
+        <div class="hidden lg:flex items-center space-x-6">
+            <h2 class="text-1.5xl font-bold text-green-800">{% load static %}
+              {% load static %}
+              <img src="{% static 'images/logo.png' %}" alt="NXC Icon" width="32" height="24" class="inline-block" />
+              Welcome <strong>{{ user.username }}!</strong> 
+              <p class="text-gray-500">Access and manage your assets and transactions securely.</p>
+     
+            </h2>
+            <div class="flex space-x-4">
+              <a href="" class="button">Home</a>
+             
+              <a href="" class="button">FAQ</a>
+            
+            </div>
+        </div>
+
+        <!-- Mobile Navbar Toggle -->
+        <div class="lg:hidden flex items-center">
+            <button id="navbar-toggle" class="text-gray-600 hover:text-gray-900">
+                <!-- Icon for mobile menu -->
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                </svg>
+            </button>
+        </div>
+    </div>
+  
+
+     
+<nav id="myNav" class="sidenav">
+    <a href="javascript:void(0)" class="closebtn" id="closeNav">&times;</a>
+    <div class="px-4 py-6">
+        <h3 class="text-lg font-semibold mb-4 flex items-center">
+         {% load static %}
+            <img src="{% static 'images/logo.png' %}" alt="NXC Icon" width="32" height="24" class="inline-block" />
+            <span class="text-green-600">Nexis</span><span class="text-gray-400">phere</span><span class="text-black">FX</span>
+        </h3>
+      
+  
+  
+  
+  
+  
+        <div class="space-y-4">
+          <a href="{% url 'landing_page' %}" class="bg-white block p-4 text-green-800 rounded-xl border border-gray-200 hover:border-gray-300 flex items-center space-x-4 transition-transform transform hover:scale-105 font-semibold text-lg rounded-md section-item">
+              <i class="bi bi-house text-4xl mb-4 text-green-500"></i>
+  
+              <span class="text-green-600">Home</span>
+          </a>
+      
+        
+          <a href="https://t.me/your_support_channel" class="bg-white block p-4 text-green-800 rounded-xl border border-gray-200 hover:border-gray-300 flex items-center space-x-4 transition-transform transform hover:scale-105 font-semibold text-lg rounded-md section-item">
+              <i class="bi bi-telephone text-4xl mb-4 text-green-500"></i>
+              <span class="text-green-600">Need Help?</span>
+          </a>
+      
+         
+  
+          
+          <a href="{% url 'FAQ' %}" class="bg-white block p-4 text-green-800 rounded-xl border border-gray-200 hover:border-gray-300 flex items-center space-x-4 transition-transform transform hover:scale-105 font-semibold text-lg rounded-md section-item">
+              <i class="bi bi-question-circle text-4xl mb-4 text-green-500"></i>
+              <span class="text-green-600">FAQ</span>
+          </a>
+  
+       
+        
+      
+
+
+      </div>
+      
+      
+      
+      
+  
+  
+  
+  
+  
+  
+  
+  
+  
+            
+        
+      </div>
+      
+      
+      
+      
+      
+      
+      
+            
+            
+  
+       
+  
+  
+        </div>
+    </div>
+  </nav>
+
+
+</header>
+
+
+
+<script>
+    document.getElementById('navbar-toggle').addEventListener('click', function() {
+        document.getElementById('myNav').style.width = '500px'; // Adjust width as needed
+    });
+  
+    document.getElementById('closeNav').addEventListener('click', function() {
+        document.getElementById('myNav').style.width = '0';
+    });
+  </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class="container">
+        <header class="header">
+            <h1>Notifications</h1>
+            <button id="clearAll" class="clear-btn">Clear All</button>
+        </header>
+        <ul class="notifications-list" id="notificationsList">
+            <li class="notification" data-title="New Transaction" data-message="You received $500 from John Doe." data-timestamp="2 minutes ago">
+                {% load static %}
+                
+                <div class="notification-icon"> <img src="{% static 'images/done.svg' %}" alt="Icon 2"></div>
+                
+                <div class="notification-details">
+                    <p class="notification-date">2 minutes ago</p>
+                    <p class="notification-type">New Transaction</p>
+                    <p class="notification-amount">$500</p>
+                </div>
+                <button class="remove-btn">✖</button>
+            </li>
+            <li class="notification" data-title="Market Update" data-message="The NXC price increased by 5%." data-timestamp="10 minutes ago">
+                {% load static %}
+                
+                <div class="notification-icon"> <img src="{% static 'images/dollar.svg' %}" alt="Icon 2"></div>
+                <div class="notification-details">
+                    <p class="notification-date">10 minutes ago</p>
+                    <p class="notification-type">Market Update</p>
+                    <p class="notification-amount">5% Increase</p>
+                </div>
+                <button class="remove-btn">✖</button>
+            </li>
+            <li class="notification" data-title="Refferal Bonus" data-message="You reffered a new user." data-timestamp="1 minutes ago">
+                {% load static %}
+                
+                <div class="notification-icon"> <img src="{% static 'images/referrals.svg' %}" alt="Icon 2"></div>
+               
+                <div class="notification-details">
+                    <p class="notification-date">1 minutes ago</p>
+                    <p class="notification-type">New refferals</p>
+                    <p class="notification-amount">You have earned 13 NXC</p>
+                </div>
+                <button class="remove-btn">✖</button>
+            </li>
+        </ul>
+    </div>
+
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Notification Title</h2>
+                <button class="close-button" id="closeModal">✖</button>
+            </div>
+            <div class="modal-content">
+                <p id="modalMessage">Notification message goes here.</p>
+                <p id="modalTimestamp">Timestamp</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const notificationsList = document.getElementById('notificationsList');
+            const clearAllButton = document.getElementById('clearAll');
+            const modal = document.getElementById('modal');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalMessage = document.getElementById('modalMessage');
+            const modalTimestamp = document.getElementById('modalTimestamp');
+            const closeModalButton = document.getElementById('closeModal');
+
+            // Remove individual notification
+            notificationsList.addEventListener('click', (e) => {
+                if (e.target.classList.contains('remove-btn')) {
+                    const notification = e.target.closest('.notification');
+                    notificationsList.removeChild(notification);
+                    e.stopPropagation();
+                } else if (e.target.closest('.notification')) {
+                    const notification = e.target.closest('.notification');
+                    const title = notification.getAttribute('data-title');
+                    const message = notification.getAttribute('data-message');
+                    const timestamp = notification.getAttribute('data-timestamp');
+
+                    modalTitle.textContent = title;
+                    modalMessage.textContent = message;
+                    modalTimestamp.textContent = timestamp;
+
+                    modal.style.display = 'flex';
+                }
+            });
+
+            // Clear all notifications
+            clearAllButton.addEventListener('click', () => {
+                notificationsList.innerHTML = '';
+            });
+
+            // Close modal
+            closeModalButton.addEventListener('click', () => {
+                modal.style.display = 'none';
+            });
+
+            // Close modal when clicking outside of the modal content
+            window.addEventListener('click', (e) => {
+                if (e.target == modal) {
+                    modal.style.display = 'none';
+                }
+            });
+        });
+    </script>
+    
+    <script>
+            
+
+        document.getElementById('menuIcon').addEventListener('click', function() {
+            document.getElementById('menu').style.left = '0';
+            document.getElementById('overlay').style.display = 'block';
+        });
+        
+        document.getElementById('closeBtn').addEventListener('click', function() {
+            document.getElementById('menu').style.left = '-50%';
+            document.getElementById('overlay').style.display = 'none';
+        });
+        
+        document.getElementById('overlay').addEventListener('click', function() {
+            document.getElementById('menu').style.left = '-50%';
+            document.getElementById('overlay').style.display = 'none';
+        });
+        
+        document.querySelectorAll('.menu ul li').forEach(function(item) {
+            item.addEventListener('click', function() {
+                document.querySelectorAll('.menu ul li').forEach(function(li) {
+                    li.classList.remove('selected');
+                });
+                item.classList.add('selected');
+            });
+        });
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        document.addEventListener("DOMContentLoaded", function() {
+            const easyTouch = document.getElementById("easyTouch");
+            let isDragging = false;
+        
+            easyTouch.addEventListener("mousedown", function(e) {
+                e.preventDefault();
+                let shiftX = e.clientX - easyTouch.getBoundingClientRect().left;
+                let shiftY = e.clientY - easyTouch.getBoundingClientRect().top;
+        
+                function moveAt(pageX, pageY) {
+                    easyTouch.style.left = pageX - shiftX + "px";
+                    easyTouch.style.top = pageY - shiftY + "px";
+                }
+        
+                function onMouseMove(event) {
+                    isDragging = true;
+                    moveAt(event.pageX, event.pageY);
+                }
+        
+                document.addEventListener("mousemove", onMouseMove);
+        
+                easyTouch.addEventListener("mouseup", function() {
+                    document.removeEventListener("mousemove", onMouseMove);
+                    setTimeout(() => { isDragging = false; }, 0); // Delay to differentiate click and drag
+                });
+        
+                easyTouch.addEventListener("dragstart", function() {
+                    return false;
+                });
+            });
+        
+            easyTouch.addEventListener("click", function() {
+                if (!isDragging) {
+                    window.location.href = "nexisphereai/nexisphereai.html";
+                }
+            });
+        });
+                  </script>
+              
+  <style>
+   
+     /* Optional custom styles */
+     .shadow-text {
+         text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+     }
+   
+     /* Custom styles for sidenav */
+     .sidenav {
+         height: 100%;
+         width: 0;
+         position: fixed;
+         top: 0;
+         left: 0;
+         background-color: rgb(252, 252, 250);
+         overflow-x: hidden;
+         transition: 0.5s;
+         box-shadow: 2px 0 5px rgba(0,0,0,0.5);
+     }
+     .sidenav.open {
+         width: 250px; /* Adjust as needed */
+     }
+     .sidenav .closebtn {
+         position: absolute;
+         top: 15px;
+         right: 25px;
+         font-size: 36px;
+         margin-left: 50px;
+         cursor: pointer;
+     }
+     .modal {
+         display: none;
+         position: fixed;
+         z-index: 1;
+         left: 0;
+         top: 0;
+         width: 100%;
+         height: 100%;
+         overflow: auto;
+         background-color: wheat;
+         background-color: white;
+         padding-top: 60px;
+     }
+     .modal-content {
+         background-color: #fefefe;
+         margin: 5% auto;
+         padding: 20px;
+         border: 1px solid #888;
+         width: 80%;
+     }
+     .close-btn {
+         color: #aaa;
+         float: right;
+         font-size: 28px;
+         font-weight: bold;
+     }
+     .close-btn:hover,
+     .close-btn:focus {
+         color: rgb(226, 69, 69);
+         text-decoration: none;
+         cursor: pointer;
+     }
+
+       /* Styles for the sidenav */
+       .sidenav {
+         height: 100%;
+         width: 0;
+         position: fixed;
+         z-index: 1;
+         top: 0;
+         left: 0;
+         background-color: rgba(253, 252, 249, 0.9);
+
+
+
+         overflow-x: hidden;
+         transition: 0.5s;
+         padding-top: 60px;
+         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+     }
+
+     .sidenav a {
+         padding: 8px 16px;
+         text-decoration: none;
+         font-size: 18px;
+         color: #000;
+         display: block;
+         transition: 0.3s;
+     }
+
+     .sidenav a:hover {
+         color: #f1f1f1;
+     }
+
+     .sidenav .closebtn {
+         position: absolute;
+         top: 0;
+         right: 25px;
+         font-size: 36px;
+         margin-left: 50px;
+     }
+ </style>
+
+</body>
+</html>

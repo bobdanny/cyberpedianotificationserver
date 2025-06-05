@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Trading App</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    {% extends "base_generic.html" %}
+    {% block content %}
+      <h1>Welcome to MyApp</h1>
+      <p>Your description goes here. This is the official landing page of the app.</p>
+      <a href="{% url 'register' %}">Get Started</a>
+    {% endblock %}
+    
+     <style>
+    body {
+        font-family: Arial, sans-serif;
+        line-height: 1.6;
+        margin: 0;
+        background-color: transparent;
+       
+    }
+    header {
+        margin-bottom: 20px;
+    }
+    .navbar {
+        background-color: transparent;
+    }
+    .navbar-brand {
+        color: #ffffff;
+        font-weight: 700;
+    }
+    .navbar-nav .nav-link {
+        color: #fff;
+    }
+    .navbar-nav .nav-link.active {
+        font-weight: bold;
+    }
+    .hero {
+        background-color: rgb(255, 255, 255); /* Off-white with transparency */
+    text-align: center;
+    padding: 40px 0;
+    position: relative;
+    font-family: 'Arial', sans-serif;
+    font-size: 1.25rem;
+    line-height: 1.4;
+    background-blur: 15px; /* Optional: adds a subtle blur effect to the background */
+    border-radius: 25px;
+   backdrop-filter: blur(20px); /* Blur effect on the sidebar content */
+}
+
+
+    
+
+    .hero h1 {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: #0c0c0c;
+        
+        border-radius: 67;
+    }
+    .hero p {
+        font-size: 1.25rem;
+       
+        color: #0c0c0c;
+    }
+    
+    .hero .btn {
+        margin: 0.5rem;
+        box-shadow: 0 24px 8px rgba(0, 0, 0, 0.1); /* Lighter shadow */
+    }
+    .features {
+        padding: 60px 0;
+        background-color: rgba(246, 255, 248, 0.8); /* Off-white with transparency */;
+    backdrop-filter: blur(10px); /* Blur effect on the sidebar content */
+    }
+    .features .card {
+        border-radius: 10px;
+        transition: transform 0.3s;
+    }
+    .features .card:hover {
+        transform: scale(1.05);
+    }
+    .about-us {
+        padding: 60px 0;
+        background: #ffffff;
+    }
+    .about-us img {
+        border: 4px solid #ddd;
+        border-radius: 50%;
+        width: 150px;
+        height: 150px;
+        object-fit: cover;
+    }
+    .support {
+        padding: 60px 0;
+        background: #e9ecef;
+    }
+    footer {
+        background-color: rgba(30, 170, 65, 0.8); /* Off-white with transparency */
+        color: #fff;
+        padding: 20px 0;
+        text-align: center;
+    }
+    footer a {
+        color: #fff;
+        text-decoration: none;
+    }
+    footer a:hover {
+        color: #ddd;
+    }
+
+
+
+    .navbar {
+        background-color: rgba(30, 170, 65, 0.8); /* Off-white with transparency */
+        }
+        .navbar-brand img {
+            max-height: 40px; /* Adjust this value as needed */
+            width: auto;
+        }
+        .navbar-brand, .nav-link {
+            color: #000000 !important;
+       
+          
+        }
+        .navbar-brand:hover, .nav-link:hover {
+          
+            color: #e6e1e1 !important; /* Light green for hover effect */
+        }
+        .navbar-toggler-icon {
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxOCIgaGVpZ2h0PSIxOCIgdmlld0JveD0iMCAwIDE4IDE4Ij4KPHBhdGggZD0iTTEuOTYgMi43NGgtLjY4Yy0uMy0uNi0uNS0uNi0uN2MtLjEtLjItLjItLjMtLjEtLjYtLjctMS42LTEuMy00LTEuMy0uNS0uMS0xLjEtLjEtMS4xIDAtMS4xLTEuNy0yLTIuMy0uMi0xLjctMS4yLTEuNi0xLjktMS43LTEuNy0xLjctMS43LTEuMy0xLjEtMS4xLTMuMy0yLjItMi44TDIuOS0uMyAxLjc2LTIuNi0yLjk1IDAtLjEtMi44SDEuNjhWMjRIMy4zQzEuNCAxNy4zIDMuNyAxNy4zIDMuN1oiIHN0cm9rZS13aWR0aD0iMSIvPjwvc3ZnPg==');
+          
+        }
+
+
+
+
+
+
+
+</style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark">
+            <a class="navbar-brand" href="#">
+                <img src="logo.png" alt="NexisphereFX💱">NexisphereFX💱
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#about">About Us</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#features">Features</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#support">Support</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#contact">Contact</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Homepage -->
+    <section class="hero text-white">
+       
+        <div class="deposit-btn">
+            <h1 class="display-4">Experience Unmatched Speed in West African Payments</h1>
+            <p class="lead">Fast, Secure, and Multi-Currency Transactions at Your Fingertips</p>
+            <div class="button-container">
+                <a href="#" class="btn btn-light btn-lg">
+                    <i class="bi bi-bar-chart display-7 mb-14"></i>Sign Up
+                </a>
+                <a href="#" class="btn btn-light btn-lg">
+                    Log In
+                 </a>
+                <a href="#" class="btn btn-light btn-lg">
+                    <img src="android.jpeg" alt="Android APK Icon" class="btn-icon"> Download APK
+                  
+                </a>
+                <a href="#" class="btn btn-light btn-lg">
+                Get it on Google Play
+                </a>
+                <a href="#" class="btn btn-light btn-lg">
+                  Get it on App Store
+                </a>
+            </div>
+        </div>
+        <style>
+        /* Container for the buttons */
+.button-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px; /* Adjust the gap between buttons as needed */
+  
+}
+
+/* Styling for each button */
+.button-container .btn {
+    display: flex;
+    align-items: center;
+    padding: 10px 20px; /* Adjust padding as needed */
+    text-decoration: none;
+    border-radius: 5px; /* Optional: for rounded corners */
+    background-color: #eef1f5; /* Light background for the button */
+    color: #333; /* Text color */
+    font-size: 16px; /* Font size */
+    font-weight: bold; /* Font weight */
+    backdrop-filter: blur(20px); /* Blur effect on the sidebar content */
+}
+
+/* Styling for the image inside the button */
+.button-container .btn-icon {
+    width: 44px; /* Adjust size as needed */
+    height: auto; /* Maintain aspect ratio */
+    margin-right: 8px; /* Space between the image and text */
+}
+
+/* Optional: Hover effect for the buttons */
+.button-container .btn:hover {
+    background-color: #e2e6ea; /* Slightly darker background on hover */
+    color: #000; /* Text color on hover */
+}
+
+
+
+
+        </style>
+    </section>
+
+<style>
+      .deposit-btn {
+        display: inline-block; /* Make sure it respects padding and margin */
+        padding: 10px 20px; /* Vertical and horizontal padding */
+        font-size: 16px; /* Font size for text */
+        font-weight: bold; /* Make the text bold */
+        text-decoration: none; /* Remove underline */
+        border-radius: 15px; /* Rounded corners */
+      
+        background-color: transparent; /* Button background color */
+        color: #000000; /* Text color */
+        transition: background-color 0.3s, transform 0.2s, box-shadow 0.3s; /* Smooth transition for hover effects */
+        box-shadow: 0 5px 8px rgba(0, 0, 0, 0.2); /* Shadow effect for floating */
+      }
+</style>
+
+    <section id="features" class="features">
+        <h2 class="text-center mb-4">Features</h2>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4">
+                    <div class="card text-center border-0 shadow-sm">
+                        <div class="card-body">
+                          
+                            <i class="bi bi-speedometer2 display-4 mb-3"></i>
+                            <h5 class="card-title">Lightning Fast</h5>
+                            <p class="card-text">Experience transactions at V8 engine speed.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 mb-4">
+                    <div class="card text-center border-0 shadow-sm">
+                        <div class="card-body">
+                            <i class="bi bi-currency-exchange display-4 mb-3"></i>
+                            <h5 class="card-title">Multi-Currency Support</h5>
+                            <p class="card-text">Seamlessly transact in various currencies across West Africa.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 mb-4">
+                    <div class="card text-center border-0 shadow-sm">
+                        <div class="card-body">
+                            <i class="bi bi-shield-lock display-4 mb-3"></i>
+                            <h5 class="card-title">Top-notch Security</h5>
+                            <p class="card-text">Advanced security measures to keep your transactions safe.</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- New Features -->
+                <div class="col-lg-4 mb-4">
+                    <div class="card text-center border-0 shadow-sm">
+                        <div class="card-body">
+                            <i class="bi bi-clock display-4 mb-3"></i>
+                            <h5 class="card-title">24/7 Customer Support</h5>
+                            <p class="card-text">Get assistance anytime with our round-the-clock support team.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 mb-4">
+                    <div class="card text-center border-0 shadow-sm">
+                        <div class="card-body">
+                            <i class="bi bi-bar-chart display-4 mb-3"></i>
+                            <h5 class="card-title">Live Market Data And Prices</h5>
+                            <p class="card-text">Access the live financial market rates</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 mb-4">
+                    <div class="card text-center border-0 shadow-sm">
+                        <div class="card-body">
+                            <i class="fas fa-envelope display-4 mb-3 text-gold"></i>
+                            <h5 class="card-title">Proprietary Gmail-Based Technology</h5>
+                            <p class="card-text">Nexisphere utilizes proprietary technology integrated with Gmail accounts, allowing seamless transactions and management of digital assets directly through users' existing Gmail credentials.</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 mb-4">
+                        <div class="card text-center border-0 shadow-sm">
+                            <div class="card-body">
+                                <i class="fas fa-chart-line display-4 mb-3 text-gold"></i>
+                  <h5 class="card-title text-gold">Instant Transfers</h5>
+                                <p class="card-text">Users can enjoy instant transfer capabilities within the Nexisphere ecosystem, enabling swift and efficient transactions of funds and digital currencies across various platforms and devices..</p>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 mb-4">
+                            <div class="card text-center border-0 shadow-sm">
+                                <div class="card-body">
+                                    <i class="fas fa-desktop display-4 mb-3 text-gold"></i>
+                                    <h5 class="card-title text-gold">User-Friendly Interface</h5>
+                                    <p class="card-text">
+    Designed for ease of use, the Nexisphere wallet features an intuitive interface that allows users to navigate seamlessly through features like transaction histories, portfolio management, and real-time market insights, enhancing overall user experience and accessibility.
+                                    </p>
+                                </div>
+                            </div>
+
+                
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+        
+      
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+
+
+</style>
+
+
+
+
+  
+
+
+
+
+
+
+
+<section id="about" class="about-us">
+    <div class="container">
+        <h2 class="text-center mb-4">About Us</h2>
+        <div class="row">
+            <div class="col-lg-6 mb-4">
+                <h3>Our Mission</h3>
+                <p>
+                    At NexiSphereFX, our mission is to transform the landscape of digital payments across West Africa. 
+                    We leverage cutting-edge technology to ensure that every transaction is processed with exceptional speed and reliability. 
+                    Our app is designed with a focus on high-level security to protect your financial data and provide peace of mind. 
+                    With an intuitive and user-friendly interface, NexiSphereFX aims to make payments seamless and accessible for everyone, 
+                    empowering businesses and individuals to manage their transactions effortlessly.
+                </p>
+                <p>
+                    We are committed to continuously enhancing our platform, integrating the latest advancements in financial technology, 
+                    and maintaining the highest standards of service. Whether you’re making payments locally or across borders, 
+                    NexiSphereFX offers a secure, fast, and convenient solution tailored to meet the diverse needs of West African markets.
+                </p>
+            </div>
+            <div class="col-lg-6 mb-4">
+                <h3>Meet the Team</h3>
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <img src="team1.jpg" class="img-fluid rounded-circle" alt="Team Member">
+                        <h5 class="mt-2">Alice Johnson</h5>
+                        <p>CEO</p>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <img src="team2.jpg" class="img-fluid rounded-circle" alt="Team Member">
+                        <h5 class="mt-2">Bob Smith</h5>
+                        <p>CTO</p>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <img src="team3.jpg" class="img-fluid rounded-circle" alt="Team Member">
+                        <h5 class="mt-2">Carol Williams</h5>
+                        <p>CFO</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<style>
+    /* Ensure the images and text are centered on small screens */
+    @media (max-width: 768px) {
+        .about-us .row {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .about-us .col-md-4 {
+            flex: 0 0 auto; /* Prevent column from stretching */
+            max-width: 322%; /* Adjust as needed */
+            text-align: center;
+        }
+    }
+</style>
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+    
+
+    <section id="testimonial" class="testimonial-section">
+        <div class="container">
+            <h2 class="text-center mb-4">What Our Users Say</h2>
+            <div class="testimonial-wrapper">
+                
+                <div class="testimonial-item">
+                    <p>"The ease of making payments with NexiSphereFX across West Africa is phenomenal. The app's user-friendly interface and robust security make it a game-changer."</p>
+                    <h5>Kwame Nkrumah</h5>
+                    <p>Founder, GhanaTech</p>
+                </div>
+
+                <div class="testimonial-item">
+                    <p>"NexisphereFX stands out with its lightning-fast transactions and high-level security. It's a must-have for anyone doing business in West Africa."</p>
+                    <h5>Amina Diallo</h5>
+                    <p>COO, WestAfrica Commerce</p>
+                </div>
+                <div class="testimonial-item">
+                    <p>"Nexisphere Wallet has revolutionized my financial transactions. With NXC, I can easily send and receive money via email, making it incredibly convenient and secure. It's the perfect solution for my everyday needs, and I can use it anywhere in West Africa!."</p>
+                    <h5>John D., Lagos, Nigeria</h5>
+                    <p>Founder, GhanaTech</p>
+                </div>
+                <div class="testimonial-item">
+                    <p>"The ease of making payments with NexiSphereFX across West Africa is phenomenal. The app's user-friendly interface and robust security has made it a game-changer."</p>
+                    <h5>Kwame Nkrumah</h5>
+                    <p>Founder, GhanaTech</p>
+                </div>
+            </div>
+        </div>
+    </section>
+     <style>
+        .testimonial-section {
+    overflow-x: auto;
+    padding: 20px 0; /* Optional: Adjust padding */
+}
+
+.testimonial-wrapper {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+}
+
+.testimonial-item {
+    flex: 0 0 auto; /* Prevents items from shrinking */
+    width: 300px; /* Adjust width as needed */
+    margin-right: 20px; /* Spacing between items */
+    box-sizing: border-box;
+    padding: 20px; /* Padding inside each testimonial item */
+    border: 1px solid #ddd; /* Border for visual separation */
+    border-radius: 8px; /* Rounded corners */
+    background: #f9f9f9; /* Background color */
+}
+
+.testimonial-item h5 {
+    margin: 10px 0 5px;
+    font-size: 1.2rem;
+}
+
+.testimonial-item p {
+    margin: 0;
+    font-size: 1rem;
+    color: #555; /* Text color */
+}
+
+.testimonial-section::-webkit-scrollbar {
+    height: 8px;
+}
+
+.testimonial-section::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+}
+
+.testimonial-section::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+     </style>
+ 
+
+
+
+
+    <section id="support" class="support">
+        <div class="container">
+            <h2 class="text-center mb-4">Support</h2>
+            <div class="row">
+                <div class="col-md-6">
+                    <h3>Contact Support</h3>
+                    <form>
+                        <div class="form-group">
+                            <label for="name">Name</label>
+                            <input type="text" class="form-control" id="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email address</label>
+                            <input type="email" class="form-control" id="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Message</label>
+                            <textarea class="form-control" id="message" rows="4" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
+                <div class="col-md-6">
+                    <h3>Help Center</h3>
+                    <p>For frequently asked questions and troubleshooting, visit our help center.</p>
+                    <a href="#" class="btn btn-secondary">Visit Help Center</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>© 2024 Your Company Name. All rights reserved.</p>
+            <ul class="list-unstyled">
+                <li><a href="#">Privacy Policy</a></li>
+                <li><a href="#">Terms of Service</a></li>
+            </ul>
+            <div>
+                <a href="#" class="mx-2"><i class="bi bi-tiktok"></i></a>
+                <a href="#" class="mx-2"><i class="bi bi-facebook"></i></a>
+                <a href="#" class="mx-2"><i class="bi bi-twitter"></i></a>
+                <a href="#" class="mx-2"><i class="bi bi-linkedin"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS and dependencies -->
+ 
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
