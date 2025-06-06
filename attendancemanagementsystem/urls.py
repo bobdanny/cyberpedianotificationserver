@@ -19,24 +19,21 @@ from .views import (
     available_courses,
     upload_course,
     register_course,
-    registration_success,
     user_profile,
-    registration_history,
     get_private_key,
     allreg,
     logout_view,
     sa,
     shared_apartment,
-    apartment_detail,
     pet_friendlyapa, 
     near_library,
-    search_apartments,
-    application,
-    applications,
-    apply_for_apartment,
-    reply_to_application,
-    inbox,
     get_secret_key,
+    attendance,
+    start_session_view,
+    student_sessions_view,
+    mark_attendance_view,
+    get_private_key,
+
 )
 
 urlpatterns = [
@@ -59,24 +56,22 @@ urlpatterns = [
     path('admin/upload-course/', upload_course, name='upload_course'),
     path('student/available-courses/', available_courses, name='available_courses'),
     path('register-course/<int:course_id>/', register_course, name='register_course'),
-    path('registration-success/', registration_success, name='registration_success'),
     path('profile/', user_profile, name='user_profile'),
-    path('registration-history/', registration_history, name='registration_history'),
     path('allreg/', allreg, name='allreg'),
     path('get-private-key/', get_private_key, name='get_private_key'),
     path('logout/', logout_view, name='logout'),
     path('shared_apartment/', shared_apartment, name='shared_apartment'),  # Shared apartments view
-    path('apartment/<int:apartment_id>/', apartment_detail, name='apartment_detail'),
-    path('hostelallocation/apartment/<int:apartment_id>/', apartment_detail, name='apartment_detail'),
     path('pet_friendlyapa/', pet_friendlyapa, name='pet_friendlyapa'), 
     path('near_library/', near_library, name='near_library'),
-    path('ajax/search-apartments/', search_apartments, name='search_apartments'),
-    path('application/', application, name='application'),
-    path('applications/', applications, name='applications'),
-    path('apply/', apply_for_apartment, name='apply_for_apartment'),
-    path('reply/<int:application_id>/', reply_to_application, name='reply_to_application'),
-    path('inbox/', inbox, name='inbox'),
+    
+    path('attendance/', attendance, name='attendance'),
+ 
     path('sa/', sa, name='sa'),
     path('api/secret-key/', get_secret_key, name='get_secret_key'),
+
+    path('start-session/', start_session_view, name='start_session'),
+    path('get-private-key/', get_private_key, name='get_private_key'),
+    path('sessions/', student_sessions_view, name='student_sessions'),
+    path('sessions/mark/<int:session_id>/', mark_attendance_view, name='mark_attendance'),
 ]   
    

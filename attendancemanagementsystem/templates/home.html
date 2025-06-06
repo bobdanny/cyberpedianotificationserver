@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Welcome Page</title>
+  <style>
+    /* Reset default styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      height: 100vh;
+      background: linear-gradient(135deg, #6d6e70, #74747e);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 400px;
+      width: 100%;
+    }
+
+    .card {
+      background: #ffffff;
+      border-radius: 20px;
+      padding: 40px 30px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+      text-align: center;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+    }
+
+    .card h1 {
+      font-size: 2.5rem;
+      color: #111827;
+      margin-bottom: 15px;
+    }
+
+    .card p {
+      color: #6b7280;
+      font-size: 1rem;
+      margin-bottom: 25px;
+    }
+
+    .button-group {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .btn {
+  display: inline-block;
+  text-decoration: none;  /* Remove underline from links */
+  text-align: center;
+  padding: 14px;
+  border: none;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  letter-spacing: 0.5px;
+  color: white;
+}
+
+
+    .btn-login {
+      background: linear-gradient(to right, #2563eb, #1d4ed8);
+      color: white;
+    }
+
+    .btn-login:hover {
+      background: linear-gradient(to right, #1e3a8a, #1e40af);
+      transform: translateY(-2px);
+    }
+
+    .btn-signup {
+      background: linear-gradient(to right, #22c55e, #16a34a);
+      color: white;
+    }
+
+    .btn-signup:hover {
+      background: linear-gradient(to right, #15803d, #166534);
+      transform: translateY(-2px);
+    }
+
+    .btn-attendance {
+      background: linear-gradient(to right, #9333ea, #7e22ce);
+      color: white;
+    }
+
+    .btn-attendance:hover {
+      background: linear-gradient(to right, #6b21a8, #581c87);
+      transform: translateY(-2px);
+    }
+
+    .btn:active {
+      transform: scale(0.98);
+    }
+
+    /* Optional: Smooth transition on page load */
+    .card {
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeInUp 0.6s forwards;
+    }
+
+    @keyframes fadeInUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <h1>Welcome!</h1>
+      <p>Manage your attendance.</p>
+      <div class="button-group">
+        <a href="/attendancemanagementsystem/login/" class="btn btn-login" role="button">Login</a>
+        <a href="/attendancemanagementsystem/signup/" class="btn btn-signup" role="button">Sign Up</a>
+        <a href="{% url 'attendance' %}" class="btn btn-attendance" role="button">  Mark Attendance</a>
+      </div>
+      
+
+      
+    </div>
+  </div>
+</body>
+</html>
