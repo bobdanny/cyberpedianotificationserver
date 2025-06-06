@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Active Sessions</title>
+</head>
+<body>
+    <h1>Active Class Sessions for You</h1>
+
+    {% if sessions %}
+        <ul>
+        {% for session in sessions %}
+            <li>
+                <strong>{{ session.course }} ({{ session.session_code }})</strong> - Expires at: {{ session.expires_at|date:"SHORT_DATETIME_FORMAT" }}
+
+                {% if session.id in attended_session_ids %}
+                    <em>Attendance marked ✓</em>
+                {% else %}
+                    <form method="post" action="{% url 'mark_attendance' session.id %}" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit">Mark Attendance</button>
+                    </form>
+                {% endif %}
+            </li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>No active sessions available for your department and level.</p>
+    {% endif %}
+
+    {% if messages %}
+        <ul>
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+</body>
+</html>

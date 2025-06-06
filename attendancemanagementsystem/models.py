@@ -179,26 +179,37 @@ class Apartment(models.Model):
 
 
 
-class ApartmentApplication(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    apartment = models.ForeignKey('Apartment', on_delete=models.CASCADE)
-    applied_at = models.DateTimeField(auto_now_add=True)
-    message = models.TextField(blank=True, null=True)
-
-    def __str__(self):
-        return f"{self.user.username} applied for {self.apartment.name}"
-    
 
 
 
 
-class Message(models.Model):
-    sender = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='sent_messages', on_delete=models.CASCADE)
-    recipient = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='received_messages', on_delete=models.CASCADE)
-    apartment_application = models.ForeignKey('ApartmentApplication', related_name='messages', on_delete=models.CASCADE)
-    content = models.TextField()
-    sent_at = models.DateTimeField(auto_now_add=True)
-    read = models.BooleanField(default=False)
 
-    def __str__(self):
-        return f'Message from {self.sender.username} to {self.recipient.username}'
+# models.py
+
+from django.contrib.auth.models import User
+from django.db import models
+
+# models.py
+from django.conf import settings
+
+class AttendanceRecord(models.Model):
+    student = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    class_session = models.ForeignKey('ClassSession', on_delete=models.CASCADE)
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('student', 'class_session')
+
+
+class ClassSession(models.Model):
+    course = models.CharField(max_length=100)
+    session_code = models.CharField(max_length=10, unique=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    expires_at = models.DateTimeField()
+
+    department = models.CharField(max_length=50, choices=DEPARTMENT_CHOICES)
+    level = models.CharField(max_length=3, choices=LEVEL_CHOICES)
+    semester = models.CharField(max_length=3, choices=SEMESTER_CHOICES)
+
+    # 🔥 New field
+    max_students = models.PositiveIntegerField(default=30, help_text="Maximum number of students allowed to mark attendance for this session.")

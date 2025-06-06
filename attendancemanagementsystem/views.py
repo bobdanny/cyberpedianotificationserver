@@ -88,42 +88,215 @@ def payment_completion(request):
 
     return render(request, 'payment_failed.html', {'tx_ref': tx_ref})
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 from django.db.models import Sum
 @login_required
-
 def landing_page(request):
     user = request.user
 
-    # Total courses registered
-    total_courses = user.registered_courses.count()
-
-    # Total credits registered
-    total_registered_credits = user.registered_courses.aggregate(
-        total_credits=Sum('course__credit_units')
-    )['total_credits'] or 0
-
-    # Total available credits for the student's department, level, and semester
-    total_available_credits = 0
-    if user.department and user.level and user.semester:
-        total_available_credits = Course.objects.filter(
-            department=user.department,
-            level=user.level,
-            semester=user.semester
-        ).aggregate(total_credits=Sum('credit_units'))['total_credits'] or 0
-
-    # Calculate progress percentage
-    progress_percentage = 0
-    if total_available_credits > 0:
-        progress_percentage = (total_registered_credits / total_available_credits) * 100
+    # Filter sessions that:
+    # 1. Match the student's department, level, and semester.
+    # 2. Are not expired yet.
+    sessions = ClassSession.objects.filter(
+        department=user.department,
+        level=user.level,
+        semester=user.semester,
+        expires_at__gt=timezone.now()
+    ).order_by('-created_at')
 
     context = {
-        'total_courses': total_courses,
-        'total_registered_credits': total_registered_credits,
-        'total_available_credits': total_available_credits,
-        'progress_percentage': progress_percentage
+        'sessions': sessions
     }
 
     return render(request, 'landing_page.html', context)
+
+
+
+
+
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from .models import DEPARTMENT_CHOICES, LEVEL_CHOICES, SEMESTER_CHOICES
+from .utils import start_class_session  # import the function you wrote earlier
+
+
+
+
+
+
+
+
+
+
+
+@login_required
+def start_session_view(request):
+    if request.method == "POST":
+        course = request.POST.get("course")
+        session_code = request.POST.get("session_code")
+        department = request.POST.get("department")
+        level = request.POST.get("level")
+        semester = request.POST.get("semester")
+        duration = request.POST.get("duration")
+        max_students = request.POST.get("max_students")
+
+        # Basic validation
+        if not all([course, session_code, department, level, semester, duration, max_students]):
+            messages.error(request, "All fields are required.")
+            return redirect("start_session")
+
+        try:
+            duration = int(duration)
+        except ValueError:
+            messages.error(request, "Duration must be a number.")
+            return redirect("start_session")
+
+        try:
+            max_students = int(max_students)
+        except ValueError:
+            messages.error(request, "Maximum students must be a number.")
+            return redirect("start_session")
+
+        try:
+            # Create the session
+            session = start_class_session(
+                course=course,
+                session_code=session_code,
+                department=department,
+                level=level,
+                semester=semester,
+                duration_minutes=duration,
+                max_students=max_students
+            )
+            messages.success(request, f"Class session '{session.session_code}' started successfully!")
+            return redirect("start_session")
+        except Exception as e:
+            messages.error(request, f"Error: {str(e)}")
+            return redirect("start_session")
+
+    # GET request: render the session form and attendance records table
+    department_filter = request.GET.get("department", "")
+    level_filter = request.GET.get("level", "")
+    semester_filter = request.GET.get("semester", "")
+
+    # Fetch attendance records
+    attendance_records = AttendanceRecord.objects.select_related('student', 'class_session').all()
+
+    if department_filter:
+        attendance_records = attendance_records.filter(class_session__department=department_filter)
+    if level_filter:
+        attendance_records = attendance_records.filter(class_session__level=level_filter)
+    if semester_filter:
+        attendance_records = attendance_records.filter(class_session__semester=semester_filter)
+
+    attendance_records = attendance_records.order_by('-timestamp')  # latest first
+
+    context = {
+        "departments": DEPARTMENT_CHOICES,
+        "levels": LEVEL_CHOICES,
+        "semesters": SEMESTER_CHOICES,
+        "attendance_records": attendance_records,
+        "selected_department": department_filter,
+        "selected_level": level_filter,
+        "selected_semester": semester_filter,
+    }
+    return render(request, "start_session.html", context)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@login_required  # Remove if you don't want to require login
+def get_private_key(request):
+    # NEVER send the raw key in production — this is for demo only.
+    private_key = "secret123"  # Ideally, store in settings or environment variable
+    return JsonResponse({"private_key": private_key})
+
+
+
+
+
+
 
 
 
@@ -381,16 +554,6 @@ def register_course(request, course_id):
 
 from django.shortcuts import render
 
-@login_required
-def registration_history(request):
-    user = request.user
-    registered_courses = user.registered_courses.select_related('course').order_by('-date_registered')
-    # registered_courses is a queryset of RegisteredCourse objects with related Course prefetched
-
-    return render(request, 'registration_history.html', {
-        'registered_courses': registered_courses,
-    })
-
 
 
 
@@ -401,6 +564,79 @@ def registration_history(request):
 def registration_success(request):
     return render(request, 'success.html')
 
+@login_required
+def attendance(request):
+    student = request.user
+
+    now = timezone.now()
+    sessions = ClassSession.objects.filter(
+        department=student.department,
+        level=student.level,
+        expires_at__gt=now
+    )
+
+    if request.method == "POST":
+        session_id = request.POST.get("session_id")
+        entered_code = request.POST.get("session_code", "").strip()
+
+        try:
+            session = ClassSession.objects.get(id=session_id)
+        except ClassSession.DoesNotExist:
+            messages.error(request, "Selected session does not exist.")
+            return redirect('attendance')
+
+        # Check if entered code matches
+        if session.session_code != entered_code:
+            messages.error(request, "Incorrect session code.")
+            return redirect('attendance')
+
+        # Check if session expired
+        if timezone.now() > session.expires_at:
+            messages.error(request, "This session has expired.")
+            return redirect('attendance')
+
+        # Check if max students reached
+        current_count = AttendanceRecord.objects.filter(class_session=session).count()
+        if current_count >= session.max_students:
+            messages.error(request, "This session has reached the maximum number of students allowed to mark attendance.")
+            return redirect('attendance')
+
+        # Check if student already marked attendance
+        already_marked = AttendanceRecord.objects.filter(
+            student=student,
+            class_session=session
+        ).exists()
+
+        if already_marked:
+            messages.info(request, "You have already marked attendance for this session.")
+        else:
+            AttendanceRecord.objects.create(student=student, class_session=session)
+            messages.success(request, "Attendance marked successfully!")
+
+        return redirect('attendance')
+
+    # Build session_data list with attendance_marked
+    session_data_list = []
+    for session in sessions:
+        attendance_marked = AttendanceRecord.objects.filter(
+            student=student,
+            class_session=session
+        ).exists()
+        session_data = {
+            'id': session.id,
+            'course': session.course,
+            'session_code': session.session_code,
+            'department': session.department,
+            'level': session.level,
+            'semester': session.semester,
+            'expires_at': session.expires_at,
+            'attendance_marked': attendance_marked,
+            'max_students': session.max_students,   # optional, if you want to pass it to the template
+            'current_attendance': AttendanceRecord.objects.filter(class_session=session).count()
+        }
+        session_data_list.append(session_data)
+
+    return render(request, 'attendance.html', {'sessions': session_data_list})
 
 
 
@@ -414,19 +650,6 @@ def user_profile(request):
     user = request.user  # current logged-in user
     return render(request, 'user_profile.html', {'user': user})
 
-
-@login_required
-def application(request):
-    user = request.user  # current logged-in user
-    return render(request, 'application.html', {'user': user})
-
-
-@login_required
-def applications(request):
-    user = request.user
-    # Get all applications by this user, ordered by newest first
-    user_applications = ApartmentApplication.objects.filter(user=user).order_by('-applied_at')
-    return render(request, 'applications.html', {'applications': user_applications})
 
 from django.conf import settings
 from django.http import JsonResponse
@@ -473,31 +696,7 @@ def adminpage(request):
     else:
         form = ApartmentForm()
 
-    apartments = Apartment.objects.all()
-    applications = ApartmentApplication.objects.select_related('user', 'apartment').all().order_by('-applied_at')
-
-    # Prepare applications with sent messages by current user
-    applications_with_sent_messages = []
-    for app in applications:
-        sent_messages = app.messages.filter(sender=request.user)
-        applications_with_sent_messages.append({
-            'application': app,
-            'sent_messages': sent_messages,
-        })
-
-    return render(request, 'adminpage.html', {
-        'form': form,
-        'apartments': apartments,
-        'applications_with_sent_messages': applications_with_sent_messages,
-    })
-
-
-
-
-
-def apartment_detail(request, apartment_id):
-    apartment = get_object_or_404(Apartment, id=apartment_id)
-    return render(request, 'apartment_detail.html', {'apartment': apartment})
+  
 
 
 
@@ -506,86 +705,171 @@ def apartment_detail(request, apartment_id):
 
 
 
-@require_GET
-def search_apartments(request):
-    query = request.GET.get('q', '').strip()
-    results = []
-
-    if query:
-        apartments = Apartment.objects.filter(name__icontains=query)
-        for apt in apartments:
-            results.append({
-                'id': apt.id,
-                'name': apt.name,
-                'location': apt.location,
-                'price': str(apt.price),  # serialize decimal
-                'category': apt.category,
-                'image1': apt.image1,
-            })
-
-    return JsonResponse({'results': results})
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+from .models import ClassSession
+from .models import AttendanceRecord
+# views.py
+from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
-from django.views.decorators.http import require_POST
-from django.contrib.auth.decorators import login_required
-from .models import Apartment, ApartmentApplication
-
-@login_required
-@require_POST
-def apply_for_apartment(request):
-    apartment_id = request.POST.get('apartment_id')
-    message = request.POST.get('message', '')
-    
-    try:
-        apartment = Apartment.objects.get(id=apartment_id)
-    except Apartment.DoesNotExist:
-        return JsonResponse({'success': False, 'error': 'Apartment not found.'}, status=404)
-
-    # Check if user has already applied (optional)
-    if ApartmentApplication.objects.filter(user=request.user, apartment=apartment).exists():
-        return JsonResponse({'success': False, 'error': 'You have already applied.'}, status=400)
-
-    application = ApartmentApplication.objects.create(
-        user=request.user,
-        apartment=apartment,
-        message=message
-    )
-
-    return JsonResponse({'success': True, 'message': 'Application submitted successfully.'})
+from django.utils import timezone
+from .models import AttendanceRecord, ClassSession
 
 
 
+from django.db.models import Count
 
-
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import get_object_or_404, redirect
+from django.shortcuts import redirect
 from django.contrib import messages
 
-from .models import ApartmentApplication, Message
+from django.shortcuts import redirect
+from django.contrib import messages
+from django.utils import timezone
+from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.decorators import login_required
 
+
+@csrf_exempt
 @login_required
-def reply_to_application(request, application_id):
-    if request.method == "POST":
-        application = get_object_or_404(ApartmentApplication, id=application_id)
-        reply_message = request.POST.get('reply_message', '').strip()
-        if reply_message:
-            Message.objects.create(
-                sender=request.user,
-                recipient=application.user,
-                apartment_application=application,
-                content=reply_message
-            )
-            messages.success(request, f'Reply sent to {application.user.first_name}.')
+def mark_attendance(request, code):
+    try:
+        session = ClassSession.objects.get(session_code=code)
+        print(f"[DEBUG] Session found: {session}, max_students={session.max_students}")
+
+        # Check if session has expired
+        if timezone.now() > session.expires_at:
+            print("[DEBUG] Session expired.")
+            messages.error(request, "This session has expired.")
+            return redirect('attendance')  # Replace with your actual attendance page/view
+
+        # Count current attendance
+        current_count = AttendanceRecord.objects.filter(class_session=session).count()
+        print(f"[DEBUG] Current attendance count: {current_count}")
+
+        # Check if max students reached
+        if current_count >= session.max_students:
+            print("[DEBUG] Max students reached.")
+            messages.error(request, "This session has reached the maximum number of students allowed to mark attendance.")
+            return redirect('attendance')
+
+        student = request.user
+        print(f"[DEBUG] Current student: {student}")
+
+        # Check if student has already marked attendance
+        attendance, created = AttendanceRecord.objects.get_or_create(
+            student=student,
+            class_session=session
+        )
+        print(f"[DEBUG] Attendance record created: {created}")
+
+        if not created:
+            messages.info(request, "You have already marked attendance for this session.")
         else:
-            messages.error(request, 'Reply message cannot be empty.')
-    return redirect('adminpage')
+            messages.success(request, "Attendance marked successfully!")
+
+        return redirect('attendance')
+
+    except ClassSession.DoesNotExist:
+        print("[DEBUG] ClassSession.DoesNotExist exception caught.")
+        messages.error(request, "Invalid session code or session does not exist.")
+        return redirect('attendance')
+
+    except Exception as e:
+        print(f"[DEBUG] Exception caught: {str(e)}")
+        messages.error(request, f"An error occurred: {str(e)}")
+        return redirect('attendance')
 
 
 
 
-@login_required
-def inbox(request):
+
+import qrcode
+from io import BytesIO
+from django.core.files.base import ContentFile
+from django.conf import settings
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
+from django.utils import timezone
+from .models import ClassSession, AttendanceRecord
+
+def student_sessions_view(request):
     user = request.user
-    incoming_messages = Message.objects.filter(recipient=user).order_by('-sent_at')
-    return render(request, 'inbox.html', {'user': user, 'messages': incoming_messages})
+    now = timezone.now()
+
+    # Filter active sessions for student's department and level
+    sessions = ClassSession.objects.filter(
+        department=user.department,
+        level=user.level,
+        expires_at__gt=now
+    )
+
+    # Get all session IDs student has marked attendance for
+    attended_session_ids = AttendanceRecord.objects.filter(student=user).values_list('class_session_id', flat=True)
+
+    context = {
+        'sessions': sessions,
+        'attended_session_ids': attended_session_ids,
+    }
+    return render(request, 'student_sessions.html', context)
+
+def mark_attendance_view(request, session_id):
+    user = request.user
+    session = get_object_or_404(ClassSession, id=session_id)
+
+    # Check if session matches user dept and level and is active
+    if session.department != user.department or session.level != user.level or session.expires_at <= timezone.now():
+        messages.error(request, "You cannot mark attendance for this session.")
+        return redirect('student_sessions')
+
+    # Check if already marked attendance
+    if AttendanceRecord.objects.filter(student=user, class_session=session).exists():
+        messages.info(request, "You have already marked attendance for this session.")
+    else:
+        AttendanceRecord.objects.create(student=user, class_session=session)
+        messages.success(request, f"Attendance marked for session {session.session_code}.")
+
+    return redirect('student_sessions')

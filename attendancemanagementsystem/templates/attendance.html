@@ -1,0 +1,339 @@
+<!-- attendance_modal.html -->
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ongoing Classes - Mark Attendance</title>
+  <style>
+    /* Reset */
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      background-color: #f3f4f6;
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    h1 {
+      font-size: 2rem;
+      font-weight: bold;
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+
+    /* Messages */
+    .messages {
+      max-width: 600px;
+      width: 100%;
+      margin-bottom: 1.5rem;
+    }
+    .message {
+      padding: 0.75rem 1rem;
+      border-radius: 6px;
+      margin-bottom: 0.5rem;
+      font-size: 0.9rem;
+    }
+    .message.error {
+      background-color: #fee2e2;
+      color: #b91c1c;
+    }
+    .message.success {
+      background-color: #d1fae5;
+      color: #065f46;
+    }
+    .message.info {
+      background-color: #e5e7eb;
+      color: #374151;
+    }
+
+    /* Container for sessions */
+    .sessions-container {
+      display: grid;
+      gap: 1.5rem;
+      width: 100%;
+      max-width: 600px;
+    }
+
+    /* Single session card */
+    .session-card {
+      background-color: #fff;
+      padding: 1.25rem;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgb(0 0 0 / 0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .session-info {
+      max-width: 70%;
+    }
+    .session-info h2 {
+      margin: 0 0 0.4rem 0;
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+    .session-info p {
+      margin: 0.15rem 0;
+      color: #6b7280;
+      font-size: 0.9rem;
+    }
+
+    /* Button */
+    .btn {
+      background-color: #4f46e5;
+      color: white;
+      padding: 0.5rem 1rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.2s ease-in-out;
+      flex-shrink: 0;
+      min-width: 110px;
+      text-align: center;
+    }
+    .btn:hover {
+      background-color: #4338ca;
+    }
+
+    /* Modal backdrop */
+    #modalBackdrop {
+      position: fixed;
+      inset: 0;
+      background-color: rgba(0,0,0,0.5);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      z-index: 1000;
+    }
+    #modalBackdrop.active {
+      display: flex;
+    }
+
+    /* Modal box */
+    .modal {
+      background-color: white;
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgb(0 0 0 / 0.15);
+      max-width: 400px;
+      width: 100%;
+      padding: 1.5rem 1.75rem;
+      position: relative;
+    }
+    .modal h3 {
+      margin: 0 0 1rem 0;
+      font-size: 1.25rem;
+      font-weight: 600;
+      text-align: center;
+    }
+    .modal button.close-btn {
+      position: absolute;
+      top: 0.5rem;
+      right: 0.75rem;
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: #6b7280;
+      transition: color 0.2s ease-in-out;
+    }
+    .modal button.close-btn:hover {
+      color: #111827;
+    }
+
+    /* Form styles */
+    form {
+      display: flex;
+      flex-direction: column;
+    }
+    form input[type="text"] {
+      padding: 0.5rem 0.75rem;
+      font-size: 1rem;
+      border: 1.5px solid #d1d5db;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      transition: border-color 0.2s ease-in-out;
+    }
+    form input[type="text"]:focus {
+      border-color: #4f46e5;
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.4);
+    }
+    form button[type="submit"] {
+      background-color: #4f46e5;
+      color: white;
+      padding: 0.55rem 0;
+      font-weight: 600;
+      font-size: 1rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.2s ease-in-out;
+    }
+    form button[type="submit"]:hover {
+      background-color: #4338ca;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 480px) {
+      .session-card {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .session-info {
+        max-width: 100%;
+        margin-bottom: 1rem;
+      }
+      .btn {
+        width: 100%;
+        min-width: auto;
+      }
+    }
+
+
+
+
+    .btn.disabled {
+  background-color: #9ca3af !important; /* gray color */
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+  </style>
+</head>
+<body>
+
+  <h1>Ongoing Classes</h1>
+
+  {% if messages %}
+  <div class="messages">
+    {% for message in messages %}
+      <div class="message {% if message.tags == 'error' %}error{% elif message.tags == 'success' %}success{% else %}info{% endif %}">
+        {{ message }}
+      </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  {% if sessions|length == 0 %}
+    <p style="color:#4b5563; max-width:600px; text-align:center;">
+      No ongoing classes for your department and level right now.
+    </p>
+  {% else %}
+    <div class="sessions-container">
+      {% for session in sessions %}
+        <div class="session-card" data-session-id="{{ session.id }}" data-expires-at="{{ session.expires_at|date:"c" }}">
+          <div class="session-info">
+            <h2>{{ session.course }}</h2>
+        
+            <p>{{ session.department }} - Level {{ session.level }}</p>
+           
+            <p class="timer" id="timer-{{ session.id }}">Loading timer...</p>
+          </div>
+         
+          
+          <button
+  class="btn {% if session.attendance_marked %}disabled{% endif %}"
+  id="btn-{{ session.id }}"
+  {% if session.attendance_marked %}
+    disabled
+  {% else %}
+    onclick="openModal('{{ session.id }}', '{{ session.course }}')"
+  {% endif %}
+>
+  {% if session.attendance_marked %}
+    Marked
+  {% else %}
+    Mark Attendance
+  {% endif %}
+</button>
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <!-- Modal -->
+  <div id="modalBackdrop" role="dialog" aria-modal="true" aria-labelledby="modalCourseName">
+    <div class="modal">
+      <button class="close-btn" onclick="closeModal()" aria-label="Close modal">&times;</button>
+      <h3 id="modalCourseName">Enter Session Code</h3>
+      <form method="POST" id="attendanceForm">
+        {% csrf_token %}
+        <input type="hidden" name="session_id" id="modalSessionId" value="" />
+        <input
+          type="text"
+          name="session_code"
+          placeholder="Session Code"
+          required
+          autocomplete="off"
+          aria-describedby="sessionCodeHelp"
+        />
+        <button type="submit">Submit</button>
+      </form>
+    </div>
+  </div>
+
+<script>
+  function openModal(sessionId, courseName) {
+    document.getElementById('modalSessionId').value = sessionId;
+    document.getElementById('modalCourseName').textContent = `Enter Session Code for ${courseName}`;
+    document.getElementById('modalBackdrop').classList.add('active');
+  }
+
+  function closeModal() {
+    document.getElementById('modalBackdrop').classList.remove('active');
+    document.getElementById('attendanceForm').reset();
+  }
+
+  // Close modal on outside click
+  document.getElementById('modalBackdrop').addEventListener('click', function(e) {
+    if (e.target === this) closeModal();
+  });
+
+  // Countdown timer logic
+  function startCountdown(sessionId, expiresAt) {
+    const timerEl = document.getElementById(`timer-${sessionId}`);
+    const btnEl = document.getElementById(`btn-${sessionId}`);
+
+    function updateTimer() {
+      const now = new Date();
+      const expiry = new Date(expiresAt);
+      const diff = expiry - now;
+
+      if (diff <= 0) {
+        // Time's up: hide or disable the button & show expired message
+        timerEl.textContent = "Attendance time expired";
+        btnEl.classList.add('disabled');
+        btnEl.disabled = true;
+        clearInterval(interval);
+      } else {
+        // Calculate time components
+        const minutes = Math.floor(diff / 1000 / 60);
+        const seconds = Math.floor((diff / 1000) % 60);
+        timerEl.textContent = `Time left: ${minutes}m ${seconds}s`;
+      }
+    }
+
+    updateTimer();
+    const interval = setInterval(updateTimer, 1000);
+  }
+
+  // Initialize countdowns for all sessions
+  document.querySelectorAll('.session-card').forEach(card => {
+    const sessionId = card.getAttribute('data-session-id');
+    const expiresAt = card.getAttribute('data-expires-at');
+    startCountdown(sessionId, expiresAt);
+  });
+</script>
+
+</body>
+</html>

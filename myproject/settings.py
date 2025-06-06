@@ -21,15 +21,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-kh5!x9253n9+u9)&^23o1sh6d1xm33170tmm78y$mugpxo($-6'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False  # Set to False for production
+DEBUG = True  # Set to False for production
 
 # Allow all hosts (for showcase purposes)
 ALLOWED_HOSTS = ['*']
 
 
-LOGIN_URL = '/hostelallocation/login/'
+LOGIN_URL = '/attendancemanagementsystem/login/'
 
-# Application definition
+# Application definition 
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -37,11 +37,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'hostelallocation',
+    'attendancemanagementsystem',
     'django.contrib.humanize',
 ]
-
-AUTH_USER_MODEL = 'hostelallocation.CustomUser'
+  
+AUTH_USER_MODEL = 'attendancemanagementsystem.CustomUser'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -116,4 +116,5 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 # FLUTTERWAVE_PUBLIC_KEY = ''
 
 # Placeholder PRIVATE_KEY for showcase
-MY_SECRET_KEY = "JJ"  # Replace with your secret key
+# settings.py
+PRIVATE_KEY = "Taiwasecret"  

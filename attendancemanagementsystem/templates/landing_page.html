@@ -1,0 +1,287 @@
+<!-- templates/user_profile.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <title>User Profile</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link 
+      rel="stylesheet" 
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+ 
+</head>
+<body>
+
+
+
+  <style>
+    
+header {
+  text-align: center;
+  padding: 1rem;
+  background-color: #858585;
+  font-size: 1.5rem;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+}
+
+header h1 {
+  margin: 0;
+  color: #11011f;
+}
+  </style>
+  
+  <header>
+    <h1>Welcome Daniel!</h1>
+  </header>
+
+
+
+    <script>
+        let touchStartY = [];
+        let isTwoFinger = false;
+    
+        document.addEventListener("touchstart", (e) => {
+            if (e.touches.length === 2) {
+                isTwoFinger = true;
+                // Record the Y position of both fingers
+                touchStartY = [e.touches[0].clientY, e.touches[1].clientY];
+            } else {
+                isTwoFinger = false;
+            }
+        });
+    
+        document.addEventListener("touchmove", (e) => {
+            if (isTwoFinger && e.touches.length === 2) {
+                const newY1 = e.touches[0].clientY;
+                const newY2 = e.touches[1].clientY;
+                const deltaY1 = newY1 - touchStartY[0];
+                const deltaY2 = newY2 - touchStartY[1];
+    
+                // Check if both fingers swiped UP more than 50px
+                if (deltaY1 < -50 && deltaY2 < -50) {
+                    window.location.href = "/hostelallocation/adminpage/"; // Replace with your URL
+                }
+            }
+        });
+    
+        document.addEventListener("touchend", () => {
+            // Reset state
+            isTwoFinger = false;
+            touchStartY = [];
+        });
+    </script>
+    
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div id="attendance" class="containerr">
+      <button class="crazy-button">Mark Attendance!</button>
+    </div>
+
+    <script>
+      document.getElementById("attendance").addEventListener("click", function() {
+        window.location.href = "/attendancemanagementsystem/attendance";  
+      });
+    </script>
+
+
+
+<style>
+    /* Centering container */
+    .containerr {
+      display: flex;
+      margin-top: -94px;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;  /* Full viewport height */
+      background-color: #ffffff;  /* Optional background for contrast */
+    }
+    
+    /* Crazy button styles */
+    .crazy-button {
+      padding: 1rem 2rem;
+      font-size: 1.2rem;
+      border: none;
+      border-radius: 8px;
+      color: white;
+      background: linear-gradient(45deg, #ff0066, #ffcc00, #33cc33, #0099ff, #ff0066);
+      background-size: 400% 400%;
+      animation: gradientShift 5s ease infinite;
+      cursor: pointer;
+      box-shadow: 0 0 10px rgba(0,0,0,0.3);
+      transition: transform 0.2s;
+    }
+    
+    /* Gradient shift animation */
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    
+    /* Wiggle on hover */
+    .crazy-button:hover {
+      animation: gradientShift 2s ease infinite, wiggle 0.5s ease infinite;
+      transform: scale(1.1);
+    }
+    
+    /* Wiggle animation */
+    @keyframes wiggle {
+      0% { transform: rotate(-5deg) scale(1.1); }
+      50% { transform: rotate(5deg) scale(1.1); }
+      100% { transform: rotate(-5deg) scale(1.1); }
+    }
+  </style>    
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+
+
+
+    
+  <style>
+    nav.bottom-nav {
+   position: fixed;
+   bottom: 0;
+   left: 50%;
+   transform: translateX(-50%);
+   width: 100%;
+   max-width: 480px;
+   background: white;
+   box-shadow: 0 -1px 8px rgb(0 0 0 / 0.1);
+   display: flex;
+   justify-content: space-around;
+   padding: 10px 0;
+   z-index: 100;
+ }
+ .nav-item {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   color: #666;
+   font-size: 0.75rem;
+   cursor: pointer;
+   user-select: none;
+ }
+ .nav-item.active {
+   color: #7c34db;
+ }
+ .nav-icon {
+   font-size: 1.4rem;
+   margin-bottom: 2px;
+ }
+
+ /* Scrollbar styling for WebKit */
+ .filters-row::-webkit-scrollbar,
+ .featured-carousel::-webkit-scrollbar,
+ .quick-categories::-webkit-scrollbar {
+   height: 6px;
+ }
+ .filters-row::-webkit-scrollbar-thumb,
+ .featured-carousel::-webkit-scrollbar-thumb,
+ .quick-categories::-webkit-scrollbar-thumb {
+   background-color: #ccc;
+   border-radius: 3px;
+ }
+
+ </style>
+ 
+<nav class="bottom-nav" aria-label="Main Navigation">
+
+
+   <div  class="nav-item active" tabindex="0">
+     <div class="nav-icon">
+       <!-- Home SVG -->
+       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+         <path d="M3 9.5L12 3L21 9.5V21H14V14H10V21H3V9.5Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+       </svg>
+     </div>
+     <div class="nav-label">Home</div>
+   </div>
+ 
+ 
+  
+ 
+ 
+   
+ 
+   <div id="user" class="nav-item  " tabindex="0">
+  
+     <div  class="nav-icon">
+      
+       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+         <circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="2"/>
+         <path d="M4 20C4 16 8 14 12 14C16 14 20 16 20 20" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+       </svg>
+    
+     </div>
+     
+     <div class="nav-label">Profile</div>
+   </div>
+ </nav>
+ </main>
+
+
+ <script>
+   document.getElementById("user").addEventListener("click", function() {
+     window.location.href = "/attendancemanagementsystem/profile";  
+   });
+ </script>
+ 
+
+
+ 
+ 
+
+
+</body>
+</html>
