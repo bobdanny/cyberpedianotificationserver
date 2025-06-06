@@ -335,5 +335,118 @@
   });
 </script>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+<style>
+  nav.bottom-nav {
+ position: fixed;
+ bottom: 0;
+ left: 50%;
+ transform: translateX(-50%);
+ width: 100%;
+ max-width: 480px;
+ background: white;
+ box-shadow: 0 -1px 8px rgb(0 0 0 / 0.1);
+ display: flex;
+ justify-content: space-around;
+ padding: 10px 0;
+ z-index: 100;
+}
+.nav-item {
+ display: flex;
+ flex-direction: column;
+ align-items: center;
+ color: #666;
+ font-size: 0.75rem;
+ cursor: pointer;
+ user-select: none;
+}
+.nav-item.active {
+ color: #7c34db;
+}
+.nav-icon {
+ font-size: 1.4rem;
+ margin-bottom: 2px;
+}
+
+/* Scrollbar styling for WebKit */
+.filters-row::-webkit-scrollbar,
+.featured-carousel::-webkit-scrollbar,
+.quick-categories::-webkit-scrollbar {
+ height: 6px;
+}
+.filters-row::-webkit-scrollbar-thumb,
+.featured-carousel::-webkit-scrollbar-thumb,
+.quick-categories::-webkit-scrollbar-thumb {
+ background-color: #ccc;
+ border-radius: 3px;
+}
+
+</style>
+
+<nav class="bottom-nav" aria-label="Main Navigation">
+
+
+ <div  class="nav-item active" tabindex="0">
+   <div class="nav-icon">
+     <!-- Home SVG -->
+     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+       <path d="M3 9.5L12 3L21 9.5V21H14V14H10V21H3V9.5Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+     </svg>
+   </div>
+   <div class="nav-label">Home</div>
+ </div>
+
+
+
+
+
+ 
+
+ <div id="user" class="nav-item  " tabindex="0">
+
+   <div  class="nav-icon">
+    
+     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+       <circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="2"/>
+       <path d="M4 20C4 16 8 14 12 14C16 14 20 16 20 20" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+     </svg>
+  
+   </div>
+   
+   <div class="nav-label">Profile</div>
+ </div>
+</nav>
+</main>
+
+
+<script>
+ document.getElementById("user").addEventListener("click", function() {
+   window.location.href = "/attendancemanagementsystem/profile";  
+ });
+</script>
+
+
 </body>
 </html>

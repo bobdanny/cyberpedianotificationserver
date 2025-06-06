@@ -122,9 +122,65 @@
         transform: translateY(0);
       }
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+    .top-right-btn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  padding: 10px 20px;
+  background: linear-gradient(to right, #250c00, #d81d7a);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.top-right-btn:hover {
+  background: linear-gradient(to right, #1e3a8a, #1e40af);
+  transform: translateY(-2px);
+}
+
+.top-right-btn:active {
+  transform: scale(0.98);
+}
+
   </style>
+
+
+
+
+
+
+
+
+
+
+
+
 </head>
 <body>
+
+  <a href="/attendancemanagementsystem/start-session/">
+  <button class="top-right-btn">Admin</button>
+  </a>
+
+
   <div class="container">
     <div class="card">
       <h1>Welcome!</h1>
