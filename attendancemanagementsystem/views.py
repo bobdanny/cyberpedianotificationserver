@@ -895,7 +895,7 @@ def mark_attendance_view(request, session_id):
 
 
 
-
+  
 
 
 
