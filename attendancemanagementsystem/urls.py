@@ -33,7 +33,9 @@ from .views import (
     student_sessions_view,
     mark_attendance_view,
     get_private_key,
-
+    mark_attendance_by_code,
+    show_qr_for_active_session,
+    ajax_export_attendance_pdf,
 )
 
 urlpatterns = [
@@ -73,5 +75,10 @@ urlpatterns = [
     path('get-private-key/', get_private_key, name='get_private_key'),
     path('sessions/', student_sessions_view, name='student_sessions'),
     path('sessions/mark/<int:session_id>/', mark_attendance_view, name='mark_attendance'),
+    path('mark-attendance/<str:session_code>/', mark_attendance_by_code, name='mark_attendance_by_code'),
+    path('qr/', show_qr_for_active_session, name='show_qr'),
+    # urls.py
+    path('ajax/download-attendance/', ajax_export_attendance_pdf, name='ajax_download_attendance_pdf'),
+
 ]   
    

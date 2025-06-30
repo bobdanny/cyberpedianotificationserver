@@ -117,4 +117,8 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Placeholder PRIVATE_KEY for showcase
 # settings.py
-PRIVATE_KEY = "Taiwasecret"  
+PRIVATE_KEY = "Taiwo"  
+
+
+
+SITE_URL = "http://192.168.220.199:8000/"  # or your production domain

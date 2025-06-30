@@ -891,3 +891,126 @@ def mark_attendance_view(request, session_id):
         messages.success(request, f"Attendance marked for session {session.session_code}.")
 
     return redirect('student_sessions')
+
+
+
+
+
+
+
+
+
+from django.contrib.auth.decorators import login_required
+from django.utils import timezone
+from django.contrib import messages
+from django.shortcuts import redirect, get_object_or_404
+from .models import ClassSession, AttendanceRecord
+
+@login_required 
+def mark_attendance_by_code(request, session_code):
+    session = get_object_or_404(ClassSession, session_code=session_code)
+
+    if timezone.now() > session.expires_at:
+        messages.error(request, "This session has expired.")
+        return redirect('attendance')
+
+    current_count = AttendanceRecord.objects.filter(class_session=session).count()
+    if current_count >= session.max_students:
+        messages.error(request, "This session has reached the maximum attendance limit.")
+        return redirect('attendance')
+
+    student = request.user
+
+    if AttendanceRecord.objects.filter(student=student, class_session=session).exists():
+        messages.info(request, "You have already marked attendance for this session.")
+    else:
+        AttendanceRecord.objects.create(student=student, class_session=session)
+        messages.success(request, "Attendance marked successfully!")
+
+    return redirect('attendance')
+
+
+
+
+
+
+
+
+
+
+
+
+import qrcode
+import io
+import base64
+from django.utils import timezone
+from django.shortcuts import render
+from django.conf import settings
+from .models import ClassSession
+
+@login_required
+def show_qr_for_active_session(request):
+    # Get active session (you can customize this filter)
+    session = ClassSession.objects.filter(expires_at__gt=timezone.now()).order_by('-created_at').first()
+
+    if not session:
+        return render(request, 'no_active_session.html')
+
+    # Build full attendance URL
+    session_code = session.session_code
+    domain = settings.SITE_URL  # Define this in settings.py (e.g., "https://yourdomain.com")
+    url = f"{domain}/attendancemanagementsystem/mark-attendance/{session_code}/"
+
+
+
+    # Generate QR code image
+    qr = qrcode.make(url)
+    buffer = io.BytesIO()
+    qr.save(buffer, format='PNG')
+    qr_image_base64 = base64.b64encode(buffer.getvalue()).decode()
+
+    return render(request, 'show_qr.html', {
+        'session': session,
+        'qr_image': qr_image_base64,
+        'url': url
+    })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+from django.http import HttpResponse
+from django.template.loader import get_template
+from xhtml2pdf import pisa
+from .models import AttendanceRecord
+
+def ajax_export_attendance_pdf(request):
+    # Fetch attendance records with related student and class_session
+    records = AttendanceRecord.objects.select_related('student', 'class_session')
+
+    # Load the HTML template and render it with the records
+    template = get_template('attendance_pdf.html')
+    html = template.render({'records': records})
+
+    # Create an HTTP response with PDF content type
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="attendance.pdf"'
+
+    # Create PDF and write it directly to the response
+    pisa_status = pisa.CreatePDF(html, dest=response)
+
+    # If error occurs, return HTML with error info (optional)
+    if pisa_status.err:
+        return HttpResponse(f"Error generating PDF: {pisa_status.err}", status=500)
+
+    return response

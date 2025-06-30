@@ -1,6 +1,7 @@
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager, Group, Permission
 from django.db import models
 from django.utils import timezone
+import uuid
 
 DEPARTMENT_CHOICES = [
     ('cs', 'Computer Science'),
@@ -206,10 +207,11 @@ class ClassSession(models.Model):
     session_code = models.CharField(max_length=10, unique=True)
     created_at = models.DateTimeField(auto_now_add=True)
     expires_at = models.DateTimeField()
-
     department = models.CharField(max_length=50, choices=DEPARTMENT_CHOICES)
     level = models.CharField(max_length=3, choices=LEVEL_CHOICES)
     semester = models.CharField(max_length=3, choices=SEMESTER_CHOICES)
-
-    # 🔥 New field
     max_students = models.PositiveIntegerField(default=30, help_text="Maximum number of students allowed to mark attendance for this session.")
+
+    def __str__(self):
+        # You can customize this to show any info, e.g. course + session code
+        return f"{self.course} ({self.session_code})"

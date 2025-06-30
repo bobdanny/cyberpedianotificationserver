@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Attendance Report</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-size: 12px;
+      color: #333;
+      margin: 20px;
+    }
+    h1 {
+      text-align: center;
+      color: #2c3e50;
+      margin-bottom: 20px;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    thead {
+      background-color: #2980b9;
+      color: #000000;
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 11px;
+    }
+    th, td {
+      padding: 10px 12px;
+      border-bottom: 1px solid #ddd;
+      text-align: left;
+    }
+    tbody tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+    tbody tr:hover {
+      background-color: #eaf3fc;
+    }
+    td {
+      vertical-align: middle;
+    }
+    /* For no data row */
+    td[colspan] {
+      text-align: center;
+      font-style: italic;
+      color: #999;
+      padding: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Attendance Report</h1>
+  <table>
+    <thead>
+      <tr>
+        <th>Student</th>
+        <th>Course</th>
+        <th>Semester</th>
+        <th>Level</th>
+        <th>Department</th>
+        <th>Session Date</th>
+        <th>Session Code</th>
+        <th>Timestamp</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for record in records %}
+      <tr>
+        <td>{{ record.student.full_name }}</td>
+        <td>{{ record.class_session.course }}</td>
+        <td>{{ record.class_session.semester }}</td>
+        <td>{{ record.class_session.level }}</td>
+        <td>{{ record.class_session.department }}</td>
+        <td>{{ record.class_session.created_at|date:"Y-m-d" }}</td>
+        <td>{{ record.class_session.session_code }}</td>
+        <td>{{ record.timestamp|date:"Y-m-d H:i" }}</td>
+      </tr>
+      {% empty %}
+      <tr>
+        <td colspan="8">No attendance records found.</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</body>
+</html>

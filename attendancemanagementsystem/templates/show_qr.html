@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>QR Code for Active Class Session</title>
+<style>
+  /* Reset & base */
+  body, html {
+    height: 100%;
+    margin: 0;
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* vertical center */
+    align-items: center;     /* horizontal center */
+    background: #f0f0f0;
+    text-align: center;
+    padding: 1rem; /* prevent touching edges on mobile */
+  }
+
+  h2 {
+    margin-bottom: 0.5em;
+    font-size: 1.5rem;
+  }
+
+  .info {
+    margin-bottom: 1em;
+    font-size: 1.2rem;
+    max-width: 400px;
+    width: 100%;
+  }
+
+  .info p {
+    margin: 0.25em 0;
+  }
+
+  #qr-code {
+    width: 100%;
+    max-width: 450px;
+    height: auto;
+    margin-bottom: 1em;
+  }
+
+  #countdown {
+    font-size: 1.7em;
+    font-weight: bold;
+    color: #d9534f;
+    margin-bottom: 1em;
+  }
+
+  a {
+    color: #337ab7;
+    text-decoration: none;
+  }
+  a:hover {
+    text-decoration: underline;
+  }
+
+  /* Smaller devices adjustments */
+  @media (max-width: 400px) {
+    h2 {
+      font-size: 1.2rem;
+    }
+    .info {
+      font-size: 1rem;
+    }
+  }
+</style>
+</head>
+<body>
+
+<h2>QR Code for Active Class Session</h2>
+
+<div class="info">
+  <p><strong>Course:</strong> {{ session.course }}</p>
+  <p><strong>Session Code:</strong> {{ session.session_code }}</p>
+  <p><strong>Expires At:</strong> {{ session.expires_at }}</p>
+</div>
+
+<p><strong>Scan to mark attendance</strong></p>
+
+<img id="qr-code" src="data:image/png;base64,{{ qr_image }}" alt="QR Code">
+
+</body>
+</html>

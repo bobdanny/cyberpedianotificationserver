@@ -1,0 +1,9 @@
+<h2>QR Code for Active Class Session</h2>
+
+<p><strong>Course:</strong> {{ session.course }}</p>
+<p><strong>Session Code:</strong> {{ session.session_code }}</p>
+<p><strong>Expires At:</strong> {{ session.expires_at }}</p>
+
+<img src="data:image/png;base64,{{ qr_image }}" alt="QR Code">
+
+<p>Direct link: <a href="{{ url }}">{{ url }}</a></p>

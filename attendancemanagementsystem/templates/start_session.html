@@ -1,384 +1,129 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
   <meta charset="UTF-8" />
   <title>Start Class Session</title>
+  <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    :root {
-      --primary: #4CAF50;
-      --primary-dark: #45a049;
-      --background: #f0f4f8;
-      --text: #333;
-      --accent: #007BFF;
+    /* Spinner animation */
+    @keyframes spin {
+      to { transform: rotate(360deg); }
     }
-
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: var(--background);
-      color: var(--text);
-      margin: 0;
-      padding: 1rem;
-    }
-
-    h1, h2 {
-      text-align: center;
-      color: var(--primary);
-      margin-bottom: 1rem;
-      font-size: 1.8rem;
-    }
-
-    .container {
-      max-width: 1000px;
-      margin: 0 auto;
-      padding: 1rem;
-    }
-
-    .card {
-      background: white;
-      padding: 1.5rem;
-      border-radius: 8px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-      margin-bottom: 2rem;
-    }
-
-    label {
-      display: block;
-      margin-top: 1rem;
-      font-weight: 600;
-      font-size: 0.95rem;
-    }
-
-    input[type="text"],
-    input[type="number"],
-    select {
-      width: 100%;
-      padding: 0.6rem;
-      margin-top: 0.3rem;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      transition: border 0.2s;
-      font-size: 1rem;
-    }
-
-    input[type="text"]:focus,
-    input[type="number"]:focus,
-    select:focus {
-      border-color: var(--accent);
-      outline: none;
-    }
-
-    button {
+    .spinner {
       display: inline-block;
-      margin-top: 1.5rem;
-      padding: 0.7rem 1.4rem;
-      background-color: var(--primary);
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 1rem;
-      transition: background 0.2s;
-    }
-
-    button:hover {
-      background-color: var(--primary-dark);
-    }
-
-    .messages {
-      margin-bottom: 1rem;
-    }
-
-    .error {
-      color: #d8000c;
-      background-color: #ffd2d2;
-      padding: 0.7rem;
-      border-radius: 4px;
-      margin-bottom: 1rem;
-    }
-
-    .success {
-      color: #4F8A10;
-      background-color: #DFF2BF;
-      padding: 0.7rem;
-      border-radius: 4px;
-      margin-bottom: 1rem;
-    }
-
-    .filters {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1rem;
-      margin-bottom: 1rem;
-    }
-
-    .filters label {
-      flex: 1 1 200px;
-      min-width: 150px;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      background: white;
-      border-radius: 8px;
-      overflow: hidden;
-      margin-top: 1rem;
-      font-size: 0.9rem;
-    }
-
-    th, td {
-      padding: 0.8rem;
-      text-align: left;
-      border-bottom: 1px solid #ddd;
-    }
-
-    th {
-      background-color: #f5f5f5;
-      font-weight: 600;
-    }
-
-    tr:nth-child(even) {
-      background-color: #f9f9f9;
-    }
-
-    /* Responsive Adjustments */
-    @media (max-width: 768px) {
-      h1, h2 {
-        font-size: 1.5rem;
-      }
-
-      .container {
-        padding: 0.5rem;
-      }
-
-      .filters {
-        flex-direction: column;
-      }
-
-      .filters label {
-        width: 100%;
-      }
-
-      table, thead, tbody, th, td, tr {
-        display: block;
-        width: 100%;
-      }
-
-      thead {
-        display: none;
-      }
-
-      tr {
-        margin-bottom: 1rem;
-        background: white;
-        border-radius: 8px;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        padding: 1rem;
-      }
-
-      td {
-        display: flex;
-        justify-content: space-between;
-        padding: 0.5rem 0;
-        border: none;
-        border-bottom: 1px solid #eee;
-      }
-
-      td::before {
-        content: attr(data-label);
-        font-weight: bold;
-      }
-
-      td:last-child {
-        border-bottom: none;
-      }
-    }
-
-    @media (max-width: 480px) {
-      button {
-        width: 100%;
-        font-size: 1rem;
-      }
-
-      input[type="text"],
-      input[type="number"],
-      select {
-        font-size: 0.9rem;
-      }
+      width: 1rem;
+      height: 1rem;
+      border: 3px solid rgba(0, 0, 0, 0.2);
+      border-top-color: rgba(0, 0, 0, 0.6);
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+      vertical-align: middle;
+      margin-left: 0.5rem;
     }
   </style>
 </head>
-<body>
+<body class="bg-gray-50 text-gray-800 font-sans p-4 min-w-0 overflow-x-hidden">
 
+  <!-- Private Key Modal -->
+  <div id="privateKeyModal" class="fixed inset-0 bg-white flex items-center justify-center z-[1000]">
+    <div class="bg-white p-8 rounded-lg max-w-sm w-[90%] shadow-lg animate-fadeIn text-center">
+      <h2 class="text-2xl font-semibold text-green-600 mb-4">Enter Private Key</h2>
+      <input type="password" id="privateKeyInput" placeholder="Enter your private key" 
+             class="w-full px-4 py-3 border border-gray-300 rounded-md text-base mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+      <button onclick="validatePrivateKey()" 
+              class="bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-6 rounded-md transition-colors w-full">
+        Submit
+      </button>
+      <p id="modalError" class="text-red-600 mt-2 hidden">Invalid key. Please try again.</p>
+    </div>
+  </div>
 
-    <div id="privateKeyModal" class="modal">
-        <div class="modal-content">
-          <h2>Enter Private Key</h2>
-          <input type="password" id="privateKeyInput" placeholder="Enter your private key" />
-          <button onclick="validatePrivateKey()">Submit</button>
-          <p id="modalError" style="color: red; display: none; margin-top: 0.5rem;">Invalid key. Please try again.</p>
-        </div>
-      </div>
+  <!-- Top right fixed button -->
+  <div class="fixed top-4 right-4 z-[1100]">
+    <a href="/attendancemanagementsystem/qr/" 
+       class="inline-block bg-black text-white px-4 py-2 rounded-md font-semibold shadow-md hover:bg-gray-700 transition-colors">
+      View Active Class
+    </a>
+  </div>
 
-    <style>
-      .modal {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: white;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        z-index: 1000;
-      }
-      
-      .modal-content {
-        background: white;
-        padding: 2rem;
-        border-radius: 8px;
-        max-width: 400px;
-        width: 90%;
-        text-align: center;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-        animation: fadeIn 0.3s ease-in-out;
-      }
-      
-      .modal-content h2 {
-        margin-bottom: 1rem;
-        color: var(--primary);
-      }
-      
-      .modal-content input {
-        width: 100%;
-        padding: 0.7rem;
-        margin-bottom: 1rem;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        font-size: 1rem;
-      }
-      
-      .modal-content button {
-        background-color: var(--primary);
-        color: white;
-        border: none;
-        padding: 0.7rem 1.2rem;
-        border-radius: 4px;
-        cursor: pointer;
-        font-size: 1rem;
-      }
-      
-      .modal-content button:hover {
-        background-color: var(--primary-dark);
-      }
-      
-      @keyframes fadeIn {
-        from { opacity: 0; transform: scale(0.9); }
-        to { opacity: 1; transform: scale(1); }
-      }
-    </style>
+  <!-- Main container -->
+  <div class="max-w-4xl mx-auto mt-12">
+    <h1 class="text-center text-green-600 text-3xl font-bold mb-8">Start A Class Session</h1>
 
-
-
-
-<script>
-    let privateKeyFromServer = null;
-  
-    async function fetchPrivateKey() {
-      try {
-        const response = await fetch('/attendancemanagementsystem/get-private-key/');
-        if (!response.ok) throw new Error('Network response was not ok');
-        const data = await response.json();
-        privateKeyFromServer = data.private_key;
-      } catch (error) {
-        alert('Failed to get private key from server. Please try again later.');
-        console.error('Error fetching private key:', error);
-      }
-    }
-  
-    function validatePrivateKey() {
-      const input = document.getElementById('privateKeyInput').value.trim();
-      const modalError = document.getElementById('modalError');
-  
-      if (input === privateKeyFromServer) {
-        document.getElementById('privateKeyModal').style.display = 'none';
-        document.body.style.overflow = 'auto';
-      } else {
-        modalError.style.display = 'block';
-      }
-    }
-  
-    document.body.style.overflow = 'hidden';
-  
-    window.addEventListener('DOMContentLoaded', async () => {
-      await fetchPrivateKey();
-      document.getElementById('privateKeyModal').style.display = 'flex';
-    });
-  </script>
-  
-
-
-  <div class="container">
-    <h1>Start Class Session</h1>
-
-    <div class="messages">
+    <!-- Messages -->
+    <div class="mb-6">
       {% if messages %}
         {% for message in messages %}
-          <div class="{% if message.tags %}{{ message.tags }}{% endif %}">{{ message }}</div>
+          <div class="{% if message.tags %}{{ message.tags }}{% endif %} mb-2 px-4 py-2 rounded">
+            {{ message }}
+          </div>
         {% endfor %}
       {% endif %}
     </div>
 
-    <div class="card">
+    <!-- Start Session Form Card -->
+    <div class="bg-white rounded-lg shadow-md p-6 mb-10">
       <form method="post" novalidate>
         {% csrf_token %}
-        <label for="course">Course</label>
-        <input type="text" id="course" name="course" placeholder="e.g. Introduction to CS" required />
+        <label for="course" class="block font-semibold mb-1 text-gray-700">Course</label>
+        <input type="text" id="course" name="course" placeholder="e.g. Introduction to CS" required
+               class="w-full border border-gray-300 rounded-md px-4 py-2 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500" />
 
-        <label for="session_code">Session Code</label>
-        <input type="text" id="session_code" name="session_code" placeholder="Unique session code" required />
+        <label for="session_code" class="block font-semibold mb-1 text-gray-700">Session Code</label>
+        <input type="text" id="session_code" name="session_code" placeholder="Unique session code" required
+               class="w-full border border-gray-300 rounded-md px-4 py-2 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500" />
 
-        <label for="department">Department</label>
-        <select id="department" name="department" required>
+        <label for="department" class="block font-semibold mb-1 text-gray-700">Department</label>
+        <select id="department" name="department" required
+                class="w-full border border-gray-300 rounded-md px-4 py-2 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500">
           <option value="">Select Department</option>
           {% for code, name in departments %}
             <option value="{{ code }}">{{ name }}</option>
           {% endfor %}
         </select>
 
-        <label for="level">Level</label>
-        <select id="level" name="level" required>
+        <label for="level" class="block font-semibold mb-1 text-gray-700">Level</label>
+        <select id="level" name="level" required
+                class="w-full border border-gray-300 rounded-md px-4 py-2 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500">
           <option value="">Select Level</option>
           {% for code, name in levels %}
             <option value="{{ code }}">{{ name }}</option>
           {% endfor %}
         </select>
 
-        <label for="semester">Semester</label>
-        <select id="semester" name="semester" required>
+        <label for="semester" class="block font-semibold mb-1 text-gray-700">Semester</label>
+        <select id="semester" name="semester" required
+                class="w-full border border-gray-300 rounded-md px-4 py-2 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500">
           <option value="">Select Semester</option>
           {% for code, name in semesters %}
             <option value="{{ code }}">{{ name }}</option>
           {% endfor %}
         </select>
 
-        <label for="duration">Duration (minutes)</label>
-        <input type="number" id="duration" name="duration" value="60" min="1" max="240" required />
+        <label for="duration" class="block font-semibold mb-1 text-gray-700">Duration (minutes)</label>
+        <input type="number" id="duration" name="duration" value="60" min="1" max="240" required
+               class="w-full border border-gray-300 rounded-md px-4 py-2 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500" />
 
-        <label for="max_students">Maximum Students</label>
-        <input type="number" id="max_students" name="max_students" value="30" min="1" required />
+        <label for="max_students" class="block font-semibold mb-1 text-gray-700">Maximum Students</label>
+        <input type="number" id="max_students" name="max_students" value="30" min="1" required
+               class="w-full border border-gray-300 rounded-md px-4 py-2 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500" />
 
-        <button type="submit">Start Session</button>
+        <button type="submit" 
+                class="bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-6 rounded-md w-full transition-colors">
+          Start Session
+        </button>
       </form>
     </div>
 
-    <h2>Attendance Records</h2>
-    <div class="card">
-      <form method="get" class="filters">
-        <label>
-          Department:
-          <select name="department">
+    <!-- Attendance Records -->
+    <h2 class="text-center text-green-600 text-2xl font-semibold mb-6">Attendance Records</h2>
+
+    <div class="bg-white rounded-lg shadow-md p-6 mb-16">
+      <form method="get" class="flex flex-wrap gap-4 mb-6">
+        <label class="flex-1 min-w-[150px] flex flex-col">
+          <span class="font-semibold mb-1 text-gray-700">Department:</span>
+          <select name="department" 
+                  class="border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
             <option value="">All</option>
             {% for value, label in departments %}
               <option value="{{ value }}" {% if selected_department == value %}selected{% endif %}>{{ label }}</option>
@@ -386,9 +131,10 @@
           </select>
         </label>
 
-        <label>
-          Level:
-          <select name="level">
+        <label class="flex-1 min-w-[150px] flex flex-col">
+          <span class="font-semibold mb-1 text-gray-700">Level:</span>
+          <select name="level" 
+                  class="border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
             <option value="">All</option>
             {% for value, label in levels %}
               <option value="{{ value }}" {% if selected_level == value %}selected{% endif %}>{{ label }}</option>
@@ -396,9 +142,10 @@
           </select>
         </label>
 
-        <label>
-          Semester:
-          <select name="semester">
+        <label class="flex-1 min-w-[150px] flex flex-col">
+          <span class="font-semibold mb-1 text-gray-700">Semester:</span>
+          <select name="semester" 
+                  class="border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
             <option value="">All</option>
             {% for value, label in semesters %}
               <option value="{{ value }}" {% if selected_semester == value %}selected{% endif %}>{{ label }}</option>
@@ -406,40 +153,136 @@
           </select>
         </label>
 
-        <button type="submit">Filter</button>
+        <button type="submit" 
+                class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-6 rounded-md self-end transition-colors">
+          Filter
+        </button>
       </form>
 
-      <table>
-        <thead>
-          <tr>
-            <th>Student Name</th>
-            <th>Department</th>
-            <th>Level</th>
-            <th>Semester</th>
-            <th>Course</th>
-            <th>Session Date</th>
-            <th>Attendance Marked At</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for record in attendance_records %}
+      <!-- Responsive Table -->
+      <div class="overflow-x-auto">
+        <table class="min-w-full text-sm text-left text-gray-700">
+          <thead class="bg-gray-100 font-semibold text-gray-900">
             <tr>
-              <td data-label="Student Name">{% if record.student.get_full_name %}{{ record.student.get_full_name }}{% else %}{{ record.student.email }}{% endif %}</td>
-              <td data-label="Department">{{ record.class_session.get_department_display }}</td>
-              <td data-label="Level">{{ record.class_session.level }}</td>
-              <td data-label="Semester">{{ record.class_session.semester }}</td>
-              <td data-label="Course">{{ record.class_session.course }}</td>
-              <td data-label="Session Date">{{ record.class_session.expires_at|date:"Y-m-d H:i" }}</td>
-              <td data-label="Attendance Marked At">{{ record.timestamp|date:"Y-m-d H:i" }}</td>
+              <th class="p-3">Student Name</th>
+              <th class="p-3">Department</th>
+              <th class="p-3">Level</th>
+              <th class="p-3">Semester</th>
+              <th class="p-3">Course</th>
+              <th class="p-3">Session Date</th>
+              <th class="p-3">Attendance Marked At</th>
             </tr>
-          {% empty %}
-            <tr>
-              <td colspan="7" style="text-align:center;">No attendance records found.</td>
-            </tr>
-          {% endfor %}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {% for record in attendance_records %}
+              <tr class="border-b border-gray-200 even:bg-gray-50">
+                <td data-label="Student Name" class="p-3">
+                  {% if record.student.get_full_name %}{{ record.student.get_full_name }}{% else %}{{ record.student.email }}{% endif %}
+                </td>
+                <td data-label="Department" class="p-3">{{ record.class_session.get_department_display }}</td>
+                <td data-label="Level" class="p-3">{{ record.class_session.level }}</td>
+                <td data-label="Semester" class="p-3">{{ record.class_session.semester }}</td>
+                <td data-label="Course" class="p-3">{{ record.class_session.course }}</td>
+                <td data-label="Session Date" class="p-3">{{ record.class_session.expires_at|date:"Y-m-d H:i" }}</td>
+                <td data-label="Attendance Marked At" class="p-3">{{ record.timestamp|date:"Y-m-d H:i" }}</td>
+              </tr>
+            {% empty %}
+              <tr>
+                <td colspan="7" class="p-6 text-center text-gray-500">No attendance records found.</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
+
+  <!-- Download PDF Button -->
+  <div class="max-w-4xl mx-auto mb-12 px-6">
+    <button id="download-pdf-btn" 
+            class="bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-6 rounded-md flex items-center justify-center w-full max-w-xs mx-auto transition-colors">
+      <span class="btn-text">Download Attendance PDF</span>
+      <span class="spinner" style="display:none;"></span>
+    </button>
+  </div>
+
+<script>
+  let privateKeyFromServer = null;
+
+  async function fetchPrivateKey() {
+    try {
+      const response = await fetch('/attendancemanagementsystem/get-private-key/');
+      if (!response.ok) throw new Error('Network response was not ok');
+      const data = await response.json();
+      privateKeyFromServer = data.private_key;
+    } catch (error) {
+      alert('Failed to get private key from server. Please try again later.');
+      console.error('Error fetching private key:', error);
+    }
+  }
+
+  function validatePrivateKey() {
+    const input = document.getElementById('privateKeyInput').value.trim();
+    const modalError = document.getElementById('modalError');
+
+    if (input === privateKeyFromServer) {
+      document.getElementById('privateKeyModal').style.display = 'none';
+      document.body.style.overflow = 'auto';
+    } else {
+      modalError.style.display = 'block';
+    }
+  }
+
+  document.body.style.overflow = 'hidden';
+
+  window.addEventListener('DOMContentLoaded', async () => {
+    await fetchPrivateKey();
+    document.getElementById('privateKeyModal').style.display = 'flex';
+  });
+
+  // Download PDF button logic
+  const btn = document.getElementById('download-pdf-btn');
+
+  btn.addEventListener('click', () => {
+    btn.disabled = true;
+    btn.querySelector('.btn-text').style.display = 'none';
+    btn.querySelector('.spinner').style.display = 'inline-block';
+
+    // Simulate delay or trigger AJAX download
+    setTimeout(() => {
+      btn.disabled = false;
+      btn.querySelector('.btn-text').style.display = '';
+      btn.querySelector('.spinner').style.display = 'none';
+    }, 3000);
+  });
+
+  document.getElementById('download-pdf-btn').addEventListener('click', function () {
+    fetch('{% url "ajax_download_attendance_pdf" %}', {
+      method: 'GET',
+      headers: {
+        'X-Requested-With': 'XMLHttpRequest'
+      }
+    })
+    .then(response => {
+      if (!response.ok) throw new Error("Failed to generate PDF");
+      return response.blob();
+    })
+    .then(blob => {
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'attendance.pdf';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(url);
+    })
+    .catch(error => {
+      alert("Error downloading PDF");
+      console.error(error);
+    });
+  });
+</script>
+
 </body>
 </html>
