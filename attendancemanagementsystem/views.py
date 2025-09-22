@@ -1056,9 +1056,6 @@ if not firebase_admin._apps:
 
 
 
-
-
-
 def send_notification(request):
     device_token = "dWfKLWg0S9SdENx0ah0HyZ:APA91bHNnNc2h9yT3Pt--gzCU4QflIYAqkNTRV5KzuKQ0IQB6To5MlNdhDbEAgimwQ3nXSibiuhRV038HdywhOHvF0KlE-XcxjtBclKCKCQ2w8q2l8kiY7Q"
 
