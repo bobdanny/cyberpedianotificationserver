@@ -1022,20 +1022,29 @@ def ajax_export_attendance_pdf(request):
 
 
 
-
 from django.http import JsonResponse
-import requests
-
-
-
 import requests
 import firebase_admin
 from firebase_admin import credentials, messaging
-from django.http import JsonResponse
+
+# 🔐 Firebase service account embedded as dictionary
+firebase_config = {
+    "type": "service_account",
+    "project_id": "cyberpediawithflutter",
+    "private_key_id": "6150ad8739456edf939714cbd1cd732f74bfb9f8",
+    "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDKfDt2Dqz/VmwW\nEzwvBAoG+FqSbVsKY0uHdPI9jQGvuujcy+UCsp74ekREUVO5m7/Ld5PwEZi339lT\ndngqg7k1uDEOhf2BMlbuvB7qngGxKsU9tjGxoSqw0QXiyHKTvEkjXWedSUtYj2DI\nBFeFzakYbkN60AcGhwDiID1Wjx8ozfuimZxMp3pIqXcF/daZ9EvnxDNgZ4tNd5j3\nPuYXaJZxkZc/jNmNNgV+JeyFb0KwPWYfoaVDQ4NwQECOCOBJOw37vsG1vS6sMjLX\nDwBm8kw0/QkXHry2lH63KwcZCPATJVS+Zt7A++PH5IcAesQGTx5kH704TMjvG226\nppklBbxjAgMBAAECggEAKp3qH+dn1tf4KM9El/qoJ55m5bG5ex65+1kMURMX+0YC\nE9KgMSiqF88YBi79ya9ztx3EV79EXtLw2UWydfRCa4GIZa+i0unm7RlQAn5eCc1g\nNSRfIi0zIILl07zvjJOQ6y4SDEMsZgfLTV3IlANcpyUx86vMBr4sW+uALXMzEjGk\nUV1IVpXuWN2o9r0Foy5RIVwrl+pCUOsSIYXV6x9Gd8A/61Ni9XPe9DONSbos1LJL\ngu7MdC8oBmKh+RiAAm8MduBwAjj8dHYshq3Bj2rjlt82Da1R+Ad7xQcfjYOVw9sT\nbH7kogFAKp8jnWXZCpQLIGTmrICPbMr/fE1LM9qy/QKBgQDyYiC43L0OAeQjmKBs\nInD/tOAsWm/E6JXEIu/UXLTgwI2P0zf+oD9yBNZmLHWhbGXwSGSGWcFtUAFepTSK\nhBdtIgniSDN8+KzCJdSnkYwcbp6ckHufZL4hOTqNvCKaXBGJ9BfNpx3vtHEQ11hC\nIbdiKmoDcPTwRKevEBbU36U3TQKBgQDV3E4PBso22PatvU0AmZICcLAsU4V2gsY2\nxnIQcLFJOr3THKZmcwyZPpkAfdNb92Iyn5na8DvhoTZihbjuFr57KrOthLy/eS1b\nccby93wMrvDzyhWpLWWQgv+w+6oFSe6aYsc8qXkZHR/FxVT7Ik+Gnhj2P0nkF4cM\n/azLKcDKbwKBgG0KXiQsEdT6XtLwt8LN3735dhwd90hDRhT9jp0fs7OkjErWv8sJ\n9mDp8jX27FhZdqaZOrgCKvVtV6Bne/KQqCVNedrVlmwzRyz0be2QmdK0pSBUE3lK\njgpOP5xBteNxZeaE7Cx1cQ9EQtVLu4XMuz4rTJQNvfNVP4aPG2Za0m3FAoGBALS+\nCEqy1lwcaf7UKiwDnl7pljsgK3/JbnQEq4oxc+QL/Tpa0FdtjIxHV1APB36GSTu3\nn3Rl7HX4pdoGYhD2r+2wXUKdGFhKtYa/VgEqIHEnuQSRGlVsxJWp4SdWyo7FuR5J\ntVETegE7mAqxh+znRobjPv1+55gaOk1EZ7EcjI+JAoGBAOBTqbnDxFbVOUBEAA4F\nSo+wtYKcNa0j6KR4RjMm/JcMBJ+GyfaTUQw8KOeJMJKtMnLgm56pPEP+CKqB0GOY\nc7//51KSCE44bWBeRNs6YbovIQanGp0WAxnYsfuJFMyEvxyJwnXVCy/M6yc06X1I\nLnIKB1XybQTY32cirbFN0PKl\n-----END PRIVATE KEY-----\n",
+    "client_email": "firebase-adminsdk-fbsvc@cyberpediawithflutter.iam.gserviceaccount.com",
+    "client_id": "100409226041708107080",
+    "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+    "token_uri": "https://oauth2.googleapis.com/token",
+    "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+    "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-fbsvc%40cyberpediawithflutter.iam.gserviceaccount.com",
+    "universe_domain": "googleapis.com"
+}
 
 # ✅ Initialize Firebase Admin only once
 if not firebase_admin._apps:
-    cred = credentials.Certificate("serviceAccountKey.json")
+    cred = credentials.Certificate(firebase_config)
     firebase_admin.initialize_app(cred)
 
 
@@ -1044,9 +1053,6 @@ if not firebase_admin._apps:
 
 
 
-import requests
-from django.http import JsonResponse
-from firebase_admin import messaging
 
 
 
@@ -1057,44 +1063,84 @@ def send_notification(request):
     device_token = "dWfKLWg0S9SdENx0ah0HyZ:APA91bHNnNc2h9yT3Pt--gzCU4QflIYAqkNTRV5KzuKQ0IQB6To5MlNdhDbEAgimwQ3nXSibiuhRV038HdywhOHvF0KlE-XcxjtBclKCKCQ2w8q2l8kiY7Q"
 
     try:
-        # ✅ Fetch latest feed
-        url = "https://cyberpedia-api.onrender.com/notifications/feeds/latest"
+        url = "https://cyberpedia-api.onrender.com/feeds?q=&limit=5"
         response = requests.get(url)
         response.raise_for_status()
-        feed = response.json()
 
-        print("Full API response data:", feed)
+        data = response.json()
+        print("Full API response data:", data)  # Debug print
 
-        # ✅ Validate
-        if not feed.get("id"):
-            return JsonResponse({"success": False, "error": "Invalid feed format"})
+        feeds = data.get("data", {}).get("feeds", [])
+        print(f"Extracted feeds: {feeds}")  # Debug print
 
-        # ✅ Extract fields
-        title = feed.get("title", "Cyber Feed")
-        body = feed.get("content_snippet", "")[:100]
-        image = feed.get("image", "")
+        # Print each feed's ID
+        for feed in feeds:
+            print(f"Feed ID: {feed.get('id')}")
 
-        # ✅ Send as data-only message
-        message = messaging.Message(
-            data={
-                "route": feed.get("screen", "cyber_feeds"),
-                "feed_id": str(feed.get("id", "")),
-                "image": image or "",
-                "provider": feed.get("provider", ""),
-                "pubDate": feed.get("pub_date", ""),
-                "title": title,
-                "body": body,
-            },
-            token=device_token,
-        )
+        if not feeds:
+            return JsonResponse({"success": False, "error": "No feeds found in API response"})
 
-        res = messaging.send(message)
-        return JsonResponse({"success": True, "response": res})
+        results = []
+        for feed in feeds:
+            title = feed.get("title", "Cyber Feed")
+            body = feed.get("description", "")[:100]
+            image = feed.get("image", "")
+
+            message = messaging.Message(
+                notification=messaging.Notification(
+                    title=title,
+                    body=body if body else "New feed available",
+                    image=image if image else None,
+                ),
+                data={
+                    "route": "cyber_feeds",
+                    "feed_id": str(feed.get("id", "")),
+                    "image": image or "",
+                    "provider": feed.get("provider", ""),
+                    "pubDate": feed.get("pub_date", ""),
+                },
+                token=device_token,
+            )
+
+            res = messaging.send(message)
+            results.append(res)
+
+        return JsonResponse({"success": True, "responses": results})
 
     except Exception as e:
         print("Error occurred:", e)
         return JsonResponse({"success": False, "error": str(e)})
 
+
+def get_feed_by_id(request, feed_id):
+    try:
+        # Fetch list of feeds
+        url = "https://cyberpedia-api.onrender.com/feeds?q=&limit=50"
+        response = requests.get(url)
+        response.raise_for_status()
+
+        data = response.json()
+        feeds = data.get("data", {}).get("feeds", [])
+
+        print(f"Searching {len(feeds)} feeds for ID: {feed_id}")
+
+        # Search for feed by ID
+        for feed in feeds:
+            if str(feed.get("id")) == str(feed_id):
+                return JsonResponse({"status": "success", "feed": feed})
+
+        return JsonResponse({
+            "status": "error",
+            "message": "Feed not found",
+            "data": {}
+        })
+
+    except Exception as e:
+        return JsonResponse({
+            "status": "error",
+            "message": str(e),
+            "data": {}
+        })
 
 
 
