@@ -1,0 +1,20 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+
+# SQLite
+*.sqlite3
+
+# Environment
+.env
+*.env
+
+# Django static files
+staticfiles/
+
+# Secret keys
+serviceAccountKey.json
+
+# VS Code & OS files
+.vscode/
+.DS_Store
