@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Cyberpedia Feeds</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f9f9f9; padding: 20px; }
+    .feed { background: white; padding: 15px; margin-bottom: 15px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+    .feed h2 { font-size: 18px; margin: 0; }
+    .feed p { color: #555; margin: 5px 0; }
+    .meta { font-size: 12px; color: #888; margin-top: 8px; }
+  </style>
+</head>
+<body>
+<!-- feeds.html -->
+<h2 class="text-xl font-bold">Latest Feeds</h2>
+
+{% if feeds %}
+  <ul class="space-y-4 mt-4">
+    {% for feed in feeds %}
+      <li class="border p-3 rounded">
+        <h3 class="text-lg font-semibold">
+          <a href="{{ feed.link }}" target="_blank" class="text-blue-600 hover:underline">
+            {{ feed.title }}
+          </a>
+        </h3>
+        <p class="text-sm text-gray-600">{{ feed.content_snippet }}</p>
+        <span class="text-xs text-gray-500">By {{ feed.author }} | {{ feed.pub_date }}</span>
+      </li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p>No feeds available.</p>
+{% endif %}
+
+</body>
+</html>

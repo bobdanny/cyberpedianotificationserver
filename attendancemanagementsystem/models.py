@@ -3,6 +3,23 @@ from django.db import models
 from django.utils import timezone
 import uuid
 
+from django.conf import settings
+from django.db import models
+
+class FCMToken(models.Model):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,  # <- dynamic reference to your user model
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True
+    )
+    token = models.CharField(max_length=512, unique=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.token
+
+
 DEPARTMENT_CHOICES = [
     ('cs', 'Computer Science'),
     ('mc', 'Mass Communication'),
@@ -215,3 +232,12 @@ class ClassSession(models.Model):
     def __str__(self):
         # You can customize this to show any info, e.g. course + session code
         return f"{self.course} ({self.session_code})"
+
+
+
+
+
+
+
+
+

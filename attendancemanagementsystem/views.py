@@ -200,7 +200,6 @@ from .utils import start_class_session  # import the function you wrote earlier
 
 
 
-
 @login_required
 def start_session_view(request):
     if request.method == "POST":
@@ -1014,3 +1013,200 @@ def ajax_export_attendance_pdf(request):
         return HttpResponse(f"Error generating PDF: {pisa_status.err}", status=500)
 
     return response
+
+
+
+
+
+
+
+
+
+
+from django.http import JsonResponse
+import requests
+
+
+
+import requests
+import firebase_admin
+from firebase_admin import credentials, messaging
+from django.http import JsonResponse
+
+# ✅ Initialize Firebase Admin only once
+if not firebase_admin._apps:
+    cred = credentials.Certificate("serviceAccountKey.json")
+    firebase_admin.initialize_app(cred)
+
+
+
+
+
+
+
+import requests
+from django.http import JsonResponse
+from firebase_admin import messaging
+
+
+
+
+
+
+def send_notification(request):
+    device_token = "dWfKLWg0S9SdENx0ah0HyZ:APA91bHNnNc2h9yT3Pt--gzCU4QflIYAqkNTRV5KzuKQ0IQB6To5MlNdhDbEAgimwQ3nXSibiuhRV038HdywhOHvF0KlE-XcxjtBclKCKCQ2w8q2l8kiY7Q"
+
+    try:
+        # ✅ Fetch latest feed
+        url = "https://cyberpedia-api.onrender.com/notifications/feeds/latest"
+        response = requests.get(url)
+        response.raise_for_status()
+        feed = response.json()
+
+        print("Full API response data:", feed)
+
+        # ✅ Validate
+        if not feed.get("id"):
+            return JsonResponse({"success": False, "error": "Invalid feed format"})
+
+        # ✅ Extract fields
+        title = feed.get("title", "Cyber Feed")
+        body = feed.get("content_snippet", "")[:100]
+        image = feed.get("image", "")
+
+        # ✅ Send as data-only message
+        message = messaging.Message(
+            data={
+                "route": feed.get("screen", "cyber_feeds"),
+                "feed_id": str(feed.get("id", "")),
+                "image": image or "",
+                "provider": feed.get("provider", ""),
+                "pubDate": feed.get("pub_date", ""),
+                "title": title,
+                "body": body,
+            },
+            token=device_token,
+        )
+
+        res = messaging.send(message)
+        return JsonResponse({"success": True, "response": res})
+
+    except Exception as e:
+        print("Error occurred:", e)
+        return JsonResponse({"success": False, "error": str(e)})
+
+
+
+
+
+
+
+
+
+def get_feed_by_id(request, feed_id):
+    try:
+        # Fetch list of feeds
+        url = "https://cyberpedia-api.onrender.com/feeds?q=&limit=50"
+        response = requests.get(url)
+        response.raise_for_status()
+        data = response.json()
+
+        feeds = data.get("data", {}).get("feeds", [])
+        print(f"Searching {len(feeds)} feeds for ID: {feed_id}")
+
+        # Search for feed by ID
+        for feed in feeds:
+            if str(feed.get("id")) == str(feed_id):
+                return JsonResponse({"status": "success", "feed": feed})
+
+        return JsonResponse({
+            "status": "error",
+            "message": "Feed not found",
+            "data": {}
+        })
+
+    except Exception as e:
+        return JsonResponse({
+            "status": "error",
+            "message": str(e),
+            "data": {}
+        })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+import requests
+from django.http import JsonResponse, HttpResponse
+from django.shortcuts import render
+
+BASE_URL = "https://cyberpedia-api.onrender.com"
+import requests
+from django.http import HttpResponse
+from django.shortcuts import render
+
+def test_feeds(request):
+    url = "https://cyberpedia-api.onrender.com/feeds"
+
+    try:
+        response = requests.get(url, timeout=10)
+        response.raise_for_status()  # Raise error if not 200
+
+        # Try parsing JSON safely
+        try:
+            data = response.json()
+        except ValueError:
+            return HttpResponse("<h2>API did not return JSON</h2><pre>" + response.text[:500] + "</pre>")
+
+        # Safely navigate structure
+        feeds = (
+            data.get("data", {})
+                .get("feeds", [])
+        )
+
+        return render(request, "feeds.html", {"feeds": feeds})
+
+    except requests.exceptions.RequestException as e:
+        return HttpResponse(f"<h2>Failed to fetch feeds: {e}</h2>", status=500)
+
+
+
+
+
+
+
+
+
+# attendancemanagementsystem/views.py
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from .models import FCMToken
+from rest_framework import serializers
+
+# Serializer
+class FCMTokenSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FCMToken
+        fields = ['token']
+
+# API View
+class FCMTokenView(APIView):
+    def post(self, request):
+        serializer = FCMTokenSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"message": "Token saved successfully"}, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+  
+
+

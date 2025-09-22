@@ -36,6 +36,10 @@ from .views import (
     mark_attendance_by_code,
     show_qr_for_active_session,
     ajax_export_attendance_pdf,
+    send_notification,
+    test_feeds,
+    FCMTokenView,
+    get_feed_by_id,
 )
 
 urlpatterns = [
@@ -80,5 +84,15 @@ urlpatterns = [
     # urls.py
     path('ajax/download-attendance/', ajax_export_attendance_pdf, name='ajax_download_attendance_pdf'),
 
+    path("send-notification/", send_notification, name="send_notification"),
+
+    path("test-feeds/", test_feeds, name="test-feeds"),
+
+
+
+    path('save-fcm/', FCMTokenView.as_view(), name='save_fcm'),
+
+    path('feed/<int:feed_id>/', get_feed_by_id, name='get_feed_by_id'),
+    
 ]   
    

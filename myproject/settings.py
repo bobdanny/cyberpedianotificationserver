@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'attendancemanagementsystem',
     'django.contrib.humanize',
-]
+    'rest_framework',
+] 
   
 AUTH_USER_MODEL = 'attendancemanagementsystem.CustomUser'
 
