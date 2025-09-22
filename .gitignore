@@ -12,8 +12,6 @@ __pycache__/
 # Django static files
 staticfiles/
 
-# Secret keys
-serviceAccountKey.json
 
 # VS Code & OS files
 .vscode/
