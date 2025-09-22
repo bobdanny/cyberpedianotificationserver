@@ -9,6 +9,11 @@ __pycache__/
 .env
 *.env
 
+.serviceAccountKey.json
+
+# Secret keys
+serviceAccountKey.json
+
 # Django static files
 staticfiles/
 
