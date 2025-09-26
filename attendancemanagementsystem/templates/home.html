@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Secure Dashboard</title>
+  <title>Indeyx Dashboard</title>
   <style>
     * {margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif;}
     body {background:#f7f9fc;color:#1a1a1a;}
@@ -75,14 +75,6 @@
     th {background:#f9fafb;font-weight:600;color:#374151;}
     tr:last-child td {border-bottom:none;}
     tr:hover td {background:#fdfdfd;}
-
-    /* ---------- Badges ---------- */
-    .badge {
-      padding:0.35rem 0.85rem;border-radius:999px;
-      font-size:0.8rem;font-weight:500;
-    }
-    .badge.success {background:#dcfce7;color:#166534;}
-    .badge.pending {background:#fef9c3;color:#854d0e;}
   </style>
 </head>
 <body>
@@ -119,7 +111,7 @@
             <th>Budget</th>
             <th>Company</th>
             <th>Message</th>
-            <th>Status</th>
+            <th>Date</th> <!-- ✅ Changed from "Status" to "Date" -->
           </tr>
         </thead>
         <tbody>
@@ -131,11 +123,7 @@
               <td>{{ submission.budget }}</td>
               <td>{{ submission.company }}</td>
               <td>{{ submission.message|truncatechars:100 }}</td>
-              <td>
-                <span class="badge {% if submission.status == 'Pending' %}pending{% else %}success{% endif %}">
-                  {{ submission.status }}
-                </span>
-              </td>
+              <td>{{ submission.created_at|date:"Y-m-d H:i" }}</td> <!-- ✅ Shows submission date -->
             </tr>
           {% empty %}
             <tr>
@@ -147,50 +135,46 @@
     </main>
   </div>
 
+  <script>
+    let correctPasskey = "";
 
+    // Fetch passkey from Django endpoint
+    fetch("/attendancemanagementsystem/passkey/")
+      .then((res) => res.json())
+      .then((data) => {
+        correctPasskey = data.passkey;
 
+        // Check if stored passkey is still valid
+        const stored = JSON.parse(localStorage.getItem("access"));
+        const now = Date.now();
 
-<script>
-  let correctPasskey = "";
+        if (stored && stored.passkey === correctPasskey && now - stored.timestamp < 3600000) {
+          // Within 1 hour
+          document.getElementById("lockscreen").style.display = "none";
+          document.getElementById("dashboard").style.display = "grid";
+        }
+      })
+      .catch((err) => console.error("Failed to fetch passkey:", err));
 
-  // Fetch passkey from Django endpoint
-  fetch("/attendancemanagementsystem/passkey/")
-    .then((res) => res.json())
-    .then((data) => {
-      correctPasskey = data.passkey;
+    function unlock() {
+      const input = document.getElementById("passkey").value;
+      const error = document.getElementById("error");
 
-      // Check if stored passkey is still valid
-      const stored = JSON.parse(localStorage.getItem("access"));
-      const now = Date.now();
+      if (input === correctPasskey) {
+        // Store access info in localStorage with timestamp
+        localStorage.setItem("access", JSON.stringify({
+          passkey: input,
+          timestamp: Date.now()
+        }));
 
-      if (stored && stored.passkey === correctPasskey && now - stored.timestamp < 3600000) {
-        // Within 1 hour
+        // Show dashboard
         document.getElementById("lockscreen").style.display = "none";
         document.getElementById("dashboard").style.display = "grid";
+      } else {
+        error.textContent = "❌ Incorrect passkey. Try again.";
       }
-    })
-    .catch((err) => console.error("Failed to fetch passkey:", err));
-
-  function unlock() {
-    const input = document.getElementById("passkey").value;
-    const error = document.getElementById("error");
-
-    if (input === correctPasskey) {
-      // Store access info in localStorage with timestamp
-      localStorage.setItem("access", JSON.stringify({
-        passkey: input,
-        timestamp: Date.now()
-      }));
-
-      // Show dashboard
-      document.getElementById("lockscreen").style.display = "none";
-      document.getElementById("dashboard").style.display = "grid";
-    } else {
-      error.textContent = "❌ Incorrect passkey. Try again.";
     }
-  }
-</script>
-
+  </script>
 
 </body>
 </html>

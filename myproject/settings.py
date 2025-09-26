@@ -125,6 +125,6 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 # settings.py
 PRIVATE_KEY = "Taiwo"  
 
-DASHBOARD_PASSKEY = "12345"   
+DASHBOARD_PASSKEY = "Indeyx232"   
 
 SITE_URL = "http://192.168.1.195:8000/"  # or your production domain
