@@ -238,6 +238,14 @@ class ClassSession(models.Model):
 
 
 
+class UserSubmission(models.Model):
+    name = models.CharField(max_length=100)
+    email = models.EmailField()
+    company = models.CharField(max_length=150)  # Optional
+    service = models.CharField(max_length=100)
+    budget = models.CharField(max_length=50)
+    message = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
 
-
-
+    def __str__(self):
+        return f"{self.name} ({self.email}) - {self.service}"

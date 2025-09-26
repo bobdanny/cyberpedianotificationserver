@@ -40,6 +40,10 @@ from .views import (
     test_feeds,
     FCMTokenView,
     get_feed_by_id,
+    get_passkey,
+    submit_form,
+   
+    
 )
 
 urlpatterns = [
@@ -93,6 +97,10 @@ urlpatterns = [
     path('save-fcm/', FCMTokenView.as_view(), name='save_fcm'),
 
     path('feed/<int:feed_id>/', get_feed_by_id, name='get_feed_by_id'),
+
+    path("passkey/", get_passkey, name="get_passkey"),
+
+    path("submit/", submit_form, name="submit_form"),
     
 ]   
    

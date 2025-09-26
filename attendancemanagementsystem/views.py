@@ -416,15 +416,23 @@ def signup(request):
 from django.views.generic import TemplateView
 from .models import Apartment
 
+
+from django.views.generic import TemplateView
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
+import json
+from .models import UserSubmission
+
+
 class HomeView(TemplateView):
     template_name = 'home.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['hot_apartments'] = Apartment.objects.filter(hot=True)
-        context['all_apartments'] = Apartment.objects.all()
+        # Fetch recent submissions (latest first)
+        context['submissions'] = UserSubmission.objects.order_by('-created_at')
         return context
-    
+
 
 
 
@@ -1253,3 +1261,47 @@ class FCMTokenView(APIView):
   
 
 
+
+
+def get_passkey(request):
+    return JsonResponse({"passkey": settings.DASHBOARD_PASSKEY})
+
+
+
+
+
+@csrf_exempt
+def submit_form(request):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+            
+            name = data.get("name")
+            email = data.get("email")
+            company = data.get("company", "")  # Optional, default empty string
+            service = data.get("service")
+            budget = data.get("budget")
+            message = data.get("message")
+
+            # Validate required fields
+            if not all([name, email, service, budget, message]):
+                return JsonResponse({"success": False, "error": "Missing required fields."}, status=400)
+
+            # Save in DB
+            submission = UserSubmission.objects.create(
+                name=name,
+                email=email,
+                company=company,
+                service=service,
+                budget=budget,
+                message=message,
+            )
+
+            return JsonResponse({"success": True, "id": submission.id})
+
+        except json.JSONDecodeError:
+            return JsonResponse({"success": False, "error": "Invalid JSON."}, status=400)
+        except Exception as e:
+            return JsonResponse({"success": False, "error": str(e)}, status=400)
+
+    return JsonResponse({"error": "Invalid request method."}, status=400)

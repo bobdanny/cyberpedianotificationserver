@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'attendancemanagementsystem',
     'django.contrib.humanize',
     'rest_framework',
+    "corsheaders",
 ] 
   
 AUTH_USER_MODEL = 'attendancemanagementsystem.CustomUser'
@@ -53,7 +54,11 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
 ]
+
+CORS_ALLOW_ALL_ORIGINS = True  
 
 ROOT_URLCONF = 'myproject.urls'
 
@@ -120,6 +125,6 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 # settings.py
 PRIVATE_KEY = "Taiwo"  
 
+DASHBOARD_PASSKEY = "12345"   
 
-
-SITE_URL = "http://192.168.220.199:8000/"  # or your production domain
+SITE_URL = "http://192.168.1.195:8000/"  # or your production domain

@@ -3,197 +3,194 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Welcome Page</title>
+  <title>Secure Dashboard</title>
   <style>
-    /* Reset default styles */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    * {margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif;}
+    body {background:#f7f9fc;color:#1a1a1a;}
+
+    /* ---------- Lock Screen ---------- */
+    .lockscreen {
+      display:flex;align-items:center;justify-content:center;
+      height:100vh;background:#f9fafb;
+    }
+    .lockscreen-box {               
+      background:#fff;padding:2.5rem;border-radius:16px;
+      box-shadow:0 8px 20px rgba(0,0,0,0.08);
+      text-align:center;width:320px;animation:fadeIn 0.6s ease;
+    }
+    .lockscreen-box h2 {margin-bottom:1rem;color:#111827;font-size:1.5rem;}
+    .lockscreen-box input {
+      width:100%;padding:0.75rem 1rem;margin-bottom:1rem;
+      border:1px solid #d1d5db;border-radius:10px;
+      font-size:1rem;transition:border 0.2s;
+    }
+    .lockscreen-box input:focus {
+      border-color:#2563eb;outline:none;
+    }
+    .lockscreen-box button {
+      width:100%;background:#2563eb;border:none;color:#fff;
+      padding:0.75rem;border-radius:10px;font-size:1rem;
+      font-weight:600;cursor:pointer;transition:background 0.2s;
+    }
+    .lockscreen-box button:hover {background:#1d4ed8;}
+    .error {color:#dc2626;font-size:0.9rem;}
+
+    @keyframes fadeIn {
+      from {opacity:0;transform:translateY(10px);}
+      to {opacity:1;transform:translateY(0);}
     }
 
-    body {
-      height: 100vh;
-      background: linear-gradient(135deg, #6d6e70, #74747e);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
+    /* ---------- Dashboard ---------- */
+    .dashboard {
+      display:none;grid-template-columns:220px 1fr;min-height:100vh;
+    }
+    .sidebar {
+      background:#ffffff;border-right:1px solid #e5e7eb;
+      padding:2rem 1rem;display:flex;flex-direction:column;gap:1.5rem;
+    }
+    .sidebar h2 {font-size:1.3rem;font-weight:700;color:#111827;}
+    .sidebar nav a {
+      color:#374151;text-decoration:none;font-size:1rem;
+      background:#f0f0f0;color:#111827;
+      padding:0.6rem 0.8rem;border-radius:8px;display:block;
+      transition:background 0.2s,color 0.2s;
+    }
+    .sidebar nav a:hover {
+      background:#f3f4f6;color:#111827;
     }
 
-    .container {
-      max-width: 400px;
-      width: 100%;
+    .main {padding:2rem;}
+    .main h1 {font-size:1.6rem;margin-bottom:1.5rem;font-weight:600;}
+
+    /* ---------- Table ---------- */
+    table {
+      width:100%;border-collapse:collapse;background:#fff;
+      border-radius:12px;overflow:hidden;
+      box-shadow:0 4px 12px rgba(0,0,0,0.05);
     }
-
-    .card {
-      background: #ffffff;
-      border-radius: 20px;
-      padding: 40px 30px;
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
-      text-align: center;
-      transition: transform 0.3s, box-shadow 0.3s;
+    th,td {
+      padding:1rem;text-align:left;font-size:0.95rem;
+      border-bottom:1px solid #f0f0f0;
     }
+    th {background:#f9fafb;font-weight:600;color:#374151;}
+    tr:last-child td {border-bottom:none;}
+    tr:hover td {background:#fdfdfd;}
 
-    .card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+    /* ---------- Badges ---------- */
+    .badge {
+      padding:0.35rem 0.85rem;border-radius:999px;
+      font-size:0.8rem;font-weight:500;
     }
-
-    .card h1 {
-      font-size: 2.5rem;
-      color: #111827;
-      margin-bottom: 15px;
-    }
-
-    .card p {
-      color: #6b7280;
-      font-size: 1rem;
-      margin-bottom: 25px;
-    }
-
-    .button-group {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .btn {
-  display: inline-block;
-  text-decoration: none;  /* Remove underline from links */
-  text-align: center;
-  padding: 14px;
-  border: none;
-  border-radius: 12px;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  letter-spacing: 0.5px;
-  color: white;
-}
-
-
-    .btn-login {
-      background: linear-gradient(to right, #2563eb, #1d4ed8);
-      color: white;
-    }
-
-    .btn-login:hover {
-      background: linear-gradient(to right, #1e3a8a, #1e40af);
-      transform: translateY(-2px);
-    }
-
-    .btn-signup {
-      background: linear-gradient(to right, #22c55e, #16a34a);
-      color: white;
-    }
-
-    .btn-signup:hover {
-      background: linear-gradient(to right, #15803d, #166534);
-      transform: translateY(-2px);
-    }
-
-    .btn-attendance {
-      background: linear-gradient(to right, #9333ea, #7e22ce);
-      color: white;
-    }
-
-    .btn-attendance:hover {
-      background: linear-gradient(to right, #6b21a8, #581c87);
-      transform: translateY(-2px);
-    }
-
-    .btn:active {
-      transform: scale(0.98);
-    }
-
-    /* Optional: Smooth transition on page load */
-    .card {
-      opacity: 0;
-      transform: translateY(20px);
-      animation: fadeInUp 0.6s forwards;
-    }
-
-    @keyframes fadeInUp {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-    .top-right-btn {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  padding: 10px 20px;
-  background: linear-gradient(to right, #250c00, #d81d7a);
-  color: white;
-  border: none;
-  border-radius: 12px;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-}
-
-.top-right-btn:hover {
-  background: linear-gradient(to right, #1e3a8a, #1e40af);
-  transform: translateY(-2px);
-}
-
-.top-right-btn:active {
-  transform: scale(0.98);
-}
-
+    .badge.success {background:#dcfce7;color:#166534;}
+    .badge.pending {background:#fef9c3;color:#854d0e;}
   </style>
-
-
-
-
-
-
-
-
-
-
-
-
 </head>
 <body>
 
-  <a href="/attendancemanagementsystem/start-session/">
-  <button class="top-right-btn">Admin</button>
-  </a>
-
-
-  <div class="container">
-    <div class="card">
-      <h1>Welcome!</h1>
-      <p>Manage your attendance.</p>
-      <div class="button-group">
-        <a href="/attendancemanagementsystem/login/" class="btn btn-login" role="button">Login</a>
-        <a href="/attendancemanagementsystem/signup/" class="btn btn-signup" role="button">Sign Up</a>
-        <a href="{% url 'attendance' %}" class="btn btn-attendance" role="button">  Mark Attendance</a>
-      </div>
-      
-
-      
+  <!-- Passkey Screen -->
+  <div class="lockscreen" id="lockscreen">
+    <div class="lockscreen-box">
+      <h2>🔒 Secure Access</h2>
+      <input type="password" id="passkey" placeholder="Enter passkey"/>
+      <button onclick="unlock()">Unlock</button>
+      <p class="error" id="error"></p>
     </div>
   </div>
+
+  <!-- Dashboard -->
+  <div class="dashboard" id="dashboard">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <h2>Admin Panel</h2>
+      <nav>
+        <a href="#">Dashboard</a>
+      </nav>
+    </aside>
+
+    <!-- Main -->
+    <main class="main">
+      <h1>Form Submissions</h1>
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Service</th>
+            <th>Budget</th>
+            <th>Company</th>
+            <th>Message</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for submission in submissions %}
+            <tr>
+              <td>{{ submission.name }}</td>
+              <td>{{ submission.email }}</td>
+              <td>{{ submission.service }}</td>
+              <td>{{ submission.budget }}</td>
+              <td>{{ submission.company }}</td>
+              <td>{{ submission.message|truncatechars:100 }}</td>
+              <td>
+                <span class="badge {% if submission.status == 'Pending' %}pending{% else %}success{% endif %}">
+                  {{ submission.status }}
+                </span>
+              </td>
+            </tr>
+          {% empty %}
+            <tr>
+              <td colspan="7">No submissions yet.</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </main>
+  </div>
+
+
+
+
+<script>
+  let correctPasskey = "";
+
+  // Fetch passkey from Django endpoint
+  fetch("/attendancemanagementsystem/passkey/")
+    .then((res) => res.json())
+    .then((data) => {
+      correctPasskey = data.passkey;
+
+      // Check if stored passkey is still valid
+      const stored = JSON.parse(localStorage.getItem("access"));
+      const now = Date.now();
+
+      if (stored && stored.passkey === correctPasskey && now - stored.timestamp < 3600000) {
+        // Within 1 hour
+        document.getElementById("lockscreen").style.display = "none";
+        document.getElementById("dashboard").style.display = "grid";
+      }
+    })
+    .catch((err) => console.error("Failed to fetch passkey:", err));
+
+  function unlock() {
+    const input = document.getElementById("passkey").value;
+    const error = document.getElementById("error");
+
+    if (input === correctPasskey) {
+      // Store access info in localStorage with timestamp
+      localStorage.setItem("access", JSON.stringify({
+        passkey: input,
+        timestamp: Date.now()
+      }));
+
+      // Show dashboard
+      document.getElementById("lockscreen").style.display = "none";
+      document.getElementById("dashboard").style.display = "grid";
+    } else {
+      error.textContent = "❌ Incorrect passkey. Try again.";
+    }
+  }
+</script>
+
+
 </body>
 </html>
