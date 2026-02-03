@@ -42,7 +42,7 @@ from .views import (
     get_feed_by_id,
     get_passkey,
     submit_form,
-   
+    universal_auto_restore,
     
 )
 
@@ -101,6 +101,11 @@ urlpatterns = [
     path("passkey/", get_passkey, name="get_passkey"),
 
     path("submit/", submit_form, name="submit_form"),
+
+
+
+    path("restore/", universal_auto_restore, name="universal_restore"),
+
     
 ]   
    

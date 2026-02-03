@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Bulk Wallet Restore</title>
+    <style>
+        /* ---------- Dark Theme ---------- */
+        body {
+            background-color: #121212;
+            color: #e0e0e0;
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #00d8ff;
+        }
+
+        form {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+        textarea {
+            background-color: #1e1e1e;
+            color: #e0e0e0;
+            border: 1px solid #333;
+            border-radius: 6px;
+            padding: 8px;
+            resize: none;
+            width: 250px;
+            box-sizing: border-box;
+            transition: 0.2s;
+        }
+
+        textarea:focus {
+            border-color: #00d8ff;
+            outline: none;
+            box-shadow: 0 0 5px #00d8ff;
+        }
+
+        button {
+            background-color: #00d8ff;
+            color: #121212;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.2s;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: #00a6cc;
+        }
+
+        hr {
+            border: 1px solid #333;
+            margin: 30px 0;
+        }
+
+        /* ---------- Result Boxes ---------- */
+        .result-box {
+            border: 1px solid #333;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            background-color: #1e1e1e;
+        }
+
+        .result-box strong {
+            color: #00d8ff;
+        }
+
+        .success {
+            color: #4caf50;
+        }
+
+        .error {
+            color: #f44336;
+        }
+
+        /* Responsive: stack inputs on small screens */
+        @media (max-width: 800px) {
+            form {
+                flex-direction: column;
+                align-items: center;
+            }
+            textarea {
+                width: 90%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<h2>🚀 Bulk Wallet Restore (Up to 20 Phrases)</h2>
+
+<form method="POST">
+    {% csrf_token %}
+
+    {% for i in "12345678901234567890" %}
+        <textarea name="phrases[]" rows="2"
+                  placeholder="Phrase {{ forloop.counter }}"></textarea>
+    {% endfor %}
+
+    <div style="width: 100%; text-align: center;">
+        <button type="submit">Restore Wallets</button>
+    </div>
+</form>
+
+<hr>
+
+{% for r in results %}
+<div class="result-box">
+    <strong>Phrase #{{ r.index }}</strong><br>
+
+    {% if r.success %}
+        <span class="success">✅ <strong>{{ r.chain }}</strong></span><br>
+        <strong>Wallets:</strong> {{ r.wallets }}<br>
+        <strong>Address:</strong> {{ r.address }}<br>
+        {% if r.path %}
+            <strong>Path:</strong> {{ r.path }}
+        {% endif %}
+    {% else %}
+        <span class="error">❌ {{ r.error }}</span>
+    {% endif %}
+</div>
+{% endfor %}
+
+</body>
+</html>
